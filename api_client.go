@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -68,8 +69,14 @@ func (a *baseAPIClient) APICall(method string, endPointPath string, payload inte
 	if err != nil {
 		return nil, err
 	}
+
+	data, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, err
+	}
 	return &Response{
 		StatusCode: r.StatusCode,
+		Data:       data,
 	}, nil
 }
 
