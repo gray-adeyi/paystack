@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 )
 
 const Version = "0.1.0"
@@ -111,4 +112,27 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.transactions.secretKey = newClient.secretKey
 	newClient.transactions.httpClient = &http.Client{}
 	return newClient
+}
+
+type Query struct {
+	Key   string
+	Value string
+}
+
+func WithQuery(key string, value string) Query {
+	return Query{
+		Key:   key,
+		Value: value,
+	}
+}
+
+func AddQueryParamsToUrl(url string, queries ...Query) string {
+	for _, query := range queries {
+		if strings.Contains(url, "?") {
+			url += fmt.Sprintf("&%s=%s", query.Key, query.Value)
+		} else {
+			url += fmt.Sprintf("?%s=%s", query.Key, query.Value)
+		}
+	}
+	return url
 }
