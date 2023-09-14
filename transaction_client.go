@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// TransactionClient interactes with endpoints related to paystack's Transaction resource
+// TransactionClient interacts with endpoints related to paystack's Transaction resource
 // that allows you to create and manage payments on your integration.
 type TransactionClient struct {
 	*baseAPIClient
