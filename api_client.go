@@ -93,7 +93,9 @@ func (a *baseAPIClient) setHeaders(request *http.Request) error {
 
 type APIClient struct {
 	baseAPIClient
-	transactions *TransactionClient
+	transactions      *TransactionClient
+	transactionSplits *TransactionSplitClient
+	terminals         *TerminalClient
 }
 
 func NewAPIClient(options ...ClientOptions) *APIClient {
@@ -103,14 +105,25 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 		},
 	}
 	newClient.baseUrl = BaseUrl
-	newClient.httpClient = &http.Client{}
+
+	httpClient := &http.Client{}
+	newClient.httpClient = httpClient
 	for _, opts := range options {
 		opts(newClient)
 	}
 
 	newClient.transactions.baseUrl = BaseUrl
 	newClient.transactions.secretKey = newClient.secretKey
-	newClient.transactions.httpClient = &http.Client{}
+	newClient.transactions.httpClient = httpClient
+
+	newClient.transactionSplits.baseUrl = BaseUrl
+	newClient.transactionSplits.secretKey = newClient.secretKey
+	newClient.transactionSplits.httpClient = httpClient
+
+	newClient.terminals.baseUrl = BaseUrl
+	newClient.terminals.secretKey = newClient.secretKey
+	newClient.terminals.httpClient = httpClient
+
 	return newClient
 }
 
