@@ -96,6 +96,7 @@ type APIClient struct {
 	transactions      *TransactionClient
 	transactionSplits *TransactionSplitClient
 	terminals         *TerminalClient
+	customers         *CustomerClient
 }
 
 func NewAPIClient(options ...ClientOptions) *APIClient {
@@ -123,6 +124,10 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.terminals.baseUrl = BaseUrl
 	newClient.terminals.secretKey = newClient.secretKey
 	newClient.terminals.httpClient = httpClient
+
+	newClient.customers.baseUrl = BaseUrl
+	newClient.customers.secretKey = newClient.secretKey
+	newClient.customers.httpClient = httpClient
 
 	return newClient
 }
