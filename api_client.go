@@ -99,6 +99,7 @@ type APIClient struct {
 	customers                *CustomerClient
 	dedicatedVirtualAccounts *DedicatedVirtualAccountClient
 	applePay                 *ApplePayClient
+	subAccounts              *SubAccountClient
 }
 
 func NewAPIClient(options ...ClientOptions) *APIClient {
@@ -138,6 +139,10 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.applePay.baseUrl = BaseUrl
 	newClient.applePay.secretKey = newClient.secretKey
 	newClient.applePay.httpClient = httpClient
+
+	newClient.subAccounts.baseUrl = BaseUrl
+	newClient.subAccounts.secretKey = newClient.secretKey
+	newClient.subAccounts.httpClient = httpClient
 
 	return newClient
 }
