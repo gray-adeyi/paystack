@@ -101,6 +101,7 @@ type APIClient struct {
 	applePay                 *ApplePayClient
 	subAccounts              *SubAccountClient
 	plans                    *PlanClient
+	subscriptions            *SubscriptionClient
 }
 
 func NewAPIClient(options ...ClientOptions) *APIClient {
@@ -148,6 +149,10 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.plans.baseUrl = BaseUrl
 	newClient.plans.secretKey = newClient.secretKey
 	newClient.plans.httpClient = httpClient
+
+	newClient.subscriptions.baseUrl = BaseUrl
+	newClient.subscriptions.secretKey = newClient.secretKey
+	newClient.subscriptions.httpClient = httpClient
 
 	return newClient
 }
