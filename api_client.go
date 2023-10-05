@@ -107,6 +107,7 @@ type APIClient struct {
 	paymentRequests          *PaymentRequestClient
 	settlements              *SettlementClient
 	transferRecipients       *TransferRecipientClient
+	transfers                *TransferClient
 }
 
 func NewAPIClient(options ...ClientOptions) *APIClient {
@@ -178,6 +179,10 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.transferRecipients.baseUrl = BaseUrl
 	newClient.transferRecipients.secretKey = newClient.secretKey
 	newClient.transferRecipients.httpClient = httpClient
+
+	newClient.transfers.baseUrl = BaseUrl
+	newClient.transfers.secretKey = newClient.secretKey
+	newClient.transfers.httpClient = httpClient
 
 	return newClient
 }
