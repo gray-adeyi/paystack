@@ -110,6 +110,7 @@ type APIClient struct {
 	transfers                *TransferClient
 	transfersControl         *TransferControlClient
 	bulkCharges              *BulkChargeClient
+	integration              *IntegrationClient
 }
 
 func NewAPIClient(options ...ClientOptions) *APIClient {
@@ -193,6 +194,10 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.bulkCharges.baseUrl = BaseUrl
 	newClient.bulkCharges.secretKey = newClient.secretKey
 	newClient.bulkCharges.httpClient = httpClient
+
+	newClient.integration.baseUrl = BaseUrl
+	newClient.integration.secretKey = newClient.secretKey
+	newClient.integration.httpClient = httpClient
 
 	return newClient
 }
