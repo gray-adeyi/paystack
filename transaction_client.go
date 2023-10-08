@@ -12,6 +12,11 @@ type TransactionClient struct {
 }
 
 // NewTransactionClient creates a TransactionClient
+//
+// Example:
+// import p "github.com/gray-adeyi/paystack"
+//
+// txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransactionClient(options ...ClientOptions) *TransactionClient {
 	client := NewAPIClient(options...)
 
