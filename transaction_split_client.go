@@ -50,7 +50,7 @@ func NewTransactionSplitClient(options ...ClientOptions) *TransactionSplitClient
 // {"subaccount": "ACCT_z3x6z3nbo14xsil", "share": 20},
 // {"subaccount": "ACCT_pwwualwty4nhq9d", "share": 80},
 // }
-// resp, err := paystackClient.transactionSplits.Create("co-founders account","percentage","NGN",
+// resp, err := transactionSplitClient.Create("co-founders account","percentage","NGN",
 //
 //	subaccounts,"subaccount","ACCT_hdl8abxl8drhrl3")
 //	if err != nil {
