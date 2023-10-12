@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// CustomerClient interacts with endpoints releated to paystack Customer resource
+// CustomerClient interacts with endpoints related to paystack Customer resource
 // that allows you to create and manage customers on your integration.
 type CustomerClient struct {
 	*baseAPIClient
