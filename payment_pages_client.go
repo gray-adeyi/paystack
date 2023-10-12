@@ -18,7 +18,7 @@ type PaymentPageClient struct {
 //
 //	import p "github.com/gray-adeyi/paystack"
 //
-// ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
+//	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewPaymentPageClient(options ...ClientOptions) *PaymentPageClient {
 	client := NewAPIClient(options...)
 	return client.paymentPages
