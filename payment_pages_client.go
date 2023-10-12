@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-// PaymentPageClient interacts with endpoints related to paystack payment page resource that lets you
-//
-//	provide a quick and secure way to collect payment for products.
+// PaymentPageClient interacts with endpoints
+// related to paystack payment page resource
+// that lets you provide a quick and secure way to collect payment for products.
 type PaymentPageClient struct {
 	*baseAPIClient
 }
