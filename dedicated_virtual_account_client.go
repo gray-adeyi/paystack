@@ -35,7 +35,7 @@ func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtua
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a customer client from an APIClient
+//	// Alternatively, you can access a dedicated virtual account client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
