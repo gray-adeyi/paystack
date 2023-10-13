@@ -91,7 +91,7 @@ func (p *PaymentPageClient) Create(name string, optionalPayloadParameters ...Opt
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
-//	// resp, err := saClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//	// resp, err := ppClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
 // // see https://paystack.com/docs/api/page/#list for supported query parameters
 //
