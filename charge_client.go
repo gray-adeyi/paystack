@@ -5,10 +5,62 @@ import (
 	"net/http"
 )
 
+// ChargeClient interacts with endpoints related to paystack charge resource that
+// lets you configure a payment channel of your choice when initiating a payment.
 type ChargeClient struct {
 	*baseAPIClient
 }
 
+// NewChargeClient creates a ChargeClient
+//
+//	Example
+//
+//	import p "github.com/gray-adeyi/paystack"
+//
+//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
+func NewChargeClient(options ...ClientOptions) *ChargeClient {
+	client := NewAPIClient(options...)
+	return client.charges
+}
+
+// Create lets you initiate a payment by integrating the payment channel of your choice.
+//
+// Example:
+//
+//	import (
+//		"fmt"
+//		p "github.com/gray-adeyi/paystack"
+//		"encoding/json"
+//	)
+//
+//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// Alternatively, you can access the charge client from an APIClient
+//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// paystackClient.charges field is a `ChargeClient`
+//	// Therefore, this is possible
+//	// resp, err := paystackClient.charges.Create("johndoe@example.com", 100000)
+//
+//	// you can pass in optional parameters to the `charges.Create` with `p.WithOptionalParameter`
+//	// for example say you want to specify the `amount`.
+//	// resp, err := ppClient.Create("johndoe@example.com", 100000, p.WithOptionalParameter("authorization_code","AUTH_xxx"))
+//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
+//	// from paystack documentation see https://paystack.com/docs/api/charge/#create
+//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//
+// resp, err := chargeClient.Create("johndoe@example.com", 100000)
+//
+//	if err != nil {
+//		panic(err)
+//	}
+//	// you can have data be a custom structure based on the data your interested in retrieving from
+//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// to serialize the json data returned by paystack
+//	data := make(map[string]interface{})
+//
+//	err := json.Unmarshal(resp.Data, &data); if err != nil {
+//		panic(err)
+//	}
+//	fmt.Println(data)
 func (c *ChargeClient) Create(email string, amount string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
 	payload := make(map[string]interface{})
 	payload["email"] = email
@@ -21,6 +73,37 @@ func (c *ChargeClient) Create(email string, amount string, optionalPayloadParame
 	return c.APICall(http.MethodPost, "/charge", payload)
 }
 
+// SubmitPin lets you submit pin to continue a charge
+//
+// Example:
+//
+//	import (
+//		"fmt"
+//		p "github.com/gray-adeyi/paystack"
+//		"encoding/json"
+//	)
+//
+//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// Alternatively, you can access the charge client from an APIClient
+//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// paystackClient.charges field is a `ChargeClient`
+//	// Therefore, this is possible
+//	// resp, err := paystackClient.charges.SubmitPin("1234", "5bwib5v6anhe9xa")
+//
+// resp, err := chargeClient.SubmitPin("1234", "5bwib5v6anhe9xa")
+//
+//	if err != nil {
+//		panic(err)
+//	}
+//	// you can have data be a custom structure based on the data your interested in retrieving from
+//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// to serialize the json data returned by paystack
+//	data := make(map[string]interface{})
+//
+//	err := json.Unmarshal(resp.Data, &data); if err != nil {
+//		panic(err)
+//	}
+//	fmt.Println(data)
 func (c *ChargeClient) SubmitPin(pin string, reference string) (*Response, error) {
 	payload := make(map[string]interface{})
 	payload["pin"] = pin
@@ -29,6 +112,37 @@ func (c *ChargeClient) SubmitPin(pin string, reference string) (*Response, error
 	return c.APICall(http.MethodPost, "/charge/submit_pin", payload)
 }
 
+// SubmitPhone lets you submit phone number when requested
+//
+// Example:
+//
+//	import (
+//		"fmt"
+//		p "github.com/gray-adeyi/paystack"
+//		"encoding/json"
+//	)
+//
+//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// Alternatively, you can access the charge client from an APIClient
+//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// paystackClient.charges field is a `ChargeClient`
+//	// Therefore, this is possible
+//	// resp, err := paystackClient.charges.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
+//
+// resp, err := chargeClient.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
+//
+//	if err != nil {
+//		panic(err)
+//	}
+//	// you can have data be a custom structure based on the data your interested in retrieving from
+//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// to serialize the json data returned by paystack
+//	data := make(map[string]interface{})
+//
+//	err := json.Unmarshal(resp.Data, &data); if err != nil {
+//		panic(err)
+//	}
+//	fmt.Println(data)
 func (c *ChargeClient) SubmitPhone(phone string, reference string) (*Response, error) {
 	payload := make(map[string]interface{})
 	payload["phone"] = phone
@@ -37,6 +151,37 @@ func (c *ChargeClient) SubmitPhone(phone string, reference string) (*Response, e
 	return c.APICall(http.MethodPost, "/charge/submit_phone", payload)
 }
 
+// SubmitBirthday lets you submit a birthday when requested
+//
+// Example:
+//
+//	import (
+//		"fmt"
+//		p "github.com/gray-adeyi/paystack"
+//		"encoding/json"
+//	)
+//
+//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// Alternatively, you can access the charge client from an APIClient
+//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// paystackClient.charges field is a `ChargeClient`
+//	// Therefore, this is possible
+//	// resp, err := paystackClient.charges.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
+//
+// resp, err := chargeClient.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
+//
+//	if err != nil {
+//		panic(err)
+//	}
+//	// you can have data be a custom structure based on the data your interested in retrieving from
+//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// to serialize the json data returned by paystack
+//	data := make(map[string]interface{})
+//
+//	err := json.Unmarshal(resp.Data, &data); if err != nil {
+//		panic(err)
+//	}
+//	fmt.Println(data)
 func (c *ChargeClient) SubmitBirthday(birthday string, reference string) (*Response, error) {
 	payload := make(map[string]interface{})
 	payload["birthday"] = birthday
@@ -45,7 +190,40 @@ func (c *ChargeClient) SubmitBirthday(birthday string, reference string) (*Respo
 	return c.APICall(http.MethodPost, "/charge/submit_birthday", payload)
 }
 
-func (c *ChargeClient) SubmitAddress(address string, reference string, city string, state string, zipCode string) (*Response, error) {
+// SubmitAddress lets you submit address to continue a charge
+//
+// Example:
+//
+//	import (
+//		"fmt"
+//		p "github.com/gray-adeyi/paystack"
+//		"encoding/json"
+//	)
+//
+//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// Alternatively, you can access the charge client from an APIClient
+//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// paystackClient.charges field is a `ChargeClient`
+//	// Therefore, this is possible
+//	// resp, err := paystackClient.charges.SubmitAddress("140 N 2ND ST",
+//	//	"7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
+//
+// resp, err := chargeClient.SubmitAddress("140 N 2ND ST", "7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
+//
+//	if err != nil {
+//		panic(err)
+//	}
+//	// you can have data be a custom structure based on the data your interested in retrieving from
+//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// to serialize the json data returned by paystack
+//	data := make(map[string]interface{})
+//
+//	err := json.Unmarshal(resp.Data, &data); if err != nil {
+//		panic(err)
+//	}
+//	fmt.Println(data)
+func (c *ChargeClient) SubmitAddress(address string, reference string, city string,
+	state string, zipCode string) (*Response, error) {
 	payload := make(map[string]interface{})
 	payload["address"] = address
 	payload["reference"] = reference
@@ -56,6 +234,39 @@ func (c *ChargeClient) SubmitAddress(address string, reference string, city stri
 	return c.APICall(http.MethodPost, "/charge/submit_address", payload)
 }
 
+// PendingCharge lets you check the status of a charge. When you get pending as a charge status or if there
+// was an exception when calling any of the /charge endpoints, wait 10 seconds or more, then make a check
+// to see if its status has changed. Don't call too early as you may get a lot more pending than you should.
+//
+// Example:
+//
+//	import (
+//		"fmt"
+//		p "github.com/gray-adeyi/paystack"
+//		"encoding/json"
+//	)
+//
+//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// Alternatively, you can access the charge client from an APIClient
+//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
+//	// paystackClient.charges field is a `ChargeClient`
+//	// Therefore, this is possible
+//	// resp, err := paystackClient.charges.PendingCharge("5bwib5v6anhe9xa")
+//
+// resp, err := chargeClient.PendingCharge("5bwib5v6anhe9xa")
+//
+//	if err != nil {
+//		panic(err)
+//	}
+//	// you can have data be a custom structure based on the data your interested in retrieving from
+//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// to serialize the json data returned by paystack
+//	data := make(map[string]interface{})
+//
+//	err := json.Unmarshal(resp.Data, &data); if err != nil {
+//		panic(err)
+//	}
+//	fmt.Println(data)
 func (c *ChargeClient) PendingCharge(reference string) (*Response, error) {
 	return c.APICall(http.MethodGet, fmt.Sprintf("/charge/%s", reference), nil)
 }
