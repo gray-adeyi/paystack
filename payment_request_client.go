@@ -5,7 +5,8 @@ import (
 	"net/http"
 )
 
-// PaymentRequestClient interacts with endpoints related to paystack payment request resource that lets you manage requests for payment of goods and services.
+// PaymentRequestClient interacts with endpoints related to paystack payment request resource that
+// lets you manage requests for payment of goods and services.
 type PaymentRequestClient struct {
 	*baseAPIClient
 }

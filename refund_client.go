@@ -6,8 +6,7 @@ import (
 )
 
 // RefundClient interacts with endpoints related to paystack refund resource that lets you
-//
-//	create and manage transaction Refunds.
+// create and manage transaction Refunds.
 type RefundClient struct {
 	*baseAPIClient
 }

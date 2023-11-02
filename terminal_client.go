@@ -11,7 +11,7 @@ type TerminalEvent = string
 const TerminalEventInvoice TerminalEvent = "invoice"
 const TerminalEventTransaction TerminalEvent = "transaction"
 
-// TerminalClient interacts with endpoints related to paystack Terminal resource tha allows you to
+// TerminalClient interacts with endpoints related to paystack Terminal resource that allows you to
 // build delightful in-person payment experiences.
 type TerminalClient struct {
 	*baseAPIClient
