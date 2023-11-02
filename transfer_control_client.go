@@ -3,7 +3,7 @@ package paystack
 import "net/http"
 
 // TransferControlClient interacts with endpoints related to paystack transfer control resource that lets
-// you manage settings of your transfers.
+// you manage settings of your Transfers.
 type TransferControlClient struct {
 	*baseAPIClient
 }
@@ -125,7 +125,7 @@ func (t *TransferControlClient) ResendOTP(transferCode string, reason string) (*
 	return t.APICall(http.MethodPost, "/transfer/resend_otp", payload)
 }
 
-// DisableOTP lets you complete transfers without use of OTPs.
+// DisableOTP lets you complete Transfers without use of OTPs.
 // You will get an OTP to complete the request.
 //
 // Example:
@@ -160,7 +160,7 @@ func (t *TransferControlClient) DisableOTP() (*Response, error) {
 	return t.APICall(http.MethodPost, "/transfer/disable_otp", nil)
 }
 
-// FinalizeDisableOTP lets you finalize the request to disable OTP on your transfers.
+// FinalizeDisableOTP lets you finalize the request to disable OTP on your Transfers.
 //
 // Example:
 //
