@@ -40,7 +40,7 @@ func NewTransferRecipientClient(options ...ClientOptions) *TransferRecipientClie
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.transferRecipients.Create("nuban","Tolu Robert","01000000010", "058")
 //
-//	// you can pass in optional parameters to the `paymentPages.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `PaymentPages.Create` with `p.WithOptionalParameter`
 //	// for example, say you want to specify the `currency`.
 //	// resp, err := ppClient.Create("nuban","Tolu Robert","01000000010", "058", p.WithOptionalParameter("currency","NGN"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
@@ -260,7 +260,7 @@ func (t *TransferRecipientClient) Update(idOrCode string, name string,
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.transferRecipients field is a `TransferClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.paymentPages.Delete("<idOrCode>")
+//	// resp, err := paystackClient.PaymentPages.Delete("<idOrCode>")
 //
 //	resp, err := trClient.Delete("<idOrCode>")
 //	if err != nil {
