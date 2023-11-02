@@ -20,7 +20,7 @@ type TransferRecipientClient struct {
 //	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransferRecipientClient(options ...ClientOptions) *TransferRecipientClient {
 	client := NewAPIClient(options...)
-	return client.transferRecipients
+	return client.TransferRecipients
 }
 
 // Create lets you create a new recipient. A duplicate account number will lead to the retrieval of the existing record.
@@ -36,9 +36,9 @@ func NewTransferRecipientClient(options ...ClientOptions) *TransferRecipientClie
 //	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the transfer recipient client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferRecipients field is a `TransferRecipientClient`
+//	// paystackClient.TransferRecipients field is a `TransferRecipientClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferRecipients.Create("nuban","Tolu Robert","01000000010", "058")
+//	// resp, err := paystackClient.TransferRecipients.Create("nuban","Tolu Robert","01000000010", "058")
 //
 //	// you can pass in optional parameters to the `PaymentPages.Create` with `p.WithOptionalParameter`
 //	// for example, say you want to specify the `currency`.
@@ -88,13 +88,13 @@ func (t *TransferRecipientClient) Create(recipientType string, name string, acco
 //	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the transfer recipient client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferRecipients field is a `TransferRecipientClient`
+//	// paystackClient.TransferRecipients field is a `TransferRecipientClient`
 //	// Therefore, this is possible
 //	//	batch := []map[string]interface{}{
 //	//	{"type":"nuban", "name" : "Habenero Mundane", "account_number": "0123456789","bank_code":"033","currency": "NGN"},
 //	//	{"type":"nuban","name" : "Soft Merry","account_number": "98765432310","bank_code": "50211","currency": "NGN"},
 //	//	}
-//	//	resp, err := paystackClient.transferRecipients.BulkCreate(batch)
+//	//	resp, err := paystackClient.TransferRecipients.BulkCreate(batch)
 //
 //	batch := []map[string]interface{}{
 //		{"type":"nuban", "name" : "Habenero Mundane", "account_number": "0123456789","bank_code":"033","currency": "NGN"},
@@ -135,9 +135,9 @@ func (t *TransferRecipientClient) BulkCreate(batch interface{}) (*Response, erro
 //	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer recipient client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferRecipients field is a `TransferRecipientClient`
+//	// paystackClient.TransferRecipients field is a `TransferRecipientClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferRecipients.All()
+//	// resp, err := paystackClient.TransferRecipients.All()
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
@@ -176,9 +176,9 @@ func (t *TransferRecipientClient) All(queries ...Query) (*Response, error) {
 //	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer recipient client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferRecipients field is a `TransferRecipientClient`
+//	// paystackClient.TransferRecipients field is a `TransferRecipientClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferRecipients.FetchOne("<idOrSlug>")
+//	// resp, err := paystackClient.TransferRecipients.FetchOne("<idOrSlug>")
 //
 //	resp, err := trClient.FetchOne("<idOrCode>")
 //	if err != nil {
@@ -210,11 +210,11 @@ func (t *TransferRecipientClient) FetchOne(idOrCode string) (*Response, error) {
 //	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer recipient client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferRecipients field is a `TransferClient`
+//	// paystackClient.TransferRecipients field is a `TransferClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferRecipients.Update("<idOrCode>", "Rick Sanchez")
+//	// resp, err := paystackClient.TransferRecipients.Update("<idOrCode>", "Rick Sanchez")
 //
-//	// you can pass in optional parameters to the `transferRecipients.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `TransferRecipients.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `email`.
 //	// resp, err := trClient.Create("<idOrCode>", "Rick Sanchez", p.WithOptionalParameter("email","johndoe@example.com"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
@@ -258,7 +258,7 @@ func (t *TransferRecipientClient) Update(idOrCode string, name string,
 //	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer recipient client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferRecipients field is a `TransferClient`
+//	// paystackClient.TransferRecipients field is a `TransferClient`
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.PaymentPages.Delete("<idOrCode>")
 //
