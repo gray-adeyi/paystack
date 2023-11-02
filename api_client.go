@@ -150,7 +150,7 @@ type APIClient struct {
 	Integration              *IntegrationClient
 	Charges                  *ChargeClient
 	Disputes                 *DisputeClient
-	refunds                  *RefundClient
+	Refunds                  *RefundClient
 	verification             *VerificationClient
 	miscellaneous            *MiscellaneousClient
 }
@@ -259,9 +259,9 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.Disputes.secretKey = newClient.secretKey
 	newClient.Disputes.httpClient = httpClient
 
-	newClient.refunds.baseUrl = BaseUrl
-	newClient.refunds.secretKey = newClient.secretKey
-	newClient.refunds.httpClient = httpClient
+	newClient.Refunds.baseUrl = BaseUrl
+	newClient.Refunds.secretKey = newClient.secretKey
+	newClient.Refunds.httpClient = httpClient
 
 	newClient.verification.baseUrl = BaseUrl
 	newClient.verification.secretKey = newClient.secretKey
