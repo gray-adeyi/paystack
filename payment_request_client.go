@@ -22,7 +22,7 @@ func NewPaymentRequestClient(options ...ClientOptions) *PaymentRequestClient {
 	return client.PaymentRequests
 }
 
-// Create lets you create a payment request for a transaction on your integration
+// Create lets you create a payment request for a transaction on your Integration
 //
 // Example:
 //
@@ -72,7 +72,7 @@ func (p *PaymentRequestClient) Create(customerIdOrCode string, amount int,
 	return p.APICall(http.MethodPost, "/paymentrequest", payload)
 }
 
-// All lets you retrieve the payment requests available on your integration
+// All lets you retrieve the payment requests available on your Integration
 //
 // Example:
 //
@@ -113,7 +113,7 @@ func (p *PaymentRequestClient) All(queries ...Query) (*Response, error) {
 	return p.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve details of a payment request on your integration
+// FetchOne lets you retrieve details of a payment request on your Integration
 //
 // Example:
 //
@@ -147,7 +147,7 @@ func (p *PaymentRequestClient) FetchOne(idOrCode string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/paymentrequest/%s", idOrCode), nil)
 }
 
-// Verify lets you verify the details of a payment request on your integration
+// Verify lets you verify the details of a payment request on your Integration
 //
 // Example:
 //
@@ -285,7 +285,7 @@ func (p *PaymentRequestClient) Finalize(code string, sendNotification bool) (*Re
 	return p.APICall(http.MethodPost, fmt.Sprintf("/paymentrequest/finalize/%s", code), nil)
 }
 
-// Update lets you update a payment request details on your integration
+// Update lets you update a payment request details on your Integration
 //
 // Example:
 //

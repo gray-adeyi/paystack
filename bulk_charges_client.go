@@ -67,7 +67,7 @@ func (b *BulkChargeClient) Initiate(charges interface{}) (*Response, error) {
 	return b.APICall(http.MethodPost, "/bulkcharge", charges)
 }
 
-// All lets you retrieve all bulk charge batches created by the integration.
+// All lets you retrieve all bulk charge batches created by the Integration.
 //
 // Example:
 //

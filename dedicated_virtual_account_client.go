@@ -130,7 +130,7 @@ func (d *DedicatedVirtualAccountClient) Assign(email string, firstName string, l
 	return d.APICall(http.MethodPost, "/dedicated_account/assign", payload)
 }
 
-// All lets you retrieve dedicated virtual accounts available on your integration.
+// All lets you retrieve dedicated virtual accounts available on your Integration.
 //
 // Example:
 //
@@ -171,7 +171,7 @@ func (d *DedicatedVirtualAccountClient) All(queries ...Query) (*Response, error)
 	return d.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve details of a dedicated virtual account on your integration.
+// FetchOne lets you retrieve details of a dedicated virtual account on your Integration.
 //
 // Example:
 //
@@ -245,7 +245,7 @@ func (d *DedicatedVirtualAccountClient) Requery(queries ...Query) (*Response, er
 	return d.All(queries...)
 }
 
-// Deactivate lets you deactivate a dedicated virtual account on your integration.
+// Deactivate lets you deactivate a dedicated virtual account on your Integration.
 //
 // Example:
 //

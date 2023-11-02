@@ -142,7 +142,7 @@ func (t *TerminalClient) TerminalStatus(terminalId string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/terminal/%s/presence", terminalId), nil)
 }
 
-// All lets you retrieve the Terminals available on your integration
+// All lets you retrieve the Terminals available on your Integration
 //
 // Example:
 //
@@ -255,7 +255,7 @@ func (t *TerminalClient) Update(terminalId string, name string, address string) 
 	return t.APICall(http.MethodPut, fmt.Sprintf("/terminal/%s", terminalId), payload)
 }
 
-// Commission lets you activate your debug device by linking it to your integration
+// Commission lets you activate your debug device by linking it to your Integration
 //
 // Example:
 //
@@ -292,7 +292,7 @@ func (t *TerminalClient) Commission(serialNumber string) (*Response, error) {
 	return t.APICall(http.MethodPost, "/terminal/commission_device", payload)
 }
 
-// Decommission lets you unlink your debug device from your integration
+// Decommission lets you unlink your debug device from your Integration
 //
 // Example:
 //

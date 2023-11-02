@@ -73,7 +73,7 @@ func (r *RefundClient) Create(transaction string,
 	return r.APICall(http.MethodPost, "/refund", payload)
 }
 
-// All lets you retrieve refunds available on your integration
+// All lets you retrieve refunds available on your Integration
 //
 // Example:
 //
@@ -114,7 +114,7 @@ func (r *RefundClient) All(queries ...Query) (*Response, error) {
 	return r.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve the details of a refund on your integration
+// FetchOne lets you retrieve the details of a refund on your Integration
 //
 // Example:
 //

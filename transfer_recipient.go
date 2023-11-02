@@ -122,7 +122,7 @@ func (t *TransferRecipientClient) BulkCreate(batch interface{}) (*Response, erro
 	return t.APICall(http.MethodPost, "/transferrecipient/bulk", payload)
 }
 
-// All lets you retrieve transfer recipients available on your integration
+// All lets you retrieve transfer recipients available on your Integration
 //
 // Example:
 //
@@ -197,7 +197,7 @@ func (t *TransferRecipientClient) FetchOne(idOrCode string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil)
 }
 
-// Update lets you update transfer recipients available on your integration
+// Update lets you update transfer recipients available on your Integration
 //
 // Example:
 //

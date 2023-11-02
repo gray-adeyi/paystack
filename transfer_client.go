@@ -165,7 +165,7 @@ func (t *TransferClient) BulkInitiate(source string, transfers interface{}) (*Re
 	return t.APICall(http.MethodPost, "/transfer/bulk", payload)
 }
 
-// All lets you retrieve all the Transfers made on your integration.
+// All lets you retrieve all the Transfers made on your Integration.
 //
 // Example:
 //
@@ -206,7 +206,7 @@ func (t *TransferClient) All(queries ...Query) (*Response, error) {
 	return t.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve the details of a transfer on your integration.
+// FetchOne lets you retrieve the details of a transfer on your Integration.
 //
 // Example:
 //
@@ -240,7 +240,7 @@ func (t *TransferClient) FetchOne(idOrCode string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/transfer/%s", idOrCode), nil)
 }
 
-// Verify lets you verify the status of a transfer on your integration.
+// Verify lets you verify the status of a transfer on your Integration.
 //
 // Example:
 //

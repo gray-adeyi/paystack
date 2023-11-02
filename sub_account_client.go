@@ -6,7 +6,7 @@ import (
 )
 
 // SubAccountClient interacts with endpoints related to paystack subaccount resource that lets you
-// create and manage subaccounts on your integration. Subaccounts can be used to split payment
+// create and manage subaccounts on your Integration. Subaccounts can be used to split payment
 // between two accounts (your main account and a subaccount).
 type SubAccountClient struct {
 	*baseAPIClient
@@ -80,7 +80,7 @@ func (s *SubAccountClient) Create(businessName string, settlementBank string,
 	return s.APICall(http.MethodPost, "/subaccount", payload)
 }
 
-// All lets you retrieve subaccounts available on your integration
+// All lets you retrieve subaccounts available on your Integration
 //
 // Example:
 //
@@ -121,7 +121,7 @@ func (s *SubAccountClient) All(queries ...Query) (*Response, error) {
 	return s.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve details of a subaccount on your integration
+// FetchOne lets you retrieve details of a subaccount on your Integration
 //
 // Example:
 //
@@ -155,7 +155,7 @@ func (s *SubAccountClient) FetchOne(idOrCode string) (*Response, error) {
 	return s.APICall(http.MethodGet, fmt.Sprintf("/subaccount/%s", idOrCode), nil)
 }
 
-// Update lets you update a subaccount details on your integration
+// Update lets you update a subaccount details on your Integration
 //
 // Example:
 //

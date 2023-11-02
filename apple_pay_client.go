@@ -21,7 +21,7 @@ func NewApplePayClient(options ...ClientOptions) *ApplePayClient {
 	return client.ApplePay
 }
 
-// Register lets you register a top-level domain or subdomain for your Apple Pay integration.
+// Register lets you register a top-level domain or subdomain for your Apple Pay Integration.
 //
 // Example:
 //
@@ -57,7 +57,7 @@ func (a *ApplePayClient) Register(domainName string) (*Response, error) {
 	return a.APICall(http.MethodPost, "/apple-pay/domain", payload)
 }
 
-// All lets you retrieve all registered domains on your integration.
+// All lets you retrieve all registered domains on your Integration.
 // Returns an empty array if no domains have been added.
 //
 // Example:
@@ -98,7 +98,7 @@ func (a *ApplePayClient) All(queries ...Query) (*Response, error) {
 	return a.APICall(http.MethodGet, url, nil)
 }
 
-// Unregister lets you unregister a top-level domain or subdomain previously used for your Apple Pay integration.
+// Unregister lets you unregister a top-level domain or subdomain previously used for your Apple Pay Integration.
 //
 // Example:
 //

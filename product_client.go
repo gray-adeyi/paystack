@@ -6,7 +6,7 @@ import (
 )
 
 // ProductClient interacts with endpoints related to paystack product resource that allows you to create and
-// manage inventories on your integration.
+// manage inventories on your Integration.
 type ProductClient struct {
 	*baseAPIClient
 }
@@ -23,7 +23,7 @@ func NewProductClient(options ...ClientOptions) *ProductClient {
 	return client.Products
 }
 
-// Create lets you create a product on your integration
+// Create lets you create a product on your Integration
 //
 // Example:
 //
@@ -76,7 +76,7 @@ func (p *ProductClient) Create(name string, description string, price int, curre
 	return p.APICall(http.MethodPost, "/product", payload)
 }
 
-// All lets you retrieve Products available on your integration
+// All lets you retrieve Products available on your Integration
 //
 // Example:
 //
@@ -117,7 +117,7 @@ func (p *ProductClient) All(queries ...Query) (*Response, error) {
 	return p.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you Get details of a product on your integration
+// FetchOne lets you Get details of a product on your Integration
 //
 // Example:
 //
@@ -151,7 +151,7 @@ func (p *ProductClient) FetchOne(id string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/product/%s", id), nil)
 }
 
-// Update lets you update a product details on your integration
+// Update lets you update a product details on your Integration
 //
 // Example:
 //

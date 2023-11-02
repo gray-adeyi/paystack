@@ -6,7 +6,7 @@ import (
 )
 
 // SubscriptionClient interacts with endpoints related to paystack subscription resource that lets you
-// create and manage recurring payment on your integration.
+// create and manage recurring payment on your Integration.
 type SubscriptionClient struct {
 	*baseAPIClient
 }
@@ -24,7 +24,7 @@ func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 	return client.Subscriptions
 }
 
-// Create lets you create a subscription on your integration
+// Create lets you create a subscription on your Integration
 //
 // Example:
 //
@@ -75,7 +75,7 @@ func (s *SubscriptionClient) Create(customer string, plan string, authorization 
 	return s.APICall(http.MethodPost, "/subscription", payload)
 }
 
-// All lets you retrieve Subscriptions available on your integration
+// All lets you retrieve Subscriptions available on your Integration
 //
 // Example:
 //
@@ -116,7 +116,7 @@ func (s *SubscriptionClient) All(queries ...Query) (*Response, error) {
 	return s.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve details of a subscription on your integration
+// FetchOne lets you retrieve details of a subscription on your Integration
 //
 // Example:
 //
@@ -150,7 +150,7 @@ func (s *SubscriptionClient) FetchOne(idOrCode string) (*Response, error) {
 	return s.APICall(http.MethodGet, fmt.Sprintf("/subscription/%s", idOrCode), nil)
 }
 
-// Enable lets you enable a subscription on your integration
+// Enable lets you enable a subscription on your Integration
 //
 // Example:
 //
@@ -187,7 +187,7 @@ func (s *SubscriptionClient) Enable(code string, token string) (*Response, error
 	return s.APICall(http.MethodPost, "/subscription/enable", payload)
 }
 
-// Disable lets you disable a subscription on your integration
+// Disable lets you disable a subscription on your Integration
 //
 // Example:
 //

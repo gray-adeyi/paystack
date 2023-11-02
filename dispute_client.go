@@ -6,7 +6,7 @@ import (
 )
 
 // DisputeClient interacts with endpoint related to paystack dispute resource that lets you
-// manage transaction disputes on your integration.
+// manage transaction disputes on your Integration.
 type DisputeClient struct {
 	*baseAPIClient
 }
@@ -131,7 +131,7 @@ func (d *DisputeClient) AllTransactionDisputes(transactionId string) (*Response,
 	return d.APICall(http.MethodGet, fmt.Sprintf("/dispute/transaction/%s", transactionId), nil)
 }
 
-// Update lets you update the details of a dispute on your integration
+// Update lets you update the details of a dispute on your Integration
 //
 // Example:
 //
@@ -274,7 +274,7 @@ func (d *DisputeClient) UploadURL(id string, queries ...Query) (*Response, error
 	return d.APICall(http.MethodPost, url, nil)
 }
 
-// Resolve lets you resolve a dispute on your integration
+// Resolve lets you resolve a dispute on your Integration
 //
 // Example:
 //
@@ -328,7 +328,7 @@ func (d *DisputeClient) Resolve(id string, resolution string, message string,
 	return d.APICall(http.MethodPut, fmt.Sprintf("/dispute/%s/resolve", id), payload)
 }
 
-// Export lets you export disputes available on your integration
+// Export lets you export disputes available on your Integration
 //
 // Example:
 //

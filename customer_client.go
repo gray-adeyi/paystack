@@ -6,7 +6,7 @@ import (
 )
 
 // CustomerClient interacts with endpoints related to paystack Customer resource
-// that allows you to create and manage Customers on your integration.
+// that allows you to create and manage Customers on your Integration.
 type CustomerClient struct {
 	*baseAPIClient
 }
@@ -24,7 +24,7 @@ func NewCustomerClient(options ...ClientOptions) *CustomerClient {
 	return client.Customers
 }
 
-// Create lets you create a customer on your integration
+// Create lets you create a customer on your Integration
 //
 // Example:
 //
@@ -75,7 +75,7 @@ func (c *CustomerClient) Create(email string, firstName string, lastName string,
 	return c.APICall(http.MethodPost, "/customer", payload)
 }
 
-// All lets you retrieve Customers available on your integration.
+// All lets you retrieve Customers available on your Integration.
 //
 // Example:
 //
@@ -116,7 +116,7 @@ func (c *CustomerClient) All(queries ...Query) (*Response, error) {
 	return c.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve the details of a customer on your integration
+// FetchOne lets you retrieve the details of a customer on your Integration
 //
 // Example:
 //
@@ -150,7 +150,7 @@ func (c *CustomerClient) FetchOne(emailOrCode string) (*Response, error) {
 	return c.APICall(http.MethodGet, fmt.Sprintf("/customer/%s", emailOrCode), nil)
 }
 
-// Update lets you update a customer's details on your integration
+// Update lets you update a customer's details on your Integration
 //
 // Example:
 //
@@ -253,7 +253,7 @@ func (c *CustomerClient) Validate(code string, firstName string, lastName string
 	return c.APICall(http.MethodPost, fmt.Sprintf("/customer/%s/identification", code), payload)
 }
 
-// Flag lets you whitelist or blacklist a customer on your integration
+// Flag lets you whitelist or blacklist a customer on your Integration
 //
 // Example:
 //

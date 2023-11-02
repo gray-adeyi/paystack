@@ -24,7 +24,7 @@ func NewPaymentPageClient(options ...ClientOptions) *PaymentPageClient {
 	return client.PaymentPages
 }
 
-// Create lets you create a payment page on your integration
+// Create lets you create a payment page on your Integration
 //
 // Example:
 //
@@ -72,7 +72,7 @@ func (p *PaymentPageClient) Create(name string, optionalPayloadParameters ...Opt
 	return p.APICall(http.MethodPost, "/page", payload)
 }
 
-// All lets you retrieve payment pages available on your integration
+// All lets you retrieve payment pages available on your Integration
 //
 // Example:
 //
@@ -113,7 +113,7 @@ func (p *PaymentPageClient) All(queries ...Query) (*Response, error) {
 	return p.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve details of a payment page on your integration
+// FetchOne lets you retrieve details of a payment page on your Integration
 //
 // Example:
 //
@@ -147,7 +147,7 @@ func (p *PaymentPageClient) FetchOne(idOrSlug string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/page/%s", idOrSlug), nil)
 }
 
-// Update lets you update a payment page details on your integration
+// Update lets you update a payment page details on your Integration
 //
 // Example:
 //

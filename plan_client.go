@@ -6,7 +6,7 @@ import (
 )
 
 // PlanClient interacts with endpoints related to paystack plan resource that lets you
-// create and manage installment payment options on your integration.
+// create and manage installment payment options on your Integration.
 type PlanClient struct {
 	*baseAPIClient
 }
@@ -24,7 +24,7 @@ func NewPlanClient(options ...ClientOptions) *PlanClient {
 	return client.Plans
 }
 
-// Create lets you create a plan on your integration
+// Create lets you create a plan on your Integration
 //
 // Example:
 //
@@ -75,7 +75,7 @@ func (p *PlanClient) Create(name string, amount int, interval string, optionalPa
 	return p.APICall(http.MethodPost, "/plan", payload)
 }
 
-// All lets you retrieve Plans available on your integration
+// All lets you retrieve Plans available on your Integration
 //
 // Example:
 //
@@ -116,7 +116,7 @@ func (p *PlanClient) All(queries ...Query) (*Response, error) {
 	return p.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve details of a plan on your integration
+// FetchOne lets you retrieve details of a plan on your Integration
 //
 // Example:
 //
@@ -150,7 +150,7 @@ func (p *PlanClient) FetchOne(idOrCode string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/plan/%s", idOrCode), nil)
 }
 
-// Update lets you update a plan details on your integration
+// Update lets you update a plan details on your Integration
 //
 // Example:
 //

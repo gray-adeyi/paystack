@@ -2,8 +2,8 @@ package paystack
 
 import "net/http"
 
-// IntegrationClient interacts with endpoints related to paystack integration resource
-// that lets you manage some settings on your integration.
+// IntegrationClient interacts with endpoints related to paystack Integration resource
+// that lets you manage some settings on your Integration.
 type IntegrationClient struct {
 	*baseAPIClient
 }
@@ -17,10 +17,10 @@ type IntegrationClient struct {
 //	intClient := p.NewIntegrationClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewIntegrationClient(options ...ClientOptions) *IntegrationClient {
 	client := NewAPIClient(options...)
-	return client.integration
+	return client.Integration
 }
 
-// Timeout lets you retrieve the payment session timeout on your integration
+// Timeout lets you retrieve the payment session timeout on your Integration
 //
 // Example:
 //
@@ -31,11 +31,11 @@ func NewIntegrationClient(options ...ClientOptions) *IntegrationClient {
 //	)
 //
 //	intClient := p.NewIntegrationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access an integration client from an APIClient
+//	// Alternatively, you can access an Integration client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.integration field is a `IntegrationClient`
+//	// paystackClient.Integration field is a `IntegrationClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.integration.Timeout()
+//	// resp, err := paystackClient.Integration.Timeout()
 //
 //	resp, err := intClient.Timeout()
 //	if err != nil {
@@ -51,10 +51,10 @@ func NewIntegrationClient(options ...ClientOptions) *IntegrationClient {
 //	}
 //	fmt.Println(data)
 func (i *IntegrationClient) Timeout() (*Response, error) {
-	return i.APICall(http.MethodGet, "/integration/payment_session_timeout", nil)
+	return i.APICall(http.MethodGet, "/Integration/payment_session_timeout", nil)
 }
 
-// UpdateTimeout lets you update the payment session timeout on your integration
+// UpdateTimeout lets you update the payment session timeout on your Integration
 //
 // Example:
 //
@@ -65,11 +65,11 @@ func (i *IntegrationClient) Timeout() (*Response, error) {
 //	)
 //
 //	tcClient := p.NewIntegrationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access an integration client from an APIClient
+//	// Alternatively, you can access an Integration client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.integration field is a `IntegrationClient`
+//	// paystackClient.Integration field is a `IntegrationClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.integration.UpdateTimeout(5)
+//	// resp, err := paystackClient.Integration.UpdateTimeout(5)
 //
 //	resp, err := tcClient.UpdateTimeout(5)
 //	if err != nil {
@@ -88,5 +88,5 @@ func (i *IntegrationClient) UpdateTimeout(timeout int) (*Response, error) {
 	payload := map[string]interface{}{
 		"timeout": timeout,
 	}
-	return i.APICall(http.MethodPut, "/integration/payment_session_timeout", payload)
+	return i.APICall(http.MethodPut, "/Integration/payment_session_timeout", payload)
 }

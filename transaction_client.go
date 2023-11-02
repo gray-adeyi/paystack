@@ -6,7 +6,7 @@ import (
 )
 
 // TransactionClient interacts with endpoints related to paystack Transaction resource
-// that allows you to create and manage payments on your integration.
+// that allows you to create and manage payments on your Integration.
 type TransactionClient struct {
 	*baseAPIClient
 }
@@ -106,7 +106,7 @@ func (t *TransactionClient) Verify(reference string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/transaction/verify/%s", reference), nil)
 }
 
-// All lets you list Transactions carried out on your integration
+// All lets you list Transactions carried out on your Integration
 //
 // Example:
 //
@@ -147,7 +147,7 @@ func (t *TransactionClient) All(queries ...Query) (*Response, error) {
 	return t.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you get the details of a transaction carried out on your integration
+// FetchOne lets you get the details of a transaction carried out on your Integration
 //
 // Example:
 //
@@ -305,7 +305,7 @@ func (t *TransactionClient) Total(queries ...Query) (*Response, error) {
 	return t.APICall(http.MethodGet, url, nil)
 }
 
-// Export lets you export a list of Transactions carried out on your integration
+// Export lets you export a list of Transactions carried out on your Integration
 //
 // Example:
 //

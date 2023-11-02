@@ -20,7 +20,7 @@ func NewTransferControlClient(options ...ClientOptions) *TransferControlClient {
 	return client.TransferControl
 }
 
-// Balance lets you retrieve the available balance on your integration
+// Balance lets you retrieve the available balance on your Integration
 //
 // Example:
 //
@@ -54,7 +54,7 @@ func (t *TransferControlClient) Balance() (*Response, error) {
 	return t.APICall(http.MethodGet, "/balance", nil)
 }
 
-// BalanceLedger lets you retrieve all pay-ins and pay-outs that occurred on your integration
+// BalanceLedger lets you retrieve all pay-ins and pay-outs that occurred on your Integration
 //
 // Example:
 //

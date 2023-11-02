@@ -24,7 +24,7 @@ func NewTransactionSplitClient(options ...ClientOptions) *TransactionSplitClient
 	return client.TransactionSplits
 }
 
-// Create lets you create a split payment on your integration
+// Create lets you create a split payment on your Integration
 //
 // Example:
 //
@@ -81,7 +81,7 @@ func (t *TransactionSplitClient) Create(name string, transactionSplitType string
 	return t.APICall(http.MethodPost, "/split", payload)
 }
 
-// All let you list the transaction splits available on your integration
+// All let you list the transaction splits available on your Integration
 //
 // Example:
 //
@@ -122,7 +122,7 @@ func (t *TransactionSplitClient) All(queries ...Query) (*Response, error) {
 	return t.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you get the details of a split on your integration
+// FetchOne lets you get the details of a split on your Integration
 //
 // Example:
 //
@@ -156,7 +156,7 @@ func (t *TransactionSplitClient) FetchOne(id string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/split/%s", id), nil)
 }
 
-// Update lets you update a transaction split details on your integration
+// Update lets you update a transaction split details on your Integration
 //
 // Example:
 //
