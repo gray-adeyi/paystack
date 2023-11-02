@@ -6,7 +6,7 @@ import (
 )
 
 // TransferClient interacts with endpoints related to paystack transfer resource that lets you
-// automate sending money to your customers.
+// automate sending money to your Customers.
 type TransferClient struct {
 	*baseAPIClient
 }
@@ -20,10 +20,10 @@ type TransferClient struct {
 // tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransferClient(options ...ClientOptions) *TransferClient {
 	client := NewAPIClient(options...)
-	return client.transfers
+	return client.Transfers
 }
 
-// Initiate lets you send money to your customers.
+// Initiate lets you send money to your Customers.
 // Status of a transfer object returned will be pending if OTP is disabled.
 // In the event that an OTP is required, status will read otp.
 //
@@ -38,11 +38,11 @@ func NewTransferClient(options ...ClientOptions) *TransferClient {
 //	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the transfer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transfers field is a `TransferClient`
+//	// paystackClient.Transfers field is a `TransferClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transfers.Initiate("balance",500000,"RCP_gx2wn530m0i3w3m")
+//	// resp, err := paystackClient.Transfers.Initiate("balance",500000,"RCP_gx2wn530m0i3w3m")
 //
-//	// you can pass in optional parameters to the `transfers.Initiate` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Transfers.Initiate` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `reason`.
 //	// resp, err := tfClient.Initiate("balance",500000,"RCP_gx2wn530m0i3w3m", p.WithOptionalParameter("reason","Discount Refund"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
@@ -89,9 +89,9 @@ func (t *TransferClient) Initiate(source string, amount int, recipient string,
 //	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the transfer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transfers field is a `TransferClient`
+//	// paystackClient.Transfers field is a `TransferClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transfers.Finalize("TRF_vsyqdmlzble3uii","928783")
+//	// resp, err := paystackClient.Transfers.Finalize("TRF_vsyqdmlzble3uii","928783")
 //
 // resp, err := tfClient.Finalize("TRF_vsyqdmlzble3uii","928783")
 //
@@ -114,7 +114,7 @@ func (t *TransferClient) Finalize(transferCode string, otp string) (*Response, e
 	return t.APICall(http.MethodPost, "/transfer/finalize_transfer", payload)
 }
 
-// BulkInitiate lets you initiate multiple transfers in a single request.
+// BulkInitiate lets you initiate multiple Transfers in a single request.
 // You need to disable the Transfers OTP requirement to use this endpoint.
 //
 // Example:
@@ -128,22 +128,22 @@ func (t *TransferClient) Finalize(transferCode string, otp string) (*Response, e
 //	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the transfer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transfers field is a `TransferClient`
+//	// paystackClient.Transfers field is a `TransferClient`
 //	// Therefore, this is possible
-//	// transfers := []map[string]interface{
+//	// Transfers := []map[string]interface{
 //	//	{"amount": 20000,"reference": "588YtfftReF355894J","reason": "Why not?","recipient":"RCP_2tn9clt23s7qr28"},
 //	//	{"amount": 30000,"reference": "YunoTReF35e0r4J","reason": "Because I can","recipient":"RCP_1a25w1h3n0xctjg"},
 //	//	{"amount": 40000,"reason": "Coming right up","recipient": "RCP_aps2aibr69caua7"},
 //	}
-//	// resp, err := paystackClient.transfers.BulkInitiate("balance", transfers)
+//	// resp, err := paystackClient.Transfers.BulkInitiate("balance", Transfers)
 //
-//	transfers := []map[string]interface{
+//	Transfers := []map[string]interface{
 //		{"amount": 20000,"reference": "588YtfftReF355894J","reason": "Why not?","recipient":"RCP_2tn9clt23s7qr28"},
 //		{"amount": 30000,"reference": "YunoTReF35e0r4J","reason": "Because I can","recipient":"RCP_1a25w1h3n0xctjg"},
 //		{"amount": 40000,"reason": "Coming right up","recipient": "RCP_aps2aibr69caua7"},
 //	}
 //
-//	resp, err := tfClient.BulkInitiate("balance", transfers)
+//	resp, err := tfClient.BulkInitiate("balance", Transfers)
 //
 //	if err != nil {
 //		panic(err)
@@ -160,12 +160,12 @@ func (t *TransferClient) Finalize(transferCode string, otp string) (*Response, e
 func (t *TransferClient) BulkInitiate(source string, transfers interface{}) (*Response, error) {
 	payload := make(map[string]interface{})
 	payload["source"] = source
-	payload["transfers"] = transfers
+	payload["Transfers"] = transfers
 
 	return t.APICall(http.MethodPost, "/transfer/bulk", payload)
 }
 
-// All lets you retrieve all the transfers made on your integration.
+// All lets you retrieve all the Transfers made on your Integration.
 //
 // Example:
 //
@@ -178,11 +178,11 @@ func (t *TransferClient) BulkInitiate(source string, transfers interface{}) (*Re
 //	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transfers field is a `TransferClient`
+//	// paystackClient.Transfers field is a `TransferClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transfers.All()
+//	// resp, err := paystackClient.Transfers.All()
 //
-//	// All also accepts queries, so say you want to customize how many transfers to retrieve
+//	// All also accepts queries, so say you want to customize how many Transfers to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := tfClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
@@ -206,7 +206,7 @@ func (t *TransferClient) All(queries ...Query) (*Response, error) {
 	return t.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve the details of a transfer on your integration.
+// FetchOne lets you retrieve the details of a transfer on your Integration.
 //
 // Example:
 //
@@ -219,9 +219,9 @@ func (t *TransferClient) All(queries ...Query) (*Response, error) {
 //	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transfers field is a `TransferClient`
+//	// paystackClient.Transfers field is a `TransferClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transfers.FetchOne("<idOrCode>")
+//	// resp, err := paystackClient.Transfers.FetchOne("<idOrCode>")
 //
 //	resp, err := tfClient.FetchOne("<idOrCode>")
 //	if err != nil {
@@ -240,7 +240,7 @@ func (t *TransferClient) FetchOne(idOrCode string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/transfer/%s", idOrCode), nil)
 }
 
-// Verify lets you verify the status of a transfer on your integration.
+// Verify lets you verify the status of a transfer on your Integration.
 //
 // Example:
 //
@@ -253,9 +253,9 @@ func (t *TransferClient) FetchOne(idOrCode string) (*Response, error) {
 //	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transfers field is a `TransferClient`
+//	// paystackClient.Transfers field is a `TransferClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transfers.Verify("<reference>")
+//	// resp, err := paystackClient.Transfers.Verify("<reference>")
 //
 //	resp, err := tfClient.Verify("<reference>")
 //	if err != nil {

@@ -2,7 +2,7 @@ package paystack
 
 import "net/http"
 
-// MiscellaneousClient interacts with endpoints related to paystack miscellaneous resource that
+// MiscellaneousClient interacts with endpoints related to paystack Miscellaneous resource that
 // provides information that is relevant to other client methods
 type MiscellaneousClient struct {
 	*baseAPIClient
@@ -17,7 +17,7 @@ type MiscellaneousClient struct {
 //	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
 	client := NewAPIClient(options...)
-	return client.miscellaneous
+	return client.Miscellaneous
 }
 
 // Banks lets you retrieve a list of all supported banks and their properties
@@ -33,9 +33,9 @@ func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
 //	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment pages client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.miscellaneous field is a `MiscellaneousClient`
+//	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.miscellaneous.Banks()
+//	// resp, err := paystackClient.Miscellaneous.Banks()
 //
 //	// Banks also accepts queries, so say you want to customize how many banks to retrieve
 //	// and which country the banks to retrieve are from, you can write it like so.
@@ -74,9 +74,9 @@ func (p *MiscellaneousClient) Banks(queries ...Query) (*Response, error) {
 //	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment pages client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.miscellaneous field is a `MiscellaneousClient`
+//	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.miscellaneous.Countries()
+//	// resp, err := paystackClient.Miscellaneous.Countries()
 //
 //	resp, err := miscClient.Countries()
 //	if err != nil {
@@ -95,7 +95,7 @@ func (p *MiscellaneousClient) Countries() (*Response, error) {
 	return p.APICall(http.MethodGet, "/country", nil)
 }
 
-// States lets you retrieve a list of states for a country for address verification
+// States lets you retrieve a list of states for a country for address Verification
 //
 // Example:
 //
@@ -108,9 +108,9 @@ func (p *MiscellaneousClient) Countries() (*Response, error) {
 //	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment pages client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.miscellaneous field is a `MiscellaneousClient`
+//	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.miscellaneous.States()
+//	// resp, err := paystackClient.Miscellaneous.States()
 //
 //	// States also accepts queries, so say you want to specify country the states
 //	// to retrieve are from, you can write it like so.

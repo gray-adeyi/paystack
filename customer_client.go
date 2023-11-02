@@ -6,7 +6,7 @@ import (
 )
 
 // CustomerClient interacts with endpoints related to paystack Customer resource
-// that allows you to create and manage customers on your integration.
+// that allows you to create and manage Customers on your Integration.
 type CustomerClient struct {
 	*baseAPIClient
 }
@@ -21,10 +21,10 @@ type CustomerClient struct {
 func NewCustomerClient(options ...ClientOptions) *CustomerClient {
 	client := NewAPIClient(options...)
 
-	return client.customers
+	return client.Customers
 }
 
-// Create lets you create a customer on your integration
+// Create lets you create a customer on your Integration
 //
 // Example:
 //
@@ -37,9 +37,9 @@ func NewCustomerClient(options ...ClientOptions) *CustomerClient {
 //	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.customers field is a `CustomerClient`
+//	// paystackClient.Customers field is a `CustomerClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.customers.Create("johndoe@example.com","John","Doe")
+//	// resp, err := paystackClient.Customers.Create("johndoe@example.com","John","Doe")
 //
 //	// you can pass in optional parameters to the `customerClient.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `phone`.
@@ -75,7 +75,7 @@ func (c *CustomerClient) Create(email string, firstName string, lastName string,
 	return c.APICall(http.MethodPost, "/customer", payload)
 }
 
-// All lets you retrieve customers available on your integration.
+// All lets you retrieve Customers available on your Integration.
 //
 // Example:
 //
@@ -88,9 +88,9 @@ func (c *CustomerClient) Create(email string, firstName string, lastName string,
 //	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.customers field is a `CustomerClient`
+//	// paystackClient.Customers field is a `CustomerClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.customers.All()
+//	// resp, err := paystackClient.Customers.All()
 //
 //	// All also accepts queries, so say you want to specify the page
 //	// to retrieve, you can write it like so.
@@ -116,7 +116,7 @@ func (c *CustomerClient) All(queries ...Query) (*Response, error) {
 	return c.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve the details of a customer on your integration
+// FetchOne lets you retrieve the details of a customer on your Integration
 //
 // Example:
 //
@@ -129,9 +129,9 @@ func (c *CustomerClient) All(queries ...Query) (*Response, error) {
 //	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.customers field is a `CustomerClient`
+//	// paystackClient.Customers field is a `CustomerClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.customers.FetchOne("<emailOrCode>")
+//	// resp, err := paystackClient.Customers.FetchOne("<emailOrCode>")
 //
 //	resp, err := customerClient.FetchOne("<emailOrCode>")
 //	if err != nil {
@@ -150,7 +150,7 @@ func (c *CustomerClient) FetchOne(emailOrCode string) (*Response, error) {
 	return c.APICall(http.MethodGet, fmt.Sprintf("/customer/%s", emailOrCode), nil)
 }
 
-// Update lets you update a customer's details on your integration
+// Update lets you update a customer's details on your Integration
 //
 // Example:
 //
@@ -163,9 +163,9 @@ func (c *CustomerClient) FetchOne(emailOrCode string) (*Response, error) {
 //	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.customers field is a `CustomerClient`
+//	// paystackClient.Customers field is a `CustomerClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.customers.Update("143", p.WithOptionalParameter("first_name","John"))
+//	// resp, err := paystackClient.Customers.Update("143", p.WithOptionalParameter("first_name","John"))
 //
 //	// you can pass in optional parameters to the `customerClient.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `first_name`.
@@ -209,9 +209,9 @@ func (c *CustomerClient) Update(code string, optionalPayloadParameters ...Option
 //	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.customers field is a `CustomerClient`
+//	// paystackClient.Customers field is a `CustomerClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.customers.Validate("143", "Asta","Lavista","bank_account","","NG","20012345677","007","0123456789")
+//	// resp, err := paystackClient.Customers.Validate("143", "Asta","Lavista","bank_account","","NG","20012345677","007","0123456789")
 //
 //	// you can pass in optional parameters to the `customerClient.Validate` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `middle_name`.
@@ -253,7 +253,7 @@ func (c *CustomerClient) Validate(code string, firstName string, lastName string
 	return c.APICall(http.MethodPost, fmt.Sprintf("/customer/%s/identification", code), payload)
 }
 
-// Flag lets you whitelist or blacklist a customer on your integration
+// Flag lets you whitelist or blacklist a customer on your Integration
 //
 // Example:
 //
@@ -266,9 +266,9 @@ func (c *CustomerClient) Validate(code string, firstName string, lastName string
 //	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.customers field is a `CustomerClient`
+//	// paystackClient.Customers field is a `CustomerClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.customers.Flag("CUS_xr58yrr2ujlft9k")
+//	// resp, err := paystackClient.Customers.Flag("CUS_xr58yrr2ujlft9k")
 //
 //	// you can pass in optional parameters to the `customerClient.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `risk_action`.
@@ -315,9 +315,9 @@ func (c *CustomerClient) Flag(emailOrCode string,
 //	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.customers field is a `CustomerClient`
+//	// paystackClient.Customers field is a `CustomerClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.customers.Deactivate("AUTH_72btv547")
+//	// resp, err := paystackClient.Customers.Deactivate("AUTH_72btv547")
 //
 //	resp, err := customerClient.Deactivate("AUTH_72btv547")
 //	if err != nil {

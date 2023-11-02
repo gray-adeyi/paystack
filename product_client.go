@@ -6,7 +6,7 @@ import (
 )
 
 // ProductClient interacts with endpoints related to paystack product resource that allows you to create and
-// manage inventories on your integration.
+// manage inventories on your Integration.
 type ProductClient struct {
 	*baseAPIClient
 }
@@ -20,10 +20,10 @@ type ProductClient struct {
 // prodClient := p.NewProductClient(p.WithSeretKey("<paystack-secret-key>"))
 func NewProductClient(options ...ClientOptions) *ProductClient {
 	client := NewAPIClient(options...)
-	return client.products
+	return client.Products
 }
 
-// Create lets you create a product on your integration
+// Create lets you create a product on your Integration
 //
 // Example:
 //
@@ -36,11 +36,11 @@ func NewProductClient(options ...ClientOptions) *ProductClient {
 //	prodClient := p.NewProductClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a product client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.products field is a `ProductClient`
+//	// paystackClient.Products field is a `ProductClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.products.Create("Puff Puff", "Crispy flour ball with fluffy interior", 5000, "NGN")
+//	// resp, err := paystackClient.Products.Create("Puff Puff", "Crispy flour ball with fluffy interior", 5000, "NGN")
 //
-//	// you can pass in optional parameters to the `products.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Products.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `unlimited`.
 //	// resp, err := prodClient.Create("Puff Puff", "Crispy flour ball with fluffy interior", 5000, "NGN",
 //	//	p.WithOptionalParameter("unlimited","true"))
@@ -76,7 +76,7 @@ func (p *ProductClient) Create(name string, description string, price int, curre
 	return p.APICall(http.MethodPost, "/product", payload)
 }
 
-// All lets you retrieve products available on your integration
+// All lets you retrieve Products available on your Integration
 //
 // Example:
 //
@@ -89,11 +89,11 @@ func (p *ProductClient) Create(name string, description string, price int, curre
 //	prodClient := p.NewProductClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a product client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.products field is a `ProductClient`
+//	// paystackClient.Products field is a `ProductClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.products.All()
+//	// resp, err := paystackClient.Products.All()
 //
-//	// All also accepts queries, so say you want to customize how many products to retrieve
+//	// All also accepts queries, so say you want to customize how many Products to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := prodClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
@@ -117,7 +117,7 @@ func (p *ProductClient) All(queries ...Query) (*Response, error) {
 	return p.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you Get details of a product on your integration
+// FetchOne lets you Get details of a product on your Integration
 //
 // Example:
 //
@@ -130,9 +130,9 @@ func (p *ProductClient) All(queries ...Query) (*Response, error) {
 //	prodClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a product client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.products field is a `ProductClient`
+//	// paystackClient.Products field is a `ProductClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.products.FetchOne("<id>")
+//	// resp, err := paystackClient.Products.FetchOne("<id>")
 //
 //	resp, err := prodClient.FetchOne("<id>")
 //	if err != nil {
@@ -151,7 +151,7 @@ func (p *ProductClient) FetchOne(id string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/product/%s", id), nil)
 }
 
-// Update lets you update a product details on your integration
+// Update lets you update a product details on your Integration
 //
 // Example:
 //
@@ -164,11 +164,11 @@ func (p *ProductClient) FetchOne(id string) (*Response, error) {
 //	prodClient := p.NewProductClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a product client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.products field is a `ProductClient`
+//	// paystackClient.Products field is a `ProductClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.products.Update("<id>", "Product Six", "Product Six Description",500000, "USD")
+//	// resp, err := paystackClient.Products.Update("<id>", "Product Six", "Product Six Description",500000, "USD")
 //
-//	// you can pass in optional parameters to the `products.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Products.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `unlimited`.
 //	// resp, err := prodClient.Update("<id>", "Product Six", "Product Six Description",500000, "USD",
 //	//	p.WithOptionalParameter("unlimited","true"))

@@ -6,7 +6,7 @@ import (
 )
 
 // PlanClient interacts with endpoints related to paystack plan resource that lets you
-// create and manage installment payment options on your integration.
+// create and manage installment payment options on your Integration.
 type PlanClient struct {
 	*baseAPIClient
 }
@@ -21,10 +21,10 @@ type PlanClient struct {
 func NewPlanClient(options ...ClientOptions) *PlanClient {
 	client := NewAPIClient(options...)
 
-	return client.plans
+	return client.Plans
 }
 
-// Create lets you create a plan on your integration
+// Create lets you create a plan on your Integration
 //
 // Example:
 //
@@ -37,11 +37,11 @@ func NewPlanClient(options ...ClientOptions) *PlanClient {
 //	planClient := p.NewPlanClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a plan client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.plans field is a `PlanClient`
+//	// paystackClient.Plans field is a `PlanClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.plans.Create("Monthly retainer", 500000, "monthly")
+//	// resp, err := paystackClient.Plans.Create("Monthly retainer", 500000, "monthly")
 //
-//	// you can pass in optional parameters to the `plans.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Plans.Create` with `p.WithOptionalParameter`
 //	// for example, you want to specify the `description`.
 //	// resp, err := planClient.Create("Monthly retainer", 500000, "monthly",
 //	//	p.WithOptionalParameter("description","a test description"))
@@ -75,7 +75,7 @@ func (p *PlanClient) Create(name string, amount int, interval string, optionalPa
 	return p.APICall(http.MethodPost, "/plan", payload)
 }
 
-// All lets you retrieve plans available on your integration
+// All lets you retrieve Plans available on your Integration
 //
 // Example:
 //
@@ -88,11 +88,11 @@ func (p *PlanClient) Create(name string, amount int, interval string, optionalPa
 //	planClient := p.NewPlanClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a plan client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.plans field is a `PlanClient`
+//	// paystackClient.Plans field is a `PlanClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.plans.All()
+//	// resp, err := paystackClient.Plans.All()
 //
-//	// All also accepts queries, so say you want to customize how many plans to retrieve
+//	// All also accepts queries, so say you want to customize how many Plans to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := planClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
@@ -116,7 +116,7 @@ func (p *PlanClient) All(queries ...Query) (*Response, error) {
 	return p.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve details of a plan on your integration
+// FetchOne lets you retrieve details of a plan on your Integration
 //
 // Example:
 //
@@ -129,9 +129,9 @@ func (p *PlanClient) All(queries ...Query) (*Response, error) {
 //	planClient := p.NewPlanClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a plan client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.plans field is a `PlanClient`
+//	// paystackClient.Plans field is a `PlanClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.plans.FetchOne("<idOrCode>")
+//	// resp, err := paystackClient.Plans.FetchOne("<idOrCode>")
 //
 //	resp, err := planClient.FetchOne("<idOrCode>")
 //	if err != nil {
@@ -150,7 +150,7 @@ func (p *PlanClient) FetchOne(idOrCode string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/plan/%s", idOrCode), nil)
 }
 
-// Update lets you update a plan details on your integration
+// Update lets you update a plan details on your Integration
 //
 // Example:
 //
@@ -163,11 +163,11 @@ func (p *PlanClient) FetchOne(idOrCode string) (*Response, error) {
 //	planClient := p.NewPlanClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a plan client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.plans field is a `PlanClient`
+//	// paystackClient.Plans field is a `PlanClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.plans.Update("<idOrCode>","Monthly retainer", 500000, "monthly")
+//	// resp, err := paystackClient.Plans.Update("<idOrCode>","Monthly retainer", 500000, "monthly")
 //
-//	// you can pass in optional parameters to the `subAccounts.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `SubAccounts.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `description`.
 //	// resp, err := saClient.Update("<idOrCode>","Monthly retainer", 500000, "monthly",
 //	//	p.WithOptionalParameter("description","test description"))

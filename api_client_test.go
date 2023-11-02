@@ -8,7 +8,7 @@ import (
 
 func TestAPIClient(t *testing.T) {
 	client := NewAPIClient(WithSecretKey("<paystack-secret-key>"))
-	r, err := client.transactions.Initialize(1000, "<dummy-email>", WithOptionalParameter("currency", "NGN"))
+	r, err := client.Transactions.Initialize(1000, "<dummy-email>", WithOptionalParameter("currency", "NGN"))
 	if err != nil {
 		t.Errorf("Error in client: %v", err)
 	}

@@ -6,8 +6,7 @@ import (
 )
 
 // RefundClient interacts with endpoints related to paystack refund resource that lets you
-//
-//	create and manage transaction refunds.
+// create and manage transaction Refunds.
 type RefundClient struct {
 	*baseAPIClient
 }
@@ -21,10 +20,10 @@ type RefundClient struct {
 //	refundClient := p.NewRefundClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewRefundClient(options ...ClientOptions) *RefundClient {
 	client := NewAPIClient(options...)
-	return client.refunds
+	return client.Refunds
 }
 
-// Create lets you create and manage transaction refunds.
+// Create lets you create and manage transaction Refunds.
 //
 // Example:
 //
@@ -39,9 +38,9 @@ func NewRefundClient(options ...ClientOptions) *RefundClient {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.refund field is a `RefundClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.refunds.Create("1641")
+//	// resp, err := paystackClient.Refunds.Create("1641")
 //
-//	// you can pass in optional parameters to the `refunds.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Refunds.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `amount`.
 //	// resp, err := refundClient.Create("1641", p.WithOptionalParameter("amount",500000))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
@@ -73,7 +72,7 @@ func (r *RefundClient) Create(transaction string,
 	return r.APICall(http.MethodPost, "/refund", payload)
 }
 
-// All lets you retrieve refunds available on your integration
+// All lets you retrieve Refunds available on your Integration
 //
 // Example:
 //
@@ -86,11 +85,11 @@ func (r *RefundClient) Create(transaction string,
 //	refundClient := p.NewRefundClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a refund client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.refunds field is a `RefundClient`
+//	// paystackClient.Refunds field is a `RefundClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.refunds.All()
+//	// resp, err := paystackClient.Refunds.All()
 //
-//	// All also accepts queries, so say you want to customize how many refunds to retrieve
+//	// All also accepts queries, so say you want to customize how many Refunds to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := refundClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
@@ -114,7 +113,7 @@ func (r *RefundClient) All(queries ...Query) (*Response, error) {
 	return r.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve the details of a refund on your integration
+// FetchOne lets you retrieve the details of a refund on your Integration
 //
 // Example:
 //
@@ -127,9 +126,9 @@ func (r *RefundClient) All(queries ...Query) (*Response, error) {
 //	refundClient := p.NewRefundClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a refund client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.refunds field is a `RefundClient`
+//	// paystackClient.Refunds field is a `RefundClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.refunds.FetchOne("<reference>")
+//	// resp, err := paystackClient.Refunds.FetchOne("<reference>")
 //
 //	resp, err := ppClient.FetchOne("<reference>")
 //	if err != nil {

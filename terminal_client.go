@@ -11,7 +11,7 @@ type TerminalEvent = string
 const TerminalEventInvoice TerminalEvent = "invoice"
 const TerminalEventTransaction TerminalEvent = "transaction"
 
-// TerminalClient interacts with endpoints related to paystack Terminal resource tha allows you to
+// TerminalClient interacts with endpoints related to paystack Terminal resource that allows you to
 // build delightful in-person payment experiences.
 type TerminalClient struct {
 	*baseAPIClient
@@ -26,7 +26,7 @@ type TerminalClient struct {
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTerminalClient(options ...ClientOptions) *TerminalClient {
 	client := NewAPIClient(options...)
-	return client.terminals
+	return client.Terminals
 }
 
 // SendEvent lets you send an event from your application to the Paystack Terminal
@@ -42,11 +42,11 @@ func NewTerminalClient(options ...ClientOptions) *TerminalClient {
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a terminal client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.terminals field is a `TerminalClient`
+//	// paystackClient.Terminals field is a `TerminalClient`
 //	// Therefore, this is possible
 //	// payload := map[string]interface{}{
 //	//	"id": 7895939, "reference": 4634337895939 }
-//	// resp, err := paystackClient.terminals.SendEvent("30",p.TerminalEventInvoice,"process", payload)
+//	// resp, err := paystackClient.Terminals.SendEvent("30",p.TerminalEventInvoice,"process", payload)
 //
 //	payload := map[string]interface{}{
 //	"id": 7895939, "reference": 4634337895939 }
@@ -85,9 +85,9 @@ func (t *TerminalClient) SendEvent(terminalId string, eventType TerminalEvent, a
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a terminal client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.terminals field is a `TerminalClient`
+//	// paystackClient.Terminals field is a `TerminalClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.terminals.EventStatus("30","616d721e8c5cd40a0cdd54a6")
+//	// resp, err := paystackClient.Terminals.EventStatus("30","616d721e8c5cd40a0cdd54a6")
 //
 //	payload := map[string]interface{}{
 //	"id": 7895939, "reference": 4634337895939 }
@@ -121,9 +121,9 @@ func (t *TerminalClient) EventStatus(terminalId string, eventId string) (*Respon
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.terminals field is a `TerminalClient`
+//	// paystackClient.Terminals field is a `TerminalClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.terminals.TerminalStatus("30")
+//	// resp, err := paystackClient.Terminals.TerminalStatus("30")
 //
 //	resp, err := terminalClient.TerminalStatus("30")
 //	if err != nil {
@@ -142,7 +142,7 @@ func (t *TerminalClient) TerminalStatus(terminalId string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/terminal/%s/presence", terminalId), nil)
 }
 
-// All lets you retrieve the Terminals available on your integration
+// All lets you retrieve the Terminals available on your Integration
 //
 // Example:
 //
@@ -155,11 +155,11 @@ func (t *TerminalClient) TerminalStatus(terminalId string) (*Response, error) {
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a terminal client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.terminals field is a `TerminalClient`
+//	// paystackClient.Terminals field is a `TerminalClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.All()
+//	// resp, err := paystackClient.Transactions.All()
 //
-//	// All also accepts queries, so say you want to customize how many terminals to retrieve,
+//	// All also accepts queries, so say you want to customize how many Terminals to retrieve,
 //	// you can write it like so.
 //	// resp, err := txnClient.All(p.WithQuery("perPage","50"))
 //
@@ -196,9 +196,9 @@ func (t *TerminalClient) All(queries ...Query) (*Response, error) {
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a terminal client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.terminals field is a `TerminalClient`
+//	// paystackClient.Terminals field is a `TerminalClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.terminals.FetchOne("<terminalId>")
+//	// resp, err := paystackClient.Terminals.FetchOne("<terminalId>")
 //
 //	resp, err := terminalClient.FetchOne("<terminalId>")
 //	if err != nil {
@@ -230,9 +230,9 @@ func (t *TerminalClient) FetchOne(terminalId string) (*Response, error) {
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a terminal client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.terminals field is a `TerminalClient`
+//	// paystackClient.Terminals field is a `TerminalClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.terminals.Update("<terminalId>", "New Terminal","somewhere on earth")
+//	// resp, err := paystackClient.Terminals.Update("<terminalId>", "New Terminal","somewhere on earth")
 //
 //	resp, err := terminalClient.Update("<terminalId>", "New Terminal","somewhere on earth")
 //	if err != nil {
@@ -255,7 +255,7 @@ func (t *TerminalClient) Update(terminalId string, name string, address string) 
 	return t.APICall(http.MethodPut, fmt.Sprintf("/terminal/%s", terminalId), payload)
 }
 
-// Commission lets you activate your debug device by linking it to your integration
+// Commission lets you activate your debug device by linking it to your Integration
 //
 // Example:
 //
@@ -268,9 +268,9 @@ func (t *TerminalClient) Update(terminalId string, name string, address string) 
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a terminal client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.terminals field is a `TerminalClient`
+//	// paystackClient.Terminals field is a `TerminalClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.terminals.Commission("<serialNumber>")
+//	// resp, err := paystackClient.Terminals.Commission("<serialNumber>")
 //
 //	resp, err := terminalClient.Commission("<serialNumber>")
 //	if err != nil {
@@ -292,7 +292,7 @@ func (t *TerminalClient) Commission(serialNumber string) (*Response, error) {
 	return t.APICall(http.MethodPost, "/terminal/commission_device", payload)
 }
 
-// Decommission lets you unlink your debug device from your integration
+// Decommission lets you unlink your debug device from your Integration
 //
 // Example:
 //
@@ -305,9 +305,9 @@ func (t *TerminalClient) Commission(serialNumber string) (*Response, error) {
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a terminal client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.terminals field is a `TerminalClient`
+//	// paystackClient.Terminals field is a `TerminalClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.terminals.Commission("<serialNumber>")
+//	// resp, err := paystackClient.Terminals.Commission("<serialNumber>")
 //
 //	resp, err := terminalClient.Commission("<serialNumber>")
 //	if err != nil {

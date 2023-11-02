@@ -21,10 +21,10 @@ type TransactionSplitClient struct {
 //	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransactionSplitClient(options ...ClientOptions) *TransactionSplitClient {
 	client := NewAPIClient(options...)
-	return client.transactionSplits
+	return client.TransactionSplits
 }
 
-// Create lets you create a split payment on your integration
+// Create lets you create a split payment on your Integration
 //
 // Example:
 //
@@ -37,13 +37,13 @@ func NewTransactionSplitClient(options ...ClientOptions) *TransactionSplitClient
 //	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction split client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactionSplits field is a `TransactionSplitClient`
+//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
 //	// Therefore, this is possible
 //	// subaccounts := []map[string]interface{}{
 //	// {"subaccount": "ACCT_z3x6z3nbo14xsil", "share": 20},
 //	// {"subaccount": "ACCT_pwwualwty4nhq9d", "share": 80},
 //	// }
-//	// resp, err := paystackClient.transactionSplits.Create("co-founders account","percentage","NGN",
+//	// resp, err := paystackClient.TransactionSplits.Create("co-founders account","percentage","NGN",
 //	//	subaccounts,"subaccount","ACCT_hdl8abxl8drhrl3")
 //
 // subaccounts := []map[string]interface{}{
@@ -81,7 +81,7 @@ func (t *TransactionSplitClient) Create(name string, transactionSplitType string
 	return t.APICall(http.MethodPost, "/split", payload)
 }
 
-// All let you list the transaction splits available on your integration
+// All let you list the transaction splits available on your Integration
 //
 // Example:
 //
@@ -94,9 +94,9 @@ func (t *TransactionSplitClient) Create(name string, transactionSplitType string
 //	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction split client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactionSplits field is a `TransactionSplitClient`
+//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactionSplits.All()
+//	// resp, err := paystackClient.TransactionSplits.All()
 //
 //	// All also accepts queries, so say you want to filter by the name of the split
 //	// and if it is active, you can write it like so.
@@ -122,7 +122,7 @@ func (t *TransactionSplitClient) All(queries ...Query) (*Response, error) {
 	return t.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you get the details of a split on your integration
+// FetchOne lets you get the details of a split on your Integration
 //
 // Example:
 //
@@ -135,9 +135,9 @@ func (t *TransactionSplitClient) All(queries ...Query) (*Response, error) {
 //	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction split client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactionSplits field is a `TransactionSplitClient`
+//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactionSplits.FetchOne("<id>")
+//	// resp, err := paystackClient.TransactionSplits.FetchOne("<id>")
 //
 //	resp, err := txnSplitClient.FetchOne("<id>")
 //	if err != nil {
@@ -156,7 +156,7 @@ func (t *TransactionSplitClient) FetchOne(id string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/split/%s", id), nil)
 }
 
-// Update lets you update a transaction split details on your integration
+// Update lets you update a transaction split details on your Integration
 //
 // Example:
 //
@@ -169,9 +169,9 @@ func (t *TransactionSplitClient) FetchOne(id string) (*Response, error) {
 //	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction split client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactionSplits field is a `TransactionSplitClient`
+//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactionSplits.Update("143", "co-authors account", true)
+//	// resp, err := paystackClient.TransactionSplits.Update("143", "co-authors account", true)
 //
 //	// you can pass in optional parameters to the `txnSplitClient.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `bearer_type`.
@@ -219,9 +219,9 @@ func (t *TransactionSplitClient) Update(id string, name string, active bool, opt
 //	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction split client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactionSplits field is a `TransactionSplitClient`
+//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactionSplits.Add("ACCT_hdl8abxl8drhrl3", 15)
+//	// resp, err := paystackClient.TransactionSplits.Add("ACCT_hdl8abxl8drhrl3", 15)
 //
 //	resp, err := txnSplitClient.Add("ACCT_hdl8abxl8drhrl3", 15)
 //	if err != nil {
@@ -257,9 +257,9 @@ func (t *TransactionSplitClient) Add(id string, subAccount string, share int) (*
 //	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction split client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactionSplits field is a `TransactionSplitClient`
+//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactionSplits.Remove("143","ACCT_hdl8abxl8drhrl3")
+//	// resp, err := paystackClient.TransactionSplits.Remove("143","ACCT_hdl8abxl8drhrl3")
 //
 //	resp, err := txnSplitClient.Remove("143","ACCT_hdl8abxl8drhrl3")
 //	if err != nil {

@@ -7,7 +7,7 @@ import (
 
 // PaymentPageClient interacts with endpoints
 // related to paystack payment page resource
-// that lets you provide a quick and secure way to collect payment for products.
+// that lets you provide a quick and secure way to collect payment for Products.
 type PaymentPageClient struct {
 	*baseAPIClient
 }
@@ -21,10 +21,10 @@ type PaymentPageClient struct {
 //	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewPaymentPageClient(options ...ClientOptions) *PaymentPageClient {
 	client := NewAPIClient(options...)
-	return client.paymentPages
+	return client.PaymentPages
 }
 
-// Create lets you create a payment page on your integration
+// Create lets you create a payment page on your Integration
 //
 // Example:
 //
@@ -37,11 +37,11 @@ func NewPaymentPageClient(options ...ClientOptions) *PaymentPageClient {
 //	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the payment pages client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.paymentPages field is a `PaymentPageClient`
+//	// paystackClient.PaymentPages field is a `PaymentPageClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.paymentPages.Create("Buttercup Brunch")
+//	// resp, err := paystackClient.PaymentPages.Create("Buttercup Brunch")
 //
-//	// you can pass in optional parameters to the `paymentPages.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `PaymentPages.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `amount`.
 //	// resp, err := ppClient.Create("Buttercup Brunch", p.WithOptionalParameter("amount",500000))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
@@ -72,7 +72,7 @@ func (p *PaymentPageClient) Create(name string, optionalPayloadParameters ...Opt
 	return p.APICall(http.MethodPost, "/page", payload)
 }
 
-// All lets you retrieve payment pages available on your integration
+// All lets you retrieve payment pages available on your Integration
 //
 // Example:
 //
@@ -85,9 +85,9 @@ func (p *PaymentPageClient) Create(name string, optionalPayloadParameters ...Opt
 //	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment pages client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.paymentPages field is a `PaymentPageClient`
+//	// paystackClient.PaymentPages field is a `PaymentPageClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.paymentPages.All()
+//	// resp, err := paystackClient.PaymentPages.All()
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
@@ -113,7 +113,7 @@ func (p *PaymentPageClient) All(queries ...Query) (*Response, error) {
 	return p.APICall(http.MethodGet, url, nil)
 }
 
-// FetchOne lets you retrieve details of a payment page on your integration
+// FetchOne lets you retrieve details of a payment page on your Integration
 //
 // Example:
 //
@@ -126,9 +126,9 @@ func (p *PaymentPageClient) All(queries ...Query) (*Response, error) {
 //	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment page client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.paymentPages field is a `PaymentPageClient`
+//	// paystackClient.PaymentPages field is a `PaymentPageClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.paymentPages.FetchOne("<idOrSlug>")
+//	// resp, err := paystackClient.PaymentPages.FetchOne("<idOrSlug>")
 //
 //	resp, err := ppClient.FetchOne("<idOrSlug>")
 //	if err != nil {
@@ -147,7 +147,7 @@ func (p *PaymentPageClient) FetchOne(idOrSlug string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/page/%s", idOrSlug), nil)
 }
 
-// Update lets you update a payment page details on your integration
+// Update lets you update a payment page details on your Integration
 //
 // Example:
 //
@@ -160,11 +160,11 @@ func (p *PaymentPageClient) FetchOne(idOrSlug string) (*Response, error) {
 //	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment page client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.paymentPages field is a `PaymentPageClient`
+//	// paystackClient.PaymentPages field is a `PaymentPageClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.paymentPages.Update("<idOrSlug>", "Buttercup Brunch", "description")
+//	// resp, err := paystackClient.PaymentPages.Update("<idOrSlug>", "Buttercup Brunch", "description")
 //
-//	// you can pass in optional parameters to the `subAccounts.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `SubAccounts.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `amount`.
 //	// resp, err := trClient.Create("<idOrSlug>", "Buttercup Brunch", "description",
 //	//	p.WithOptionalParameter("amount",500000))
@@ -210,9 +210,9 @@ func (p *PaymentPageClient) Update(idOrSlug string, name string, description str
 //	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment page client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.paymentPages field is a `PaymentPageClient`
+//	// paystackClient.PaymentPages field is a `PaymentPageClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.paymentPages.CheckSlug("<slug>")
+//	// resp, err := paystackClient.PaymentPages.CheckSlug("<slug>")
 //
 //	resp, err := ppClient.CheckSlug("<slug>")
 //	if err != nil {
@@ -231,7 +231,7 @@ func (p *PaymentPageClient) CheckSlug(slug string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/page/check_slug_availability/%s", slug), nil)
 }
 
-// AddProducts lets you add products to a payment page
+// AddProducts lets you add Products to a payment page
 //
 // Example:
 //
@@ -244,9 +244,9 @@ func (p *PaymentPageClient) CheckSlug(slug string) (*Response, error) {
 //	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment page client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.paymentPages field is a `PaymentPageClient`
+//	// paystackClient.PaymentPages field is a `PaymentPageClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.paymentPages.AddProducts("<id>", []string{4"73", "292"})
+//	// resp, err := paystackClient.PaymentPages.AddProducts("<id>", []string{4"73", "292"})
 //
 //	resp, err := ppClient.AddProducts("<id>", []string{4"73", "292"})
 //	if err != nil {

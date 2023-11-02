@@ -20,7 +20,7 @@ type ChargeClient struct {
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewChargeClient(options ...ClientOptions) *ChargeClient {
 	client := NewAPIClient(options...)
-	return client.charges
+	return client.Charges
 }
 
 // Create lets you initiate a payment by integrating the payment channel of your choice.
@@ -36,11 +36,11 @@ func NewChargeClient(options ...ClientOptions) *ChargeClient {
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.charges field is a `ChargeClient`
+//	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.charges.Create("johndoe@example.com", 100000)
+//	// resp, err := paystackClient.Charges.Create("johndoe@example.com", 100000)
 //
-//	// you can pass in optional parameters to the `charges.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Charges.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `amount`.
 //	// resp, err := ppClient.Create("johndoe@example.com", 100000, p.WithOptionalParameter("authorization_code","AUTH_xxx"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
@@ -86,9 +86,9 @@ func (c *ChargeClient) Create(email string, amount string, optionalPayloadParame
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.charges field is a `ChargeClient`
+//	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.charges.SubmitPin("1234", "5bwib5v6anhe9xa")
+//	// resp, err := paystackClient.Charges.SubmitPin("1234", "5bwib5v6anhe9xa")
 //
 // resp, err := chargeClient.SubmitPin("1234", "5bwib5v6anhe9xa")
 //
@@ -125,9 +125,9 @@ func (c *ChargeClient) SubmitPin(pin string, reference string) (*Response, error
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.charges field is a `ChargeClient`
+//	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.charges.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
+//	// resp, err := paystackClient.Charges.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
 //
 // resp, err := chargeClient.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
 //
@@ -164,9 +164,9 @@ func (c *ChargeClient) SubmitPhone(phone string, reference string) (*Response, e
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.charges field is a `ChargeClient`
+//	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.charges.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
+//	// resp, err := paystackClient.Charges.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
 //
 // resp, err := chargeClient.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
 //
@@ -203,9 +203,9 @@ func (c *ChargeClient) SubmitBirthday(birthday string, reference string) (*Respo
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.charges field is a `ChargeClient`
+//	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.charges.SubmitAddress("140 N 2ND ST",
+//	// resp, err := paystackClient.Charges.SubmitAddress("140 N 2ND ST",
 //	//	"7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
 //
 // resp, err := chargeClient.SubmitAddress("140 N 2ND ST", "7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
@@ -249,9 +249,9 @@ func (c *ChargeClient) SubmitAddress(address string, reference string, city stri
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.charges field is a `ChargeClient`
+//	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.charges.PendingCharge("5bwib5v6anhe9xa")
+//	// resp, err := paystackClient.Charges.PendingCharge("5bwib5v6anhe9xa")
 //
 // resp, err := chargeClient.PendingCharge("5bwib5v6anhe9xa")
 //
