@@ -7,7 +7,7 @@ import (
 
 // PaymentPageClient interacts with endpoints
 // related to paystack payment page resource
-// that lets you provide a quick and secure way to collect payment for products.
+// that lets you provide a quick and secure way to collect payment for Products.
 type PaymentPageClient struct {
 	*baseAPIClient
 }
@@ -231,7 +231,7 @@ func (p *PaymentPageClient) CheckSlug(slug string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/page/check_slug_availability/%s", slug), nil)
 }
 
-// AddProducts lets you add products to a payment page
+// AddProducts lets you add Products to a payment page
 //
 // Example:
 //
