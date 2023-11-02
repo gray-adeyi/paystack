@@ -17,7 +17,7 @@ type TransferControlClient struct {
 //	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransferControlClient(options ...ClientOptions) *TransferControlClient {
 	client := NewAPIClient(options...)
-	return client.transferControl
+	return client.TransferControl
 }
 
 // Balance lets you retrieve the available balance on your integration
@@ -33,9 +33,9 @@ func NewTransferControlClient(options ...ClientOptions) *TransferControlClient {
 //	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer control client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferControl field is a `TransferControlClient`
+//	// paystackClient.TransferControl field is a `TransferControlClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferControl.Balance()
+//	// resp, err := paystackClient.TransferControl.Balance()
 //
 //	resp, err := tcClient.Balance()
 //	if err != nil {
@@ -67,9 +67,9 @@ func (t *TransferControlClient) Balance() (*Response, error) {
 //	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer control client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferControl field is a `TransferControlClient`
+//	// paystackClient.TransferControl field is a `TransferControlClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferControl.BalanceLedger()
+//	// resp, err := paystackClient.TransferControl.BalanceLedger()
 //
 //	resp, err := tcClient.BalanceLedger()
 //	if err != nil {
@@ -101,9 +101,9 @@ func (t *TransferControlClient) BalanceLedger() (*Response, error) {
 //	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer control client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferControl field is a `TransferControlClient`
+//	// paystackClient.TransferControl field is a `TransferControlClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferControl.ResendOTP("TRF_vsyqdmlzble3uii","resend_otp")
+//	// resp, err := paystackClient.TransferControl.ResendOTP("TRF_vsyqdmlzble3uii","resend_otp")
 //
 //	resp, err := tcClient.ResendOTP("TRF_vsyqdmlzble3uii","resend_otp")
 //	if err != nil {
@@ -139,9 +139,9 @@ func (t *TransferControlClient) ResendOTP(transferCode string, reason string) (*
 //	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer control client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferControl field is a `TransferControlClient`
+//	// paystackClient.TransferControl field is a `TransferControlClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferControl.DisableOTP()
+//	// resp, err := paystackClient.TransferControl.DisableOTP()
 //
 //	resp, err := tcClient.DisableOTP()
 //	if err != nil {
@@ -173,9 +173,9 @@ func (t *TransferControlClient) DisableOTP() (*Response, error) {
 //	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer control client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferControl field is a `TransferControlClient`
+//	// paystackClient.TransferControl field is a `TransferControlClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferControl.FinalizeDisableOTP("<otp>")
+//	// resp, err := paystackClient.TransferControl.FinalizeDisableOTP("<otp>")
 //
 //	resp, err := tcClient.FinalizeDisableOTP("<otp>")
 //	if err != nil {
@@ -208,9 +208,9 @@ func (t *TransferControlClient) FinalizeDisableOTP(otp string) (*Response, error
 //	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transfer control client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transferControl field is a `TransferControlClient`
+//	// paystackClient.TransferControl field is a `TransferControlClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transferControl.EnableOTP()
+//	// resp, err := paystackClient.TransferControl.EnableOTP()
 //
 //	resp, err := tcClient.EnableOTP()
 //	if err != nil {
