@@ -20,10 +20,10 @@ type SettlementClient struct {
 //	sClient := p.NewSettlementClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewSettlementClient(options ...ClientOptions) *SettlementClient {
 	client := NewAPIClient(options...)
-	return client.settlements
+	return client.Settlements
 }
 
-// All lets you retrieve settlements made to your settlement accounts
+// All lets you retrieve Settlements made to your settlement accounts
 //
 // Example:
 //
@@ -36,9 +36,9 @@ func NewSettlementClient(options ...ClientOptions) *SettlementClient {
 //	sClient := p.NewSettlementClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a settlement client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.settlements field is a `SettlementClient`
+//	// paystackClient.Settlements field is a `SettlementClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.settlements.All()
+//	// resp, err := paystackClient.Settlements.All()
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
@@ -77,9 +77,9 @@ func (s *SettlementClient) All(queries ...Query) (*Response, error) {
 //	sClient := p.NewSettlementClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a settlement client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.settlements field is a `SettlementClient`
+//	// paystackClient.Settlements field is a `SettlementClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.settlements.AllTransactions("<settlementId>")
+//	// resp, err := paystackClient.Settlements.AllTransactions("<settlementId>")
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
