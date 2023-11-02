@@ -152,7 +152,7 @@ type APIClient struct {
 	Disputes                 *DisputeClient
 	Refunds                  *RefundClient
 	Verification             *VerificationClient
-	miscellaneous            *MiscellaneousClient
+	Miscellaneous            *MiscellaneousClient
 }
 
 // NewAPIClient lets you create an APIClient. it can accept zero to many client options
@@ -267,9 +267,9 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.Verification.secretKey = newClient.secretKey
 	newClient.Verification.httpClient = httpClient
 
-	newClient.miscellaneous.baseUrl = BaseUrl
-	newClient.miscellaneous.secretKey = newClient.secretKey
-	newClient.miscellaneous.httpClient = httpClient
+	newClient.Miscellaneous.baseUrl = BaseUrl
+	newClient.Miscellaneous.secretKey = newClient.secretKey
+	newClient.Miscellaneous.httpClient = httpClient
 
 	return newClient
 }
