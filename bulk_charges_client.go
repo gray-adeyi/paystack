@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// BulkChargeClient interacts with endpoints related to paystack bulk charges resource that lets
+// BulkChargeClient interacts with endpoints related to paystack bulk Charges resource that lets
 // you create and manage multiple recurring payments from your Customers.
 type BulkChargeClient struct {
 	*baseAPIClient
@@ -143,7 +143,7 @@ func (b *BulkChargeClient) FetchOne(idOrCode string) (*Response, error) {
 	return b.APICall(http.MethodGet, fmt.Sprintf("/bulkcharge/%s", idOrCode), nil)
 }
 
-// Charges lets you retrieve the charges associated with a specified batch code.
+// Charges lets you retrieve the Charges associated with a specified batch code.
 //
 // Example:
 //
@@ -180,7 +180,7 @@ func (b *BulkChargeClient) FetchOne(idOrCode string) (*Response, error) {
 //	}
 //	fmt.Println(data)
 func (b *BulkChargeClient) Charges(idOrCode string, queries ...Query) (*Response, error) {
-	url := AddQueryParamsToUrl(fmt.Sprintf("/bulkcharge/%s/charges", idOrCode), queries...)
+	url := AddQueryParamsToUrl(fmt.Sprintf("/bulkcharge/%s/Charges", idOrCode), queries...)
 	return b.APICall(http.MethodGet, url, nil)
 }
 
