@@ -59,7 +59,7 @@ type OptionalPayloadParameter = func(map[string]interface{}) map[string]interfac
 //	import p "github.com/gray-adeyi/paystack"
 //
 //	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
-//	resp, err := client.dedicatedVirtualAccounts.Create("481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
+//	resp, err := client.DedicatedVirtualAccounts.Create("481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
 //
 // WithOptionalParameter is used to pass the `preferred_bank` optional parameter in the client method call
 func WithOptionalParameter(key string, value interface{}) OptionalPayloadParameter {
@@ -134,7 +134,7 @@ type APIClient struct {
 	TransactionSplits        *TransactionSplitClient
 	Terminals                *TerminalClient
 	Customers                *CustomerClient
-	dedicatedVirtualAccounts *DedicatedVirtualAccountClient
+	DedicatedVirtualAccounts *DedicatedVirtualAccountClient
 	applePay                 *ApplePayClient
 	subAccounts              *SubAccountClient
 	plans                    *PlanClient
@@ -191,9 +191,9 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.Customers.secretKey = newClient.secretKey
 	newClient.Customers.httpClient = httpClient
 
-	newClient.dedicatedVirtualAccounts.baseUrl = BaseUrl
-	newClient.dedicatedVirtualAccounts.secretKey = newClient.secretKey
-	newClient.dedicatedVirtualAccounts.httpClient = httpClient
+	newClient.DedicatedVirtualAccounts.baseUrl = BaseUrl
+	newClient.DedicatedVirtualAccounts.secretKey = newClient.secretKey
+	newClient.DedicatedVirtualAccounts.httpClient = httpClient
 
 	newClient.applePay.baseUrl = BaseUrl
 	newClient.applePay.secretKey = newClient.secretKey

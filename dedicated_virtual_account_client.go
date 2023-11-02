@@ -21,7 +21,7 @@ type DedicatedVirtualAccountClient struct {
 func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtualAccountClient {
 	client := NewAPIClient(options...)
 
-	return client.dedicatedVirtualAccounts
+	return client.DedicatedVirtualAccounts
 }
 
 // Create lets you create a dedicated virtual account for an existing customer
@@ -37,11 +37,11 @@ func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtua
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dedicated virtual account client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.Create("481193")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Create("481193")
 //
-//	// you can pass in optional parameters to the `dedicatedVirtualAccounts.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `DedicatedVirtualAccounts.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `preferred_bank`.
 //	// resp, err := dvaClient.Create("481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
@@ -86,12 +86,12 @@ func (d *DedicatedVirtualAccountClient) Create(customerIdOrCode string,
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.Assign("janedoe@test.com","Jane",
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Assign("janedoe@test.com","Jane",
 //	//	"Doe","Karen", "+2348100000000", "test-bank", "NG")
 //
-//	// you can pass in optional parameters to the `dedicatedVirtualAccounts.Assign` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `DedicatedVirtualAccounts.Assign` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `account_number`.
 //	// resp, err := dvaClient.Assign("janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", "NG",
 //	//	p.WithOptionalParameter("account_number","5273681014"))
@@ -143,9 +143,9 @@ func (d *DedicatedVirtualAccountClient) Assign(email string, firstName string, l
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dedicated virtual account client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.All()
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.All()
 //
 //	// All also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
@@ -184,9 +184,9 @@ func (d *DedicatedVirtualAccountClient) All(queries ...Query) (*Response, error)
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dedicated virtual account client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.FetchOne("<dedicatedAccountId>")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.FetchOne("<dedicatedAccountId>")
 //
 //	resp, err := dvaClient.FetchOne("<dedicatedAccountId>")
 //	if err != nil {
@@ -218,9 +218,9 @@ func (d *DedicatedVirtualAccountClient) FetchOne(dedicatedAccountId string) (*Re
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dedicated virtual account client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.Requery()
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Requery()
 //
 //	// All also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
@@ -258,9 +258,9 @@ func (d *DedicatedVirtualAccountClient) Requery(queries ...Query) (*Response, er
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dedicated virtual account client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.Deactivate("<dedicatedAccountId>")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Deactivate("<dedicatedAccountId>")
 //
 //	resp, err := dvaClient.Deactivate("<dedicatedAccountId>")
 //	if err != nil {
@@ -292,11 +292,11 @@ func (d *DedicatedVirtualAccountClient) Deactivate(id string) (*Response, error)
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a customer client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.Split("<customerIdOrCode>")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Split("<customerIdOrCode>")
 //
-//	// you can pass in optional parameters to the `dedicatedVirtualAccounts.Split` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `DedicatedVirtualAccounts.Split` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `preferred_bank`.
 //	// resp, err := dvaClient.Split("<customerIdOrCode>", p.WithOptionalParameter("preferred_bank","wema-bank"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
@@ -342,9 +342,9 @@ func (d *DedicatedVirtualAccountClient) Split(customerIdOrCode string, optionalP
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dedicated virtual account client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.RemoveSplit("<accountNumber>")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.RemoveSplit("<accountNumber>")
 //
 //	resp, err := dvaClient.RemoveSplit("<accountNumber>")
 //	if err != nil {
@@ -378,9 +378,9 @@ func (d *DedicatedVirtualAccountClient) RemoveSplit(accountNumber string) (*Resp
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dedicated virtual account client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.dedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
+//	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.dedicatedVirtualAccounts.BankProviders()
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.BankProviders()
 //
 //	resp, err := dvaClient.BankProviders()
 //	if err != nil {
