@@ -302,7 +302,7 @@ func (p *PaymentRequestClient) Finalize(code string, sendNotification bool) (*Re
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.paymentRequests.Update("<idOrCode>", "CUS_XXX", "description")
 //
-//	// you can pass in optional parameters to the `subAccounts.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `SubAccounts.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `amount`.
 //	// resp, err := saClient.Create("<idOrSlug>", "Buttercup Brunch", "description",
 //	//	p.WithOptionalParameter("amount",500000))

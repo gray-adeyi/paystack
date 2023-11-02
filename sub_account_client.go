@@ -22,7 +22,7 @@ type SubAccountClient struct {
 func NewSubAccountClient(options ...ClientOptions) *SubAccountClient {
 	client := NewAPIClient(options...)
 
-	return client.subAccounts
+	return client.SubAccounts
 }
 
 // Create lets you create a dedicated virtual account for an existing customer
@@ -38,11 +38,11 @@ func NewSubAccountClient(options ...ClientOptions) *SubAccountClient {
 //	saClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subaccount client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subAccounts field is a `SubAccountClient`
+//	// paystackClient.SubAccounts field is a `SubAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.Create("Sunshine Studios", "044", "0193274682", 18.2,"")
+//	// resp, err := paystackClient.SubAccounts.Create("Sunshine Studios", "044", "0193274682", 18.2,"")
 //
-//	// you can pass in optional parameters to the `subAccounts.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `SubAccounts.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `preferred_bank`.
 //	// resp, err := saClient.Create("Sunshine Studios", "044", "0193274682", 18.2,"",
 //	//	p.WithOptionalParameter("primary_contact_email","johndoe@example.com"))
@@ -93,9 +93,9 @@ func (s *SubAccountClient) Create(businessName string, settlementBank string,
 //	saClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subaccount client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subAccounts field is a `SubAccountClient`
+//	// paystackClient.SubAccounts field is a `SubAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.All()
+//	// resp, err := paystackClient.SubAccounts.All()
 //
 //	// All also accepts queries, so say you want to customize how many subaccounts to retrieve
 //	// and which page to retrieve, you can write it like so.
@@ -134,9 +134,9 @@ func (s *SubAccountClient) All(queries ...Query) (*Response, error) {
 //	saClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subaccount client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subAccounts field is a `SubAccountClient`
+//	// paystackClient.SubAccounts field is a `SubAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.FetchOne("<idOrCode>")
+//	// resp, err := paystackClient.SubAccounts.FetchOne("<idOrCode>")
 //
 //	resp, err := saClient.FetchOne("<idOrCode>")
 //	if err != nil {
@@ -168,11 +168,11 @@ func (s *SubAccountClient) FetchOne(idOrCode string) (*Response, error) {
 //	saClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a terminal client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subAccounts field is a `SubAccountClient`
+//	// paystackClient.SubAccounts field is a `SubAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.Update("<idOrCode>", "Sunshine Studios", "044")
+//	// resp, err := paystackClient.SubAccounts.Update("<idOrCode>", "Sunshine Studios", "044")
 //
-//	// you can pass in optional parameters to the `subAccounts.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `SubAccounts.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `preferred_bank`.
 //	// resp, err := saClient.Create("<idOrCode>","Sunshine Studios", "044",
 //	//	p.WithOptionalParameter("primary_contact_email","johndoe@example.com"))

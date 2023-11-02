@@ -167,7 +167,7 @@ func (p *PlanClient) FetchOne(idOrCode string) (*Response, error) {
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.plans.Update("<idOrCode>","Monthly retainer", 500000, "monthly")
 //
-//	// you can pass in optional parameters to the `subAccounts.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `SubAccounts.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `description`.
 //	// resp, err := saClient.Update("<idOrCode>","Monthly retainer", 500000, "monthly",
 //	//	p.WithOptionalParameter("description","test description"))

@@ -164,7 +164,7 @@ func (p *PaymentPageClient) FetchOne(idOrSlug string) (*Response, error) {
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.paymentPages.Update("<idOrSlug>", "Buttercup Brunch", "description")
 //
-//	// you can pass in optional parameters to the `subAccounts.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `SubAccounts.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `amount`.
 //	// resp, err := trClient.Create("<idOrSlug>", "Buttercup Brunch", "description",
 //	//	p.WithOptionalParameter("amount",500000))

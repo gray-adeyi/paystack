@@ -41,7 +41,7 @@ func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.subscriptions.Create("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx")
 //
-//	// you can pass in optional parameters to the `subAccounts.Create` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `SubAccounts.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `start_date`.
 //	// resp, err := subClient.Create("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx",
 //	//	p.WithOptionalParameter("start_date","2023-10-16T00:30:13+01:00"))
@@ -131,7 +131,7 @@ func (s *SubscriptionClient) All(queries ...Query) (*Response, error) {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.FetchOne("<idOrCode>")
+//	// resp, err := paystackClient.SubAccounts.FetchOne("<idOrCode>")
 //
 //	resp, err := subClient.FetchOne("<idOrCode>")
 //	if err != nil {
@@ -165,7 +165,7 @@ func (s *SubscriptionClient) FetchOne(idOrCode string) (*Response, error) {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.Enable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
+//	// resp, err := paystackClient.SubAccounts.Enable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
 //
 //	resp, err := subClient.Enable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
 //	if err != nil {
@@ -202,7 +202,7 @@ func (s *SubscriptionClient) Enable(code string, token string) (*Response, error
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.Disable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
+//	// resp, err := paystackClient.SubAccounts.Disable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
 //
 //	resp, err := subClient.Disable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
 //	if err != nil {
@@ -239,7 +239,7 @@ func (s *SubscriptionClient) Disable(code string, token string) (*Response, erro
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.GenerateLink("SUB_vsyqdmlzble3uii")
+//	// resp, err := paystackClient.SubAccounts.GenerateLink("SUB_vsyqdmlzble3uii")
 //
 //	resp, err := subClient.GenerateLink("SUB_vsyqdmlzble3uii")
 //	if err != nil {
@@ -273,7 +273,7 @@ func (s *SubscriptionClient) GenerateLink(code string) (*Response, error) {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subAccounts.SendLink("SUB_vsyqdmlzble3uii")
+//	// resp, err := paystackClient.SubAccounts.SendLink("SUB_vsyqdmlzble3uii")
 //
 //	resp, err := subClient.SendLink("SUB_vsyqdmlzble3uii")
 //	if err != nil {
