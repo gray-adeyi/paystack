@@ -6,7 +6,7 @@ import (
 )
 
 // BulkChargeClient interacts with endpoints related to paystack bulk charges resource that lets
-// you create and manage multiple recurring payments from your customers.
+// you create and manage multiple recurring payments from your Customers.
 type BulkChargeClient struct {
 	*baseAPIClient
 }

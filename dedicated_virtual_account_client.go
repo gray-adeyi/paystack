@@ -6,7 +6,7 @@ import (
 )
 
 // DedicatedVirtualAccountClient interacts with endpoints related to paystack dedicated virtual account
-// resource that enables Nigerian merchants to manage unique payment accounts of their customers.
+// resource that enables Nigerian merchants to manage unique payment accounts of their Customers.
 type DedicatedVirtualAccountClient struct {
 	*baseAPIClient
 }

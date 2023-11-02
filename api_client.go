@@ -133,7 +133,7 @@ type APIClient struct {
 	Transactions             *TransactionClient
 	TransactionSplits        *TransactionSplitClient
 	Terminals                *TerminalClient
-	customers                *CustomerClient
+	Customers                *CustomerClient
 	dedicatedVirtualAccounts *DedicatedVirtualAccountClient
 	applePay                 *ApplePayClient
 	subAccounts              *SubAccountClient
@@ -187,9 +187,9 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.Terminals.secretKey = newClient.secretKey
 	newClient.Terminals.httpClient = httpClient
 
-	newClient.customers.baseUrl = BaseUrl
-	newClient.customers.secretKey = newClient.secretKey
-	newClient.customers.httpClient = httpClient
+	newClient.Customers.baseUrl = BaseUrl
+	newClient.Customers.secretKey = newClient.secretKey
+	newClient.Customers.httpClient = httpClient
 
 	newClient.dedicatedVirtualAccounts.baseUrl = BaseUrl
 	newClient.dedicatedVirtualAccounts.secretKey = newClient.secretKey

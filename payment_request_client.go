@@ -181,7 +181,7 @@ func (p *PaymentRequestClient) Verify(code string) (*Response, error) {
 	return p.APICall(http.MethodGet, fmt.Sprintf("/paymentrequest/verify/%s", code), nil)
 }
 
-// SendNotification lets you send notification of a payment request to your customers
+// SendNotification lets you send notification of a payment request to your Customers
 //
 // Example:
 //

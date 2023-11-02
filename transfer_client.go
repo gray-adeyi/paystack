@@ -6,7 +6,7 @@ import (
 )
 
 // TransferClient interacts with endpoints related to paystack transfer resource that lets you
-// automate sending money to your customers.
+// automate sending money to your Customers.
 type TransferClient struct {
 	*baseAPIClient
 }
@@ -23,7 +23,7 @@ func NewTransferClient(options ...ClientOptions) *TransferClient {
 	return client.transfers
 }
 
-// Initiate lets you send money to your customers.
+// Initiate lets you send money to your Customers.
 // Status of a transfer object returned will be pending if OTP is disabled.
 // In the event that an OTP is required, status will read otp.
 //
