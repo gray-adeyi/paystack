@@ -21,7 +21,7 @@ type SubscriptionClient struct {
 func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 	client := NewAPIClient(options...)
 
-	return client.subscriptions
+	return client.Subscriptions
 }
 
 // Create lets you create a subscription on your integration
@@ -37,9 +37,9 @@ func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 //	subClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subscription client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subscriptions field is a `SubscriptionClient`
+//	// paystackClient.Subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subscriptions.Create("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx")
+//	// resp, err := paystackClient.Subscriptions.Create("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx")
 //
 //	// you can pass in optional parameters to the `SubAccounts.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `start_date`.
@@ -75,7 +75,7 @@ func (s *SubscriptionClient) Create(customer string, plan string, authorization 
 	return s.APICall(http.MethodPost, "/subscription", payload)
 }
 
-// All lets you retrieve subscriptions available on your integration
+// All lets you retrieve Subscriptions available on your integration
 //
 // Example:
 //
@@ -88,11 +88,11 @@ func (s *SubscriptionClient) Create(customer string, plan string, authorization 
 //	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subscription client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subscriptions field is a `SubscriptionClient`
+//	// paystackClient.Subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.subscriptions.All()
+//	// resp, err := paystackClient.Subscriptions.All()
 //
-//	// All also accepts queries, so say you want to customize how many subscriptions to retrieve
+//	// All also accepts queries, so say you want to customize how many Subscriptions to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := subClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
@@ -129,7 +129,7 @@ func (s *SubscriptionClient) All(queries ...Query) (*Response, error) {
 //	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subscription client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subscriptions field is a `SubscriptionClient`
+//	// paystackClient.Subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.SubAccounts.FetchOne("<idOrCode>")
 //
@@ -163,7 +163,7 @@ func (s *SubscriptionClient) FetchOne(idOrCode string) (*Response, error) {
 //	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subscription client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subscriptions field is a `SubscriptionClient`
+//	// paystackClient.Subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.SubAccounts.Enable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
 //
@@ -200,7 +200,7 @@ func (s *SubscriptionClient) Enable(code string, token string) (*Response, error
 //	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subscription client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subscriptions field is a `SubscriptionClient`
+//	// paystackClient.Subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.SubAccounts.Disable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
 //
@@ -237,7 +237,7 @@ func (s *SubscriptionClient) Disable(code string, token string) (*Response, erro
 //	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subscription client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subscriptions field is a `SubscriptionClient`
+//	// paystackClient.Subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.SubAccounts.GenerateLink("SUB_vsyqdmlzble3uii")
 //
@@ -271,7 +271,7 @@ func (s *SubscriptionClient) GenerateLink(code string) (*Response, error) {
 //	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a subscription client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.subscriptions field is a `SubscriptionClient`
+//	// paystackClient.Subscriptions field is a `SubscriptionClient`
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.SubAccounts.SendLink("SUB_vsyqdmlzble3uii")
 //
