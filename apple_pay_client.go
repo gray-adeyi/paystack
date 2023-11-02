@@ -18,7 +18,7 @@ type ApplePayClient struct {
 func NewApplePayClient(options ...ClientOptions) *ApplePayClient {
 	client := NewAPIClient(options...)
 
-	return client.applePay
+	return client.ApplePay
 }
 
 // Register lets you register a top-level domain or subdomain for your Apple Pay integration.
@@ -34,9 +34,9 @@ func NewApplePayClient(options ...ClientOptions) *ApplePayClient {
 //	applePayClient := p.ApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access an Apple Pay client from APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.applePay field is a `ApplePayClient`
+//	// paystackClient.ApplePay field is a `ApplePayClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.applePay.Register("<domainName>")
+//	// resp, err := paystackClient.ApplePay.Register("<domainName>")
 //
 //	resp, err := applePayClient.Register("<domainName>")
 //	if err != nil {
@@ -71,9 +71,9 @@ func (a *ApplePayClient) Register(domainName string) (*Response, error) {
 //	applePayClient := p.NewApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access an Apple Pay client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.applePay field is a `ApplePayClient`
+//	// paystackClient.ApplePay field is a `ApplePayClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.applePay.All()
+//	// resp, err := paystackClient.ApplePay.All()
 //
 //	// All also accepts queries, so say you want to use cursor, you can write it like so.
 //	// resp, err := applePayClient.All(p.WithQuery("use_cursor","true"))
@@ -111,9 +111,9 @@ func (a *ApplePayClient) All(queries ...Query) (*Response, error) {
 //	applePayClient := p.ApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access an Apple Pay client from APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.applePay field is a `ApplePayClient`
+//	// paystackClient.ApplePay field is a `ApplePayClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.applePay.Unregister("<domainName>")
+//	// resp, err := paystackClient.ApplePay.Unregister("<domainName>")
 //
 //	resp, err := applePayClient.Unregister("<domainName>")
 //	if err != nil {
