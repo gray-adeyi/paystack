@@ -131,7 +131,7 @@ func (a *baseAPIClient) setHeaders(request *http.Request) error {
 type APIClient struct {
 	baseAPIClient
 	Transactions             *TransactionClient
-	transactionSplits        *TransactionSplitClient
+	TransactionSplits        *TransactionSplitClient
 	terminals                *TerminalClient
 	customers                *CustomerClient
 	dedicatedVirtualAccounts *DedicatedVirtualAccountClient
@@ -179,9 +179,9 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.Transactions.secretKey = newClient.secretKey
 	newClient.Transactions.httpClient = httpClient
 
-	newClient.transactionSplits.baseUrl = BaseUrl
-	newClient.transactionSplits.secretKey = newClient.secretKey
-	newClient.transactionSplits.httpClient = httpClient
+	newClient.TransactionSplits.baseUrl = BaseUrl
+	newClient.TransactionSplits.secretKey = newClient.secretKey
+	newClient.TransactionSplits.httpClient = httpClient
 
 	newClient.terminals.baseUrl = BaseUrl
 	newClient.terminals.secretKey = newClient.secretKey
