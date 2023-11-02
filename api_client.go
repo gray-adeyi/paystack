@@ -15,27 +15,53 @@ const BaseUrl = "https://api.paystack.co"
 
 var ErrNoSecretKey = errors.New("Paystack secret key was not provided")
 
+// Response is a struct containing the status code and data retrieved from paystack. Response.Data is a slice of
+// byte that is JSON serializable.
 type Response struct {
 	StatusCode int
 	Data       []byte
 }
 
+// ClientOptions is a type used to modify attributes of an APIClient. It can be passed into the NewAPIClient
+// function while creating an APIClient
 type ClientOptions = func(client *APIClient)
 
+// WithSecretKey lets you set the secret key of an APIClient. It should be used when creating an APIClient
+// with the NewAPIClient function.
+//
+// Example
+//
+//	import p "github.com/gray-adeyi/paystack"
+//	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
 func WithSecretKey(secretKey string) ClientOptions {
 	return func(client *APIClient) {
 		client.secretKey = secretKey
 	}
 }
 
+// WithBaseUrl lets you override paystack's base url for an APIClient. It should be used when creating an APIClient
+// with the NewAPIClient function.
 func WithBaseUrl(baseUrl string) ClientOptions {
 	return func(client *APIClient) {
 		client.baseUrl = baseUrl
 	}
 }
 
+// OptionalPayloadParameter is a type for storing optional parameters used by some APIClient methods that needs
+// to accept optional parameter.
 type OptionalPayloadParameter = func(map[string]interface{}) map[string]interface{}
 
+// WithOptionalParameter lets you add optional parameters when calling some client methods and you need to add
+// optional parameters to your payload.
+//
+// Example
+//
+//	import p "github.com/gray-adeyi/paystack"
+//
+//	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
+//	resp, err := client.dedicatedVirtualAccounts.Create("481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
+//
+// WithOptionalParameter is used to pass the `preferred_bank` optional parameter in the client method call
 func WithOptionalParameter(key string, value interface{}) OptionalPayloadParameter {
 	return func(m map[string]interface{}) map[string]interface{} {
 		m[key] = value
@@ -91,6 +117,17 @@ func (a *baseAPIClient) setHeaders(request *http.Request) error {
 	return nil
 }
 
+// APIClient is a struct that has other dedicated clients bound to it. This provides a convenience for interacting
+// with all of paystack's endpoints in your Go project. It should not be instantiated directly but interacting but
+// via the NewAPIClient function. As stated above, it has other dedicated clients bound to it as field, therefore,
+// after creating an instance of the APIClient type. You can access the associated functions of each dedicated client
+// via its field name.
+//
+//	Example
+//	import p "github.com/gray-adeyi/paystack"
+//
+//	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
+//	resp, err := client.transactions.Verify("<reference>")
 type APIClient struct {
 	baseAPIClient
 	transactions             *TransactionClient
@@ -118,6 +155,12 @@ type APIClient struct {
 	miscellaneous            *MiscellaneousClient
 }
 
+// NewAPIClient lets you create an APIClient. it can accept zero to many client options
+//
+//	Example
+//	import p "github.com/gray-adeyi/paystack"
+//
+//	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
 func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient := &APIClient{
 		transactions: &TransactionClient{
@@ -231,11 +274,13 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	return newClient
 }
 
+// Query helps represent key value pairs used in url query parametes
 type Query struct {
 	Key   string
 	Value string
 }
 
+// WithQuery lets you create a Query from key value pairs
 func WithQuery(key string, value string) Query {
 	return Query{
 		Key:   key,
@@ -243,6 +288,7 @@ func WithQuery(key string, value string) Query {
 	}
 }
 
+// AddQueryParamsToUrl lets you add query parameters to a url
 func AddQueryParamsToUrl(url string, queries ...Query) string {
 	for _, query := range queries {
 		if strings.Contains(url, "?") {
