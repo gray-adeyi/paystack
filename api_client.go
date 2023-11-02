@@ -222,7 +222,7 @@ type APIClient struct {
 	Verification *VerificationClient
 
 	// Miscellaneous let you interact with endpoints related to paystack Miscellaneous resource that
-	//// provides information that is relevant to other client methods
+	// provides information that is relevant to other client methods
 	Miscellaneous *MiscellaneousClient
 }
 
