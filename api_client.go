@@ -127,10 +127,10 @@ func (a *baseAPIClient) setHeaders(request *http.Request) error {
 //	import p "github.com/gray-adeyi/paystack"
 //
 //	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
-//	resp, err := client.transactions.Verify("<reference>")
+//	resp, err := client.Transactions.Verify("<reference>")
 type APIClient struct {
 	baseAPIClient
-	transactions             *TransactionClient
+	Transactions             *TransactionClient
 	transactionSplits        *TransactionSplitClient
 	terminals                *TerminalClient
 	customers                *CustomerClient
@@ -163,7 +163,7 @@ type APIClient struct {
 //	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
 func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient := &APIClient{
-		transactions: &TransactionClient{
+		Transactions: &TransactionClient{
 			&baseAPIClient{},
 		},
 	}
@@ -175,9 +175,9 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 		opts(newClient)
 	}
 
-	newClient.transactions.baseUrl = BaseUrl
-	newClient.transactions.secretKey = newClient.secretKey
-	newClient.transactions.httpClient = httpClient
+	newClient.Transactions.baseUrl = BaseUrl
+	newClient.Transactions.secretKey = newClient.secretKey
+	newClient.Transactions.httpClient = httpClient
 
 	newClient.transactionSplits.baseUrl = BaseUrl
 	newClient.transactionSplits.secretKey = newClient.secretKey

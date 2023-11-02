@@ -147,7 +147,7 @@ func (d *DedicatedVirtualAccountClient) Assign(email string, firstName string, l
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.dedicatedVirtualAccounts.All()
 //
-//	// All also accepts queries, so say you want to customize how many transactions to retrieve
+//	// All also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := dvaClient.All(p.WithQuery("active","true"), p.WithQuery("bank_id","035"))
 //
@@ -205,7 +205,7 @@ func (d *DedicatedVirtualAccountClient) FetchOne(dedicatedAccountId string) (*Re
 	return d.APICall(http.MethodGet, fmt.Sprintf("/dedicated_account/%s", dedicatedAccountId), nil)
 }
 
-// Requery lets you requery Dedicated Virtual Account for new transactions
+// Requery lets you requery Dedicated Virtual Account for new Transactions
 //
 // Example:
 //
@@ -222,7 +222,7 @@ func (d *DedicatedVirtualAccountClient) FetchOne(dedicatedAccountId string) (*Re
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.dedicatedVirtualAccounts.Requery()
 //
-//	// All also accepts queries, so say you want to customize how many transactions to retrieve
+//	// All also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := dvaClient.Requery(p.WithQuery("account_number","1234567890"), p.WithQuery("provider_slug","example-provider"))
 //
@@ -328,8 +328,8 @@ func (d *DedicatedVirtualAccountClient) Split(customerIdOrCode string, optionalP
 	return d.APICall(http.MethodPost, "/dedicated_account/split", payload)
 }
 
-// RemoveSplit lets you remove a split payment for transactions. If you've previously set up split payment
-// for transactions on a dedicated virtual account
+// RemoveSplit lets you remove a split payment for Transactions. If you've previously set up split payment
+// for Transactions on a dedicated virtual account
 //
 // Example:
 //

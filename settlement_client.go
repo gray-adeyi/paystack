@@ -64,7 +64,7 @@ func (s *SettlementClient) All(queries ...Query) (*Response, error) {
 	return s.APICall(http.MethodGet, url, nil)
 }
 
-// AllTransactions lets you retrieve the transactions that make up a particular settlement
+// AllTransactions lets you retrieve the Transactions that make up a particular settlement
 //
 // Example:
 //

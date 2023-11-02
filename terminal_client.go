@@ -157,7 +157,7 @@ func (t *TerminalClient) TerminalStatus(terminalId string) (*Response, error) {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.terminals field is a `TerminalClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.All()
+//	// resp, err := paystackClient.Transactions.All()
 //
 //	// All also accepts queries, so say you want to customize how many terminals to retrieve,
 //	// you can write it like so.

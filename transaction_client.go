@@ -21,7 +21,7 @@ type TransactionClient struct {
 func NewTransactionClient(options ...ClientOptions) *TransactionClient {
 	client := NewAPIClient(options...)
 
-	return client.transactions
+	return client.Transactions
 
 }
 
@@ -38,9 +38,9 @@ func NewTransactionClient(options ...ClientOptions) *TransactionClient {
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.Initialize(200000, "johndoe@example.com")
+//	// resp, err := paystackClient.Transactions.Initialize(200000, "johndoe@example.com")
 //
 //	// you can pass in optional parameters to the `txnClient.Initialize` with `p.WithOptionalParameter`
 //	// for example say you want to specify the currency.
@@ -85,9 +85,9 @@ func (t *TransactionClient) Initialize(amount int, email string, optionalPayload
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.Verify("<reference>")
+//	// resp, err := paystackClient.Transactions.Verify("<reference>")
 //
 //	resp, err := txnClient.Verify("<reference>")
 //	if err != nil {
@@ -106,7 +106,7 @@ func (t *TransactionClient) Verify(reference string) (*Response, error) {
 	return t.APICall(http.MethodGet, fmt.Sprintf("/transaction/verify/%s", reference), nil)
 }
 
-// All lets you list transactions carried out on your integration
+// All lets you list Transactions carried out on your integration
 //
 // Example:
 //
@@ -119,11 +119,11 @@ func (t *TransactionClient) Verify(reference string) (*Response, error) {
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.All()
+//	// resp, err := paystackClient.Transactions.All()
 //
-//	// All also accepts queries, so say you want to customize how many transactions to retrieve
+//	// All also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := txnClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
@@ -160,9 +160,9 @@ func (t *TransactionClient) All(queries ...Query) (*Response, error) {
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.FetchOne("<id>")
+//	// resp, err := paystackClient.Transactions.FetchOne("<id>")
 //
 //	resp, err := txnClient.FetchOne("<id>")
 //	if err != nil {
@@ -194,9 +194,9 @@ func (t *TransactionClient) FetchOne(id string) (*Response, error) {
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.ChargeAuthorization(200000,"johndoe@example.com","AUTH_xxx")
+//	// resp, err := paystackClient.Transactions.ChargeAuthorization(200000,"johndoe@example.com","AUTH_xxx")
 //
 //	// you can pass in optional parameters to the `txnClient.ChargeAuthorization` with `p.WithOptionalParameter`
 //	// for example say you want to specify the currency and channel
@@ -243,9 +243,9 @@ func (t *TransactionClient) ChargeAuthorization(amount int, email string, author
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.Timeline("<idOrReference>")
+//	// resp, err := paystackClient.Transactions.Timeline("<idOrReference>")
 //
 //	resp, err := txnClient.Timeline("<idOrReference>")
 //	if err != nil {
@@ -277,11 +277,11 @@ func (t *TransactionClient) Timeline(idOrReference string) (*Response, error) {
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.Total()
+//	// resp, err := paystackClient.Transactions.Total()
 //
-//	// Total also accepts queries, so say you want to customize how many transactions to retrieve
+//	// Total also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := txnClient.Total(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
@@ -305,7 +305,7 @@ func (t *TransactionClient) Total(queries ...Query) (*Response, error) {
 	return t.APICall(http.MethodGet, url, nil)
 }
 
-// Export lets you export a list of transactions carried out on your integration
+// Export lets you export a list of Transactions carried out on your integration
 //
 // Example:
 //
@@ -318,11 +318,11 @@ func (t *TransactionClient) Total(queries ...Query) (*Response, error) {
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.Export()
+//	// resp, err := paystackClient.Transactions.Export()
 //
-//	// Export also accepts queries, so say you want to customize how many transactions to retrieve
+//	// Export also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := txnClient.Export(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
@@ -359,9 +359,9 @@ func (t *TransactionClient) Export(queries ...Query) (*Response, error) {
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a transaction client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.transactions field is a `TransactionClient`
+//	// paystackClient.Transactions field is a `TransactionClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.transactions.PartialDebit("AUTH_xxx","NGN","200000", "johndoe@example.com")
+//	// resp, err := paystackClient.Transactions.PartialDebit("AUTH_xxx","NGN","200000", "johndoe@example.com")
 //
 //	// you can pass in optional parameters to the `txnClient.PartialDebit` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `at_least` optional parameter.

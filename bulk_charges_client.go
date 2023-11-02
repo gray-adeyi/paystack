@@ -24,7 +24,7 @@ func NewBulkChargeClient(options ...ClientOptions) *BulkChargeClient {
 }
 
 // Initiate lets you send an array of map with authorization codes and amount, using the
-// supported currency format, so paystack can process transactions as a batch.
+// supported currency format, so paystack can process Transactions as a batch.
 //
 // Example:
 //
