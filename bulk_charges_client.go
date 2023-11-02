@@ -20,7 +20,7 @@ type BulkChargeClient struct {
 // bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewBulkChargeClient(options ...ClientOptions) *BulkChargeClient {
 	client := NewAPIClient(options...)
-	return client.bulkCharges
+	return client.BulkCharges
 }
 
 // Initiate lets you send an array of map with authorization codes and amount, using the
@@ -37,13 +37,13 @@ func NewBulkChargeClient(options ...ClientOptions) *BulkChargeClient {
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access the bulk charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.bulkCharges field is a `BulkChargeClient`
+//	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
 //	//	batch := []map[string]interface{}{
 //	//	{"authorization": "AUTH_ncx8hews93", "amount": 2500, "reference": "dam1266638dhhd"},
 //	//	{"authorization": "AUTH_xfuz7dy4b9", "amount": 1500, "reference": "dam1266638dhhe"},
 //	//	}
-//	//	resp, err := paystackClient.bulkCharges.Initiate(batch)
+//	//	resp, err := paystackClient.BulkCharges.Initiate(batch)
 //
 //	batch := []map[string]interface{}{
 //	{"authorization": "AUTH_ncx8hews93", "amount": 2500, "reference": "dam1266638dhhd"},
@@ -80,9 +80,9 @@ func (b *BulkChargeClient) Initiate(charges interface{}) (*Response, error) {
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a bulk charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.bulkCharges field is a `BulkChargeClient`
+//	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.bulkCharges.All()
+//	// resp, err := paystackClient.BulkCharges.All()
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
@@ -122,9 +122,9 @@ func (b *BulkChargeClient) All(queries ...Query) (*Response, error) {
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a bulk charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.bulkCharges field is a `BulkChargeClient`
+//	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.bulkCharges.FetchOne("<idOrCode>")
+//	// resp, err := paystackClient.BulkCharges.FetchOne("<idOrCode>")
 //
 //	resp, err := bcClient.FetchOne("<idOrSlug>")
 //	if err != nil {
@@ -156,9 +156,9 @@ func (b *BulkChargeClient) FetchOne(idOrCode string) (*Response, error) {
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a bulk charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.bulkCharges field is a `BulkChargeClient`
+//	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.bulkCharges.Charges("<idOrCode>")
+//	// resp, err := paystackClient.BulkCharges.Charges("<idOrCode>")
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
@@ -197,9 +197,9 @@ func (b *BulkChargeClient) Charges(idOrCode string, queries ...Query) (*Response
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a bulk charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.bulkCharges field is a `BulkChargeClient`
+//	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.bulkCharges.Pause("<idOrCode>")
+//	// resp, err := paystackClient.BulkCharges.Pause("<idOrCode>")
 //
 //	resp, err := bcClient.Pause("<idOrSlug>")
 //	if err != nil {
@@ -231,9 +231,9 @@ func (b *BulkChargeClient) Pause(idOrCode string) (*Response, error) {
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a bulk charge client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.bulkCharges field is a `BulkChargeClient`
+//	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.bulkCharges.Resume("<idOrCode>")
+//	// resp, err := paystackClient.BulkCharges.Resume("<idOrCode>")
 //
 //	resp, err := bcClient.Resume("<idOrSlug>")
 //	if err != nil {
