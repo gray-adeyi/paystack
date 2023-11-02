@@ -6,7 +6,7 @@ import (
 )
 
 // DisputeClient interacts with endpoint related to paystack dispute resource that lets you
-// manage transaction disputes on your Integration.
+// manage transaction Disputes on your Integration.
 type DisputeClient struct {
 	*baseAPIClient
 }
@@ -20,10 +20,10 @@ type DisputeClient struct {
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewDisputeClient(options ...ClientOptions) *DisputeClient {
 	client := NewAPIClient(options...)
-	return client.disputes
+	return client.Disputes
 }
 
-// All lets you retrieve disputes filed against you
+// All lets you retrieve Disputes filed against you
 //
 // Example:
 //
@@ -36,9 +36,9 @@ func NewDisputeClient(options ...ClientOptions) *DisputeClient {
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dispute client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.disputes field is a `DisputeClient`
+//	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.disputes.All()
+//	// resp, err := paystackClient.Disputes.All()
 //
 //	// All also accepts queries, so say you want to specify the date range, you can write it like so.
 //	// resp, err := dClient.All(p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
@@ -76,9 +76,9 @@ func (d *DisputeClient) All(queries ...Query) (*Response, error) {
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a payment page client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.disputes field is a `DisputeClient`
+//	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.disputes.FetchOne("<id>")
+//	// resp, err := paystackClient.Disputes.FetchOne("<id>")
 //
 //	resp, err := dClient.FetchOne("<id>")
 //	if err != nil {
@@ -97,7 +97,7 @@ func (d *DisputeClient) FetchOne(id string) (*Response, error) {
 	return d.APICall(http.MethodGet, fmt.Sprintf("/dispute/%s", id), nil)
 }
 
-// AllTransactionDisputes lets you retrieve disputes for a particular transaction
+// AllTransactionDisputes lets you retrieve Disputes for a particular transaction
 //
 // Example:
 //
@@ -110,9 +110,9 @@ func (d *DisputeClient) FetchOne(id string) (*Response, error) {
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dispute client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.disputes field is a `DisputeClient`
+//	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.disputes.AllTransactionDisputes("transactionId")
+//	// resp, err := paystackClient.Disputes.AllTransactionDisputes("transactionId")
 //
 //	resp, err := dClient.AllTransactionDisputes("transactionId")
 //	if err != nil {
@@ -144,14 +144,14 @@ func (d *DisputeClient) AllTransactionDisputes(transactionId string) (*Response,
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dispute client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.disputes field is a `DisputeClient`
+//	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.disputes.Update("<id>", 1002)
+//	// resp, err := paystackClient.Disputes.Update("<id>", 1002)
 //
-//	// you can pass in optional parameters to the `disputes.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `uploaded_filename`.
 //	// resp, err := dClient.Update("<id>", 1002, "description",
-//	//	p.WithOptionalParameter("uploaded_filename","disputes.pdf"))
+//	//	p.WithOptionalParameter("uploaded_filename","Disputes.pdf"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
 //	// from paystack documentation see https://paystack.com/docs/api/dispute/#update
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
@@ -193,12 +193,12 @@ func (d *DisputeClient) Update(id string, referenceAmount int,
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dispute client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.disputes field is a `DisputeClient`
+//	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.disputes.AddEvidence("<id>", "johndoe@example.com",
+//	// resp, err := paystackClient.Disputes.AddEvidence("<id>", "johndoe@example.com",
 //	//	"John Doe", "5085072209", "claim for buying product")
 //
-//	// you can pass in optional parameters to the `disputes.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `delivery_address`.
 //	// resp, err := dClient.AddEvidence("<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product",
 //	//	p.WithOptionalParameter("delivery_address", "3a ladoke street ogbomoso"))
@@ -234,7 +234,7 @@ func (d *DisputeClient) AddEvidence(id string, customerEmail string,
 	return d.APICall(http.MethodPost, fmt.Sprintf("/dispute/%s/evidence", id), payload)
 }
 
-// UploadURL lets you retrieve disputes for a particular transaction
+// UploadURL lets you retrieve Disputes for a particular transaction
 //
 // Example:
 //
@@ -247,9 +247,9 @@ func (d *DisputeClient) AddEvidence(id string, customerEmail string,
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dispute client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.disputes field is a `DisputeClient`
+//	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.disputes.UploadURL()
+//	// resp, err := paystackClient.Disputes.UploadURL()
 //
 //	// All also accepts queries, so say you want to specify the `upload_filename`, you can write it like so.
 //	// resp, err := dClient.UploadURL("disputeId", p.WithQuery("upload_filename","filename.txt"))
@@ -287,12 +287,12 @@ func (d *DisputeClient) UploadURL(id string, queries ...Query) (*Response, error
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dispute client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.disputes field is a `DisputeClient`
+//	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.disputes.AddEvidence("<id>", "johndoe@example.com",
+//	// resp, err := paystackClient.Disputes.AddEvidence("<id>", "johndoe@example.com",
 //	//	"John Doe", "5085072209", "claim for buying product")
 //
-//	// you can pass in optional parameters to the `disputes.Update` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `evidence`.
 //	// resp, err := dClient.AddEvidence("<id>", "johndoe@example.com","John Doe", "5085072209", "claim for buying product",
 //	//	p.WithOptionalParameter("evidence", "evidenceId"))
@@ -328,7 +328,7 @@ func (d *DisputeClient) Resolve(id string, resolution string, message string,
 	return d.APICall(http.MethodPut, fmt.Sprintf("/dispute/%s/resolve", id), payload)
 }
 
-// Export lets you export disputes available on your Integration
+// Export lets you export Disputes available on your Integration
 //
 // Example:
 //
@@ -341,9 +341,9 @@ func (d *DisputeClient) Resolve(id string, resolution string, message string,
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// Alternatively, you can access a dispute client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.disputes field is a `DisputeClient`
+//	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.disputes.Export()
+//	// resp, err := paystackClient.Disputes.Export()
 //
 //	// All also accepts queries, so say you want to specify the date range, you can write it like so.
 //	// resp, err := dClient.Export(p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
