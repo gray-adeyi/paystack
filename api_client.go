@@ -151,7 +151,7 @@ type APIClient struct {
 	Charges                  *ChargeClient
 	Disputes                 *DisputeClient
 	Refunds                  *RefundClient
-	verification             *VerificationClient
+	Verification             *VerificationClient
 	miscellaneous            *MiscellaneousClient
 }
 
@@ -263,9 +263,9 @@ func NewAPIClient(options ...ClientOptions) *APIClient {
 	newClient.Refunds.secretKey = newClient.secretKey
 	newClient.Refunds.httpClient = httpClient
 
-	newClient.verification.baseUrl = BaseUrl
-	newClient.verification.secretKey = newClient.secretKey
-	newClient.verification.httpClient = httpClient
+	newClient.Verification.baseUrl = BaseUrl
+	newClient.Verification.secretKey = newClient.secretKey
+	newClient.Verification.httpClient = httpClient
 
 	newClient.miscellaneous.baseUrl = BaseUrl
 	newClient.miscellaneous.secretKey = newClient.secretKey

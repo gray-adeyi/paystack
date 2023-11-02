@@ -95,7 +95,7 @@ func (p *MiscellaneousClient) Countries() (*Response, error) {
 	return p.APICall(http.MethodGet, "/country", nil)
 }
 
-// States lets you retrieve a list of states for a country for address verification
+// States lets you retrieve a list of states for a country for address Verification
 //
 // Example:
 //

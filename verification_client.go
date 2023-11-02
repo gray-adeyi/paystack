@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// VerificationClient interacts with endpoints related to paystack verification resource
+// VerificationClient interacts with endpoints related to paystack Verification resource
 // that allows you to perform KYC processes.
 type VerificationClient struct {
 	*baseAPIClient
@@ -20,7 +20,7 @@ type VerificationClient struct {
 //	vClient := p.NewVerificationClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewVerificationClient(options ...ClientOptions) *VerificationClient {
 	client := NewAPIClient(options...)
-	return client.verification
+	return client.Verification
 }
 
 // ResolveAccount lets you confirm an account belongs to the right customer
@@ -34,15 +34,15 @@ func NewVerificationClient(options ...ClientOptions) *VerificationClient {
 //	)
 //
 //	vClient := p.NewVerificationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a verification client from an APIClient
+//	// Alternatively, you can access a Verification client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.verification field is a `VerificationClient`
+//	// paystackClient.Verification field is a `VerificationClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.verification.ResolveAccount(p.WithQuery("account_number","0022728151"),
+//	// resp, err := paystackClient.Verification.ResolveAccount(p.WithQuery("account_number","0022728151"),
 //	//	p.WithQuery("bank_code","063"))
 //
 //	// All also accepts queries, you can write it like so.
-//	// resp, err := paystackClient.verification.ResolveAccount(p.WithQuery("account_number","0022728151"),
+//	// resp, err := paystackClient.Verification.ResolveAccount(p.WithQuery("account_number","0022728151"),
 //	//	p.WithQuery("bank_code","063"))
 //
 // // see https://paystack.com/docs/api/verification/#resolve-account for supported query parameters
@@ -77,14 +77,14 @@ func (v *VerificationClient) ResolveAccount(queries ...Query) (*Response, error)
 //	)
 //
 //	vClient := p.NewVerificationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a verification client from an APIClient
+//	// Alternatively, you can access a Verification client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.verification field is a `VerificationClient`
+//	// paystackClient.Verification field is a `VerificationClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.verification.ValidateAccount("Ann Bron","0123456789","personal",
+//	// resp, err := paystackClient.Verification.ValidateAccount("Ann Bron","0123456789","personal",
 //	//	"632005","ZA","identityNumber")
 //
-//	// you can pass in optional parameters to the `verification.ValidateAccount` with `p.WithOptionalParameter`
+//	// you can pass in optional parameters to the `Verification.ValidateAccount` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `document_number`.
 //	// resp, err := vClient.CreateValidateAccount("Ann Bron","0123456789","personal", "632005","ZA",
 //	//	"identityNumber", p.WithOptionalParameter("document_number","1234567890123"))
@@ -132,11 +132,11 @@ func (v *VerificationClient) ValidateAccount(accountName string, accountNumber s
 //	)
 //
 //	vClient := p.NewVerificationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a verification client from an APIClient
+//	// Alternatively, you can access a Verification client from an APIClient
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.verification field is a `VerificationClient`
+//	// paystackClient.Verification field is a `VerificationClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.verification.ResolveBIN("539983")
+//	// resp, err := paystackClient.Verification.ResolveBIN("539983")
 //
 //	resp, err := vClient.ResolveAccount("539983")
 //	if err != nil {
