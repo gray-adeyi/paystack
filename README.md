@@ -37,7 +37,7 @@ func main(){
 	
 	var data map[string]interface{}
 	
-	if err = json.Unmarshal(resp.Data, data); err != nil {
+	if err = json.Unmarshal(resp.Data, &data); err != nil {
 		panic(err)
     }
 	fmt.Println(data)
