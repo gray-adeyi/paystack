@@ -77,6 +77,9 @@ type baseAPIClient struct {
 
 func (a *baseAPIClient) APICall(method string, endPointPath string, payload interface{}) (*Response, error) {
 	var body *bytes.Buffer
+	var apiRequest *http.Request
+	var err error
+
 	if payload != nil {
 		payloadInBytes, err := json.Marshal(payload)
 		if err != nil {
@@ -84,7 +87,13 @@ func (a *baseAPIClient) APICall(method string, endPointPath string, payload inte
 		}
 		body = bytes.NewBuffer(payloadInBytes)
 	}
-	apiRequest, err := http.NewRequest(method, a.baseUrl+endPointPath, body)
+
+	if body != nil {
+		apiRequest, err = http.NewRequest(method, a.baseUrl+endPointPath, body)
+	} else {
+		apiRequest, err = http.NewRequest(method, a.baseUrl+endPointPath, nil)
+	}
+
 	if err != nil {
 		return nil, err
 	}
