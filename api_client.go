@@ -233,9 +233,76 @@ type APIClient struct {
 //
 //	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
 func NewAPIClient(options ...ClientOptions) *APIClient {
+	baseClient := &baseAPIClient{}
 	newClient := &APIClient{
 		Transactions: &TransactionClient{
-			&baseAPIClient{},
+			baseClient,
+		},
+		TransactionSplits: &TransactionSplitClient{
+			baseClient,
+		},
+		Terminals: &TerminalClient{
+			baseClient,
+		},
+		Customers: &CustomerClient{
+			baseClient,
+		},
+		DedicatedVirtualAccounts: &DedicatedVirtualAccountClient{
+			baseClient,
+		},
+		ApplePay: &ApplePayClient{
+			baseClient,
+		},
+		SubAccounts: &SubAccountClient{
+			baseClient,
+		},
+		Plans: &PlanClient{
+			baseClient,
+		},
+		Subscriptions: &SubscriptionClient{
+			baseClient,
+		},
+		Products: &ProductClient{
+			baseClient,
+		},
+		PaymentPages: &PaymentPageClient{
+			baseClient,
+		},
+		PaymentRequests: &PaymentRequestClient{
+			baseClient,
+		},
+		Settlements: &SettlementClient{
+			baseClient,
+		},
+		TransferControl: &TransferControlClient{
+			baseClient,
+		},
+		TransferRecipients: &TransferRecipientClient{
+			baseClient,
+		},
+		Transfers: &TransferClient{
+			baseClient,
+		},
+		BulkCharges: &BulkChargeClient{
+			baseClient,
+		},
+		Integration: &IntegrationClient{
+			baseClient,
+		},
+		Charges: &ChargeClient{
+			baseClient,
+		},
+		Disputes: &DisputeClient{
+			baseClient,
+		},
+		Refunds: &RefundClient{
+			baseClient,
+		},
+		Verification: &VerificationClient{
+			baseClient,
+		},
+		Miscellaneous: &MiscellaneousClient{
+			baseClient,
 		},
 	}
 	newClient.baseUrl = BaseUrl
