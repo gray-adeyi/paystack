@@ -1,0 +1,18 @@
+[project]
+name = "paystack"
+version = "0.1.0"
+description = "documentation for paystack"
+authors = [
+    { name = "Gbenga Adeyi", email = "adeyigbenga005@gmail.com" }
+]
+dependencies = [
+    "mkdocs-material>=9.5.25",
+    "mike>=2.1.1",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[tool.rye]
+managed = true
+virtual = true
+dev-dependencies = []
