@@ -1,6 +1,9 @@
 package paystack
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 // ApplePayClient interacts with endpoints related to paystack Apple Pay resource that
 // lets you register your application's top-level domain or subdomain.
@@ -51,10 +54,9 @@ func NewApplePayClient(options ...ClientOptions) *ApplePayClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (a *ApplePayClient) Register(domainName string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["domainName"] = domainName
-	return a.APICall(http.MethodPost, "/apple-pay/domain", payload)
+func (a *ApplePayClient) Register(ctx context.Context, domainName string) (*Response, error) {
+	payload := map[string]string{"domainName": domainName}
+	return a.APICall(ctx, http.MethodPost, "/apple-pay/domain", payload)
 }
 
 // All lets you retrieve all registered domains on your Integration.
@@ -93,9 +95,9 @@ func (a *ApplePayClient) Register(domainName string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (a *ApplePayClient) All(queries ...Query) (*Response, error) {
+func (a *ApplePayClient) All(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/apple-pay/domain", queries...)
-	return a.APICall(http.MethodGet, url, nil)
+	return a.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // Unregister lets you unregister a top-level domain or subdomain previously used for your Apple Pay Integration.
@@ -128,8 +130,8 @@ func (a *ApplePayClient) All(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (a *ApplePayClient) Unregister(domainName string) (*Response, error) {
+func (a *ApplePayClient) Unregister(ctx context.Context, domainName string) (*Response, error) {
 	payload := make(map[string]interface{})
 	payload["domainName"] = domainName
-	return a.APICall(http.MethodDelete, "/apple-pay/domain", payload)
+	return a.APICall(ctx, http.MethodDelete, "/apple-pay/domain", payload)
 }
