@@ -76,7 +76,7 @@ type baseAPIClient struct {
 	httpClient *http.Client
 }
 
-func (a *baseAPIClient) APICall(ctx context.Context ,method string, endPointPath string, payload interface{}) (*Response, error) {
+func (a *baseAPIClient) APICall(ctx context.Context, method string, endPointPath string, payload interface{}) (*Response, error) {
 	var body *bytes.Buffer
 	var apiRequest *http.Request
 	var err error
@@ -89,8 +89,7 @@ func (a *baseAPIClient) APICall(ctx context.Context ,method string, endPointPath
 		body = bytes.NewBuffer(payloadInBytes)
 	}
 
-
-	apiRequest , err = http.NewRequestWithContext(ctx, method, a.baseUrl+endPointPath, body)
+	apiRequest, err = http.NewRequestWithContext(ctx, method, a.baseUrl+endPointPath, body)
 
 	if err != nil {
 		return nil, err
