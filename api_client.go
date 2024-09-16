@@ -2,6 +2,7 @@ package paystack
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -75,7 +76,7 @@ type baseAPIClient struct {
 	httpClient *http.Client
 }
 
-func (a *baseAPIClient) APICall(method string, endPointPath string, payload interface{}) (*Response, error) {
+func (a *baseAPIClient) APICall(ctx context.Context ,method string, endPointPath string, payload interface{}) (*Response, error) {
 	var body *bytes.Buffer
 	var apiRequest *http.Request
 	var err error
@@ -88,11 +89,8 @@ func (a *baseAPIClient) APICall(method string, endPointPath string, payload inte
 		body = bytes.NewBuffer(payloadInBytes)
 	}
 
-	if body != nil {
-		apiRequest, err = http.NewRequest(method, a.baseUrl+endPointPath, body)
-	} else {
-		apiRequest, err = http.NewRequest(method, a.baseUrl+endPointPath, nil)
-	}
+
+	apiRequest , err = http.NewRequestWithContext(ctx, method, a.baseUrl+endPointPath, body)
 
 	if err != nil {
 		return nil, err
