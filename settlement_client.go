@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -59,9 +60,9 @@ func NewSettlementClient(options ...ClientOptions) *SettlementClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SettlementClient) All(queries ...Query) (*Response, error) {
+func (s *SettlementClient) All(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/settlement", queries...)
-	return s.APICall(http.MethodGet, url, nil)
+	return s.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // AllTransactions lets you retrieve the Transactions that make up a particular settlement
@@ -100,7 +101,7 @@ func (s *SettlementClient) All(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SettlementClient) AllTransactions(settlementId string, queries ...Query) (*Response, error) {
+func (s *SettlementClient) AllTransactions(ctx context.Context, settlementId string, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl(fmt.Sprintf("/settlement/%s", settlementId), queries...)
-	return s.APICall(http.MethodGet, url, nil)
+	return s.APICall(ctx, http.MethodGet, url, nil)
 }
