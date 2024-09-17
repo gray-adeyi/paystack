@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -61,15 +62,16 @@ func NewTransactionClient(options ...ClientOptions) *TransactionClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) Initialize(amount int, email string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["amount"] = amount
-	payload["email"] = email
+func (t *TransactionClient) Initialize(ctx context.Context, amount int, email string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	payload := map[string]any{
+		"amount": amount,
+		"email":  email,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(http.MethodPost, "/transaction/initialize", payload)
+	return t.APICall(ctx, http.MethodPost, "/transaction/initialize", payload)
 }
 
 // Verify lets you confirm the status of a transaction
@@ -102,8 +104,8 @@ func (t *TransactionClient) Initialize(amount int, email string, optionalPayload
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) Verify(reference string) (*Response, error) {
-	return t.APICall(http.MethodGet, fmt.Sprintf("/transaction/verify/%s", reference), nil)
+func (t *TransactionClient) Verify(ctx context.Context, reference string) (*Response, error) {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transaction/verify/%s", reference), nil)
 }
 
 // All lets you list Transactions carried out on your Integration
@@ -142,9 +144,9 @@ func (t *TransactionClient) Verify(reference string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) All(queries ...Query) (*Response, error) {
+func (t *TransactionClient) All(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/transaction", queries...)
-	return t.APICall(http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // FetchOne lets you get the details of a transaction carried out on your Integration
@@ -177,8 +179,8 @@ func (t *TransactionClient) All(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) FetchOne(id string) (*Response, error) {
-	return t.APICall(http.MethodGet, fmt.Sprintf("/transaction/%s", id), nil)
+func (t *TransactionClient) FetchOne(ctx context.Context, id string) (*Response, error) {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transaction/%s", id), nil)
 }
 
 // ChargeAuthorization lets you charge authorizations that are marked as reusable
@@ -218,16 +220,17 @@ func (t *TransactionClient) FetchOne(id string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) ChargeAuthorization(amount int, email string, authorizationCode string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["amount"] = amount
-	payload["email"] = email
-	payload["authorization_code"] = authorizationCode
+func (t *TransactionClient) ChargeAuthorization(ctx context.Context, amount int, email string, authorizationCode string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	payload := map[string]any{
+		"amount":             amount,
+		"email":              email,
+		"authorization_code": authorizationCode,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(http.MethodPost, "/transaction/charge_authorization", payload)
+	return t.APICall(ctx, http.MethodPost, "/transaction/charge_authorization", payload)
 }
 
 // Timeline lets you view the timeline of a transaction
@@ -260,8 +263,8 @@ func (t *TransactionClient) ChargeAuthorization(amount int, email string, author
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) Timeline(idOrReference string) (*Response, error) {
-	return t.APICall(http.MethodGet, fmt.Sprintf("/transaction/timeline/%s", idOrReference), nil)
+func (t *TransactionClient) Timeline(ctx context.Context, idOrReference string) (*Response, error) {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transaction/timeline/%s", idOrReference), nil)
 }
 
 // Total lets you retrieve the total amount received on your account
@@ -300,9 +303,9 @@ func (t *TransactionClient) Timeline(idOrReference string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) Total(queries ...Query) (*Response, error) {
+func (t *TransactionClient) Total(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/transaction/totals", queries...)
-	return t.APICall(http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // Export lets you export a list of Transactions carried out on your Integration
@@ -341,9 +344,9 @@ func (t *TransactionClient) Total(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) Export(queries ...Query) (*Response, error) {
+func (t *TransactionClient) Export(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/transaction/export", queries...)
-	return t.APICall(http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // PartialDebit lets you retrieve part of a payment from a customer
@@ -383,15 +386,16 @@ func (t *TransactionClient) Export(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionClient) PartialDebit(authorizationCode string, currency string, amount string, email string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["authorization_code"] = authorizationCode
-	payload["currency"] = currency
-	payload["amount"] = amount
-	payload["email"] = email
+func (t *TransactionClient) PartialDebit(ctx context.Context, authorizationCode string, currency string, amount string, email string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	payload := map[string]any{
+		"authorization_code": authorizationCode,
+		"currency":           currency,
+		"amount":             amount,
+		"email":              email,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(http.MethodPost, "/transaction/partial_debit", payload)
+	return t.APICall(ctx, http.MethodPost, "/transaction/partial_debit", payload)
 }
