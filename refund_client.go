@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -61,15 +62,16 @@ func NewRefundClient(options ...ClientOptions) *RefundClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (r *RefundClient) Create(transaction string,
+func (r *RefundClient) Create(ctx context.Context, transaction string,
 	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["transaction"] = transaction
+	payload := map[string]any{
+		"transaction": transaction,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return r.APICall(http.MethodPost, "/refund", payload)
+	return r.APICall(ctx, http.MethodPost, "/refund", payload)
 }
 
 // All lets you retrieve Refunds available on your Integration
@@ -108,9 +110,9 @@ func (r *RefundClient) Create(transaction string,
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (r *RefundClient) All(queries ...Query) (*Response, error) {
+func (r *RefundClient) All(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/refund", queries...)
-	return r.APICall(http.MethodGet, url, nil)
+	return r.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // FetchOne lets you retrieve the details of a refund on your Integration
@@ -143,6 +145,6 @@ func (r *RefundClient) All(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (r *RefundClient) FetchOne(reference string) (*Response, error) {
-	return r.APICall(http.MethodGet, fmt.Sprintf("/refund/%s", reference), nil)
+func (r *RefundClient) FetchOne(ctx context.Context, reference string) (*Response, error) {
+	return r.APICall(ctx, http.MethodGet, fmt.Sprintf("/refund/%s", reference), nil)
 }
