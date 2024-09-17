@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -63,16 +64,17 @@ func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) Create(customer string, plan string, authorization string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["customer"] = customer
-	payload["plan"] = plan
-	payload["authorization"] = authorization
+func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan string, authorization string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	payload := map[string]any{
+		"customer":      customer,
+		"plan":          plan,
+		"authorization": authorization,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return s.APICall(http.MethodPost, "/subscription", payload)
+	return s.APICall(ctx, http.MethodPost, "/subscription", payload)
 }
 
 // All lets you retrieve Subscriptions available on your Integration
@@ -111,9 +113,9 @@ func (s *SubscriptionClient) Create(customer string, plan string, authorization 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) All(queries ...Query) (*Response, error) {
+func (s *SubscriptionClient) All(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/subscription", queries...)
-	return s.APICall(http.MethodGet, url, nil)
+	return s.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // FetchOne lets you retrieve details of a subscription on your Integration
@@ -146,8 +148,8 @@ func (s *SubscriptionClient) All(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) FetchOne(idOrCode string) (*Response, error) {
-	return s.APICall(http.MethodGet, fmt.Sprintf("/subscription/%s", idOrCode), nil)
+func (s *SubscriptionClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
+	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subscription/%s", idOrCode), nil)
 }
 
 // Enable lets you enable a subscription on your Integration
@@ -180,11 +182,13 @@ func (s *SubscriptionClient) FetchOne(idOrCode string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) Enable(code string, token string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["code"] = code
-	payload["token"] = token
-	return s.APICall(http.MethodPost, "/subscription/enable", payload)
+func (s *SubscriptionClient) Enable(ctx context.Context, code string, token string) (*Response, error) {
+	payload := map[string]any{
+		"code":  code,
+		"token": token,
+	}
+
+	return s.APICall(ctx, http.MethodPost, "/subscription/enable", payload)
 }
 
 // Disable lets you disable a subscription on your Integration
@@ -217,11 +221,12 @@ func (s *SubscriptionClient) Enable(code string, token string) (*Response, error
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) Disable(code string, token string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["code"] = code
-	payload["token"] = token
-	return s.APICall(http.MethodPost, "/subscription/disable", payload)
+func (s *SubscriptionClient) Disable(ctx context.Context, code string, token string) (*Response, error) {
+	payload := map[string]any{
+		"code":  code,
+		"token": token,
+	}
+	return s.APICall(ctx, http.MethodPost, "/subscription/disable", payload)
 }
 
 // GenerateLink lets you generate a link for updating the card on a subscription
@@ -254,8 +259,8 @@ func (s *SubscriptionClient) Disable(code string, token string) (*Response, erro
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) GenerateLink(code string) (*Response, error) {
-	return s.APICall(http.MethodGet, fmt.Sprintf("/subscription/%s/manage/link/", code), nil)
+func (s *SubscriptionClient) GenerateLink(ctx context.Context, code string) (*Response, error) {
+	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subscription/%s/manage/link/", code), nil)
 }
 
 // SendLink lets you email a customer a link for updating the card on their subscription
@@ -288,6 +293,6 @@ func (s *SubscriptionClient) GenerateLink(code string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) SendLink(code string) (*Response, error) {
-	return s.APICall(http.MethodPost, fmt.Sprintf("/subscription/%s/manage/email/", code), nil)
+func (s *SubscriptionClient) SendLink(ctx context.Context, code string) (*Response, error) {
+	return s.APICall(ctx, http.MethodPost, fmt.Sprintf("/subscription/%s/manage/email/", code), nil)
 }
