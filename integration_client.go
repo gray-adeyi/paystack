@@ -1,6 +1,9 @@
 package paystack
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 // IntegrationClient interacts with endpoints related to paystack Integration resource
 // that lets you manage some settings on your Integration.
@@ -50,8 +53,8 @@ func NewIntegrationClient(options ...ClientOptions) *IntegrationClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (i *IntegrationClient) Timeout() (*Response, error) {
-	return i.APICall(http.MethodGet, "/Integration/payment_session_timeout", nil)
+func (i *IntegrationClient) Timeout(ctx context.Context) (*Response, error) {
+	return i.APICall(ctx, http.MethodGet, "/Integration/payment_session_timeout", nil)
 }
 
 // UpdateTimeout lets you update the payment session timeout on your Integration
@@ -84,9 +87,9 @@ func (i *IntegrationClient) Timeout() (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (i *IntegrationClient) UpdateTimeout(timeout int) (*Response, error) {
-	payload := map[string]interface{}{
+func (i *IntegrationClient) UpdateTimeout(ctx context.Context, timeout int) (*Response, error) {
+	payload := map[string]any{
 		"timeout": timeout,
 	}
-	return i.APICall(http.MethodPut, "/Integration/payment_session_timeout", payload)
+	return i.APICall(ctx, http.MethodPut, "/Integration/payment_session_timeout", payload)
 }
