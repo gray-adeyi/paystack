@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -62,14 +63,15 @@ func NewPaymentPageClient(options ...ClientOptions) *PaymentPageClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentPageClient) Create(name string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["name"] = name
+func (p *PaymentPageClient) Create(ctx context.Context, name string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	payload := map[string]any{
+		"name": name,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(http.MethodPost, "/page", payload)
+	return p.APICall(ctx, http.MethodPost, "/page", payload)
 }
 
 // All lets you retrieve payment pages available on your Integration
@@ -108,9 +110,9 @@ func (p *PaymentPageClient) Create(name string, optionalPayloadParameters ...Opt
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentPageClient) All(queries ...Query) (*Response, error) {
+func (p *PaymentPageClient) All(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/page", queries...)
-	return p.APICall(http.MethodGet, url, nil)
+	return p.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // FetchOne lets you retrieve details of a payment page on your Integration
@@ -143,8 +145,8 @@ func (p *PaymentPageClient) All(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentPageClient) FetchOne(idOrSlug string) (*Response, error) {
-	return p.APICall(http.MethodGet, fmt.Sprintf("/page/%s", idOrSlug), nil)
+func (p *PaymentPageClient) FetchOne(ctx context.Context, idOrSlug string) (*Response, error) {
+	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/page/%s", idOrSlug), nil)
 }
 
 // Update lets you update a payment page details on your Integration
@@ -185,16 +187,17 @@ func (p *PaymentPageClient) FetchOne(idOrSlug string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentPageClient) Update(idOrSlug string, name string, description string,
+func (p *PaymentPageClient) Update(ctx context.Context, idOrSlug string, name string, description string,
 	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["name"] = name
-	payload["description"] = description
+	payload := map[string]any{
+		"name":        name,
+		"description": description,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(http.MethodPut, fmt.Sprintf("/page/%s", idOrSlug), payload)
+	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/page/%s", idOrSlug), payload)
 }
 
 // CheckSlug lets you check the availability of a slug for a payment page
@@ -227,8 +230,8 @@ func (p *PaymentPageClient) Update(idOrSlug string, name string, description str
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentPageClient) CheckSlug(slug string) (*Response, error) {
-	return p.APICall(http.MethodGet, fmt.Sprintf("/page/check_slug_availability/%s", slug), nil)
+func (p *PaymentPageClient) CheckSlug(ctx context.Context, slug string) (*Response, error) {
+	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/page/check_slug_availability/%s", slug), nil)
 }
 
 // AddProducts lets you add Products to a payment page
@@ -261,8 +264,9 @@ func (p *PaymentPageClient) CheckSlug(slug string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentPageClient) AddProducts(id string, products []string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["product"] = products
-	return p.APICall(http.MethodGet, fmt.Sprintf("/page/%s/product", id), nil)
+func (p *PaymentPageClient) AddProducts(ctx context.Context, id string, products []string) (*Response, error) {
+	payload := map[string][]string{
+		"product": products,
+	}
+	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/page/%s/product", id), payload)
 }
