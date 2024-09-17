@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -63,17 +64,18 @@ func NewTransferClient(options ...ClientOptions) *TransferClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) Initiate(source string, amount int, recipient string,
+func (t *TransferClient) Initiate(ctx context.Context, source string, amount int, recipient string,
 	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["source"] = source
-	payload["amount"] = amount
-	payload["recipient"] = recipient
+	payload := map[string]any{
+		"source":    source,
+		"amount":    amount,
+		"recipient": recipient,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(http.MethodPost, "/transfer", payload)
+	return t.APICall(ctx, http.MethodPost, "/transfer", payload)
 }
 
 // Finalize lets you finalize an initiated transfer
@@ -107,11 +109,13 @@ func (t *TransferClient) Initiate(source string, amount int, recipient string,
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) Finalize(transferCode string, otp string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["transfer_code"] = transferCode
-	payload["otp"] = otp
-	return t.APICall(http.MethodPost, "/transfer/finalize_transfer", payload)
+func (t *TransferClient) Finalize(ctx context.Context, transferCode string, otp string) (*Response, error) {
+	payload := map[string]any{
+		"transfer_code": transferCode,
+		"otp":           otp,
+	}
+
+	return t.APICall(ctx, http.MethodPost, "/transfer/finalize_transfer", payload)
 }
 
 // BulkInitiate lets you initiate multiple Transfers in a single request.
@@ -157,12 +161,13 @@ func (t *TransferClient) Finalize(transferCode string, otp string) (*Response, e
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) BulkInitiate(source string, transfers interface{}) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["source"] = source
-	payload["Transfers"] = transfers
+func (t *TransferClient) BulkInitiate(ctx context.Context, source string, transfers interface{}) (*Response, error) {
+	payload := map[string]any{
+		"source":    source,
+		"Transfers": transfers,
+	}
 
-	return t.APICall(http.MethodPost, "/transfer/bulk", payload)
+	return t.APICall(ctx, http.MethodPost, "/transfer/bulk", payload)
 }
 
 // All lets you retrieve all the Transfers made on your Integration.
@@ -201,9 +206,9 @@ func (t *TransferClient) BulkInitiate(source string, transfers interface{}) (*Re
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) All(queries ...Query) (*Response, error) {
+func (t *TransferClient) All(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/transfer", queries...)
-	return t.APICall(http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // FetchOne lets you retrieve the details of a transfer on your Integration.
@@ -236,8 +241,8 @@ func (t *TransferClient) All(queries ...Query) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) FetchOne(idOrCode string) (*Response, error) {
-	return t.APICall(http.MethodGet, fmt.Sprintf("/transfer/%s", idOrCode), nil)
+func (t *TransferClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transfer/%s", idOrCode), nil)
 }
 
 // Verify lets you verify the status of a transfer on your Integration.
@@ -270,6 +275,6 @@ func (t *TransferClient) FetchOne(idOrCode string) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) Verify(reference string) (*Response, error) {
-	return t.APICall(http.MethodGet, fmt.Sprintf("/transfer/verify/%s", reference), nil)
+func (t *TransferClient) Verify(ctx context.Context, reference string) (*Response, error) {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transfer/verify/%s", reference), nil)
 }
