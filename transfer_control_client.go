@@ -1,6 +1,11 @@
 package paystack
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+
+	"golang.org/x/net/context"
+)
 
 // TransferControlClient interacts with endpoints related to paystack transfer control resource that lets
 // you manage settings of your Transfers.
@@ -50,8 +55,8 @@ func NewTransferControlClient(options ...ClientOptions) *TransferControlClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferControlClient) Balance() (*Response, error) {
-	return t.APICall(http.MethodGet, "/balance", nil)
+func (t *TransferControlClient) Balance(ctx context.Context) (*Response, error) {
+	return t.APICall(ctx, http.MethodGet, "/balance", nil)
 }
 
 // BalanceLedger lets you retrieve all pay-ins and pay-outs that occurred on your Integration
@@ -84,8 +89,8 @@ func (t *TransferControlClient) Balance() (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferControlClient) BalanceLedger() (*Response, error) {
-	return t.APICall(http.MethodGet, "/balance/ledger", nil)
+func (t *TransferControlClient) BalanceLedger(ctx context.Context) (*Response, error) {
+	return t.APICall(ctx, http.MethodGet, "/balance/ledger", nil)
 }
 
 // ResendOTP lets you generate a new OTP and sends to customer in the event they are having trouble receiving one.
@@ -118,11 +123,13 @@ func (t *TransferControlClient) BalanceLedger() (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferControlClient) ResendOTP(transferCode string, reason string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["transfer_code"] = transferCode
-	payload["reason"] = reason
-	return t.APICall(http.MethodPost, "/transfer/resend_otp", payload)
+func (t *TransferControlClient) ResendOTP(ctx context.Context, transferCode string, reason string) (*Response, error) {
+	payload := map[string]any{
+		"transfer_code": transferCode,
+		"reason":        reason,
+	}
+
+	return t.APICall(ctx, http.MethodPost, "/transfer/resend_otp", payload)
 }
 
 // DisableOTP lets you complete Transfers without use of OTPs.
@@ -156,8 +163,8 @@ func (t *TransferControlClient) ResendOTP(transferCode string, reason string) (*
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferControlClient) DisableOTP() (*Response, error) {
-	return t.APICall(http.MethodPost, "/transfer/disable_otp", nil)
+func (t *TransferControlClient) DisableOTP(ctx context.Context) (*Response, error) {
+	return t.APICall(ctx, http.MethodPost, "/transfer/disable_otp", nil)
 }
 
 // FinalizeDisableOTP lets you finalize the request to disable OTP on your Transfers.
@@ -190,9 +197,9 @@ func (t *TransferControlClient) DisableOTP() (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferControlClient) FinalizeDisableOTP(otp string) (*Response, error) {
-	payload := map[string]interface{}{"otp": otp}
-	return t.APICall(http.MethodPost, "/transfer/disable_otp", payload)
+func (t *TransferControlClient) FinalizeDisableOTP(ctx context.Context, otp string) (*Response, error) {
+	payload := map[string]any{"otp": otp}
+	return t.APICall(ctx, http.MethodPost, "/transfer/disable_otp", payload)
 }
 
 // EnableOTP lets you turn OTP requirement back on.
@@ -225,6 +232,6 @@ func (t *TransferControlClient) FinalizeDisableOTP(otp string) (*Response, error
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferControlClient) EnableOTP() (*Response, error) {
-	return t.APICall(http.MethodPost, "/transfer/enable_otp", nil)
+func (t *TransferControlClient) EnableOTP(ctx context.Context) (*Response, error) {
+	return t.APICall(ctx, http.MethodPost, "/transfer/enable_otp", nil)
 }
