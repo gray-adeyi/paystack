@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -61,9 +62,9 @@ func NewVerificationClient(options ...ClientOptions) *VerificationClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (v *VerificationClient) ResolveAccount(queries ...Query) (*Response, error) {
+func (v *VerificationClient) ResolveAccount(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/bank/resolve", queries...)
-	return v.APICall(http.MethodGet, url, nil)
+	return v.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // ValidateAccount lets you confirm the authenticity of a customer's account number before sending money
@@ -106,8 +107,8 @@ func (v *VerificationClient) ResolveAccount(queries ...Query) (*Response, error)
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (v *VerificationClient) ValidateAccount(accountName string, accountNumber string, accountType string, bankCode string, countryCode string, documentType string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := map[string]interface{}{
+func (v *VerificationClient) ValidateAccount(ctx context.Context, accountName string, accountNumber string, accountType string, bankCode string, countryCode string, documentType string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	payload := map[string]any{
 		"account_name":   accountName,
 		"account_number": accountNumber,
 		"account_type":   accountType,
@@ -118,7 +119,7 @@ func (v *VerificationClient) ValidateAccount(accountName string, accountNumber s
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return v.APICall(http.MethodGet, "/bank/validate", payload)
+	return v.APICall(ctx, http.MethodGet, "/bank/validate", payload)
 }
 
 // ResolveBIN lets you retrieve more information about a customer's card
@@ -151,6 +152,6 @@ func (v *VerificationClient) ValidateAccount(accountName string, accountNumber s
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (v *VerificationClient) ResolveBIN(bin string) (*Response, error) {
-	return v.APICall(http.MethodGet, fmt.Sprintf("/decision/bin/%s", bin), nil)
+func (v *VerificationClient) ResolveBIN(ctx context.Context, bin string) (*Response, error) {
+	return v.APICall(ctx, http.MethodGet, fmt.Sprintf("/decision/bin/%s", bin), nil)
 }
