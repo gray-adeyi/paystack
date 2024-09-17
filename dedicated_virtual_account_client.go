@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -62,15 +63,16 @@ func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtua
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) Create(customerIdOrCode string,
+func (d *DedicatedVirtualAccountClient) Create(ctx context.Context, customerIdOrCode string,
 	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["customer"] = customerIdOrCode
+	payload := map[string]any{
+		"customer": customerIdOrCode,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return d.APICall(http.MethodPost, "/dedicated_account", payload)
+	return d.APICall(ctx, http.MethodPost, "/dedicated_account", payload)
 }
 
 // Assign lets you can create a customer, validate the customer, and assign a DVA to the customer.
@@ -113,21 +115,22 @@ func (d *DedicatedVirtualAccountClient) Create(customerIdOrCode string,
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) Assign(email string, firstName string, lastName string,
+func (d *DedicatedVirtualAccountClient) Assign(ctx context.Context, email string, firstName string, lastName string,
 	phone string, preferredBank string, country string,
 	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["email"] = email
-	payload["first_name"] = firstName
-	payload["last_name"] = lastName
-	payload["phone"] = phone
-	payload["preferred_bank"] = preferredBank
-	payload["country"] = country
+	payload := map[string]any{
+		"email":          email,
+		"first_name":     firstName,
+		"last_name":      lastName,
+		"phone":          phone,
+		"preferred_bank": preferredBank,
+		"country":        country,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return d.APICall(http.MethodPost, "/dedicated_account/assign", payload)
+	return d.APICall(ctx, http.MethodPost, "/dedicated_account/assign", payload)
 }
 
 // All lets you retrieve dedicated virtual accounts available on your Integration.
@@ -166,9 +169,9 @@ func (d *DedicatedVirtualAccountClient) Assign(email string, firstName string, l
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) All(queries ...Query) (*Response, error) {
+func (d *DedicatedVirtualAccountClient) All(ctx context.Context, queries ...Query) (*Response, error) {
 	url := AddQueryParamsToUrl("/dedicated_account", queries...)
-	return d.APICall(http.MethodGet, url, nil)
+	return d.APICall(ctx, http.MethodGet, url, nil)
 }
 
 // FetchOne lets you retrieve details of a dedicated virtual account on your Integration.
@@ -201,8 +204,8 @@ func (d *DedicatedVirtualAccountClient) All(queries ...Query) (*Response, error)
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) FetchOne(dedicatedAccountId string) (*Response, error) {
-	return d.APICall(http.MethodGet, fmt.Sprintf("/dedicated_account/%s", dedicatedAccountId), nil)
+func (d *DedicatedVirtualAccountClient) FetchOne(ctx context.Context, dedicatedAccountId string) (*Response, error) {
+	return d.APICall(ctx, http.MethodGet, fmt.Sprintf("/dedicated_account/%s", dedicatedAccountId), nil)
 }
 
 // Requery lets you requery Dedicated Virtual Account for new Transactions
@@ -241,8 +244,8 @@ func (d *DedicatedVirtualAccountClient) FetchOne(dedicatedAccountId string) (*Re
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) Requery(queries ...Query) (*Response, error) {
-	return d.All(queries...)
+func (d *DedicatedVirtualAccountClient) Requery(ctx context.Context, queries ...Query) (*Response, error) {
+	return d.All(ctx, queries...)
 }
 
 // Deactivate lets you deactivate a dedicated virtual account on your Integration.
@@ -275,8 +278,8 @@ func (d *DedicatedVirtualAccountClient) Requery(queries ...Query) (*Response, er
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) Deactivate(id string) (*Response, error) {
-	return d.APICall(http.MethodDelete, fmt.Sprintf("/dedicated_account/%s", id), nil)
+func (d *DedicatedVirtualAccountClient) Deactivate(ctx context.Context, id string) (*Response, error) {
+	return d.APICall(ctx, http.MethodDelete, fmt.Sprintf("/dedicated_account/%s", id), nil)
 }
 
 // Split lets you split a dedicated virtual account transaction with one or more accounts
@@ -317,15 +320,16 @@ func (d *DedicatedVirtualAccountClient) Deactivate(id string) (*Response, error)
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) Split(customerIdOrCode string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["customer"] = customerIdOrCode
+func (d *DedicatedVirtualAccountClient) Split(ctx context.Context, customerIdOrCode string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	payload := map[string]any{
+		"customer": customerIdOrCode,
+	}
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
 
-	return d.APICall(http.MethodPost, "/dedicated_account/split", payload)
+	return d.APICall(ctx, http.MethodPost, "/dedicated_account/split", payload)
 }
 
 // RemoveSplit lets you remove a split payment for Transactions. If you've previously set up split payment
@@ -359,10 +363,11 @@ func (d *DedicatedVirtualAccountClient) Split(customerIdOrCode string, optionalP
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) RemoveSplit(accountNumber string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["account_number"] = accountNumber
-	return d.APICall(http.MethodDelete, "/dedicated_account/split", payload)
+func (d *DedicatedVirtualAccountClient) RemoveSplit(ctx context.Context, accountNumber string) (*Response, error) {
+	payload := map[string]any{
+		"account_number": accountNumber,
+	}
+	return d.APICall(ctx, http.MethodDelete, "/dedicated_account/split", payload)
 }
 
 // BankProviders lets you retrieve available bank providers for a dedicated virtual account
@@ -395,6 +400,6 @@ func (d *DedicatedVirtualAccountClient) RemoveSplit(accountNumber string) (*Resp
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DedicatedVirtualAccountClient) BankProviders() (*Response, error) {
-	return d.APICall(http.MethodPost, "/dedicated_account/available_providers", nil)
+func (d *DedicatedVirtualAccountClient) BankProviders(ctx context.Context) (*Response, error) {
+	return d.APICall(ctx, http.MethodPost, "/dedicated_account/available_providers", nil)
 }
