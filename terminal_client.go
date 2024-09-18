@@ -165,7 +165,7 @@ func (t *TerminalClient) TerminalStatus(ctx context.Context, terminalId string) 
 //	// you can write it like so.
 //	// resp, err := txnClient.All(p.WithQuery("perPage","50"))
 //
-// // see https://paystack.com/docs/api/terminal/#list for supported query parameters
+//	// see https://paystack.com/docs/api/terminal/#list for supported query parameters
 //
 //	resp, err := terminalClient.All()
 //	if err != nil {

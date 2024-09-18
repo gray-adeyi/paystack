@@ -48,7 +48,7 @@ func NewPaymentRequestClient(options ...ClientOptions) *PaymentRequestClient {
 //	// from paystack documentation see https://paystack.com/docs/api/payment-request/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := prClient.Create("CUS_xwaj0txjryg393b", 500000)
+//	resp, err := prClient.Create("CUS_xwaj0txjryg393b", 500000)
 //
 //	if err != nil {
 //		panic(err)

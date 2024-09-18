@@ -49,7 +49,7 @@ func NewPaymentPageClient(options ...ClientOptions) *PaymentPageClient {
 //	// from paystack documentation see https://paystack.com/docs/api/page/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := ppClient.Create("Buttercup Brunch")
+//	resp, err := ppClient.Create("Buttercup Brunch")
 //
 //	if err != nil {
 //		panic(err)
@@ -95,7 +95,7 @@ func (p *PaymentPageClient) Create(ctx context.Context, name string, optionalPay
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := ppClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/page/#list for supported query parameters
+//	// see https://paystack.com/docs/api/page/#list for supported query parameters
 //
 //	resp, err := ppClient.All()
 //	if err != nil {

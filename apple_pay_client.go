@@ -80,7 +80,7 @@ func (a *ApplePayClient) Register(ctx context.Context, domainName string) (*Resp
 //	// All also accepts queries, so say you want to use cursor, you can write it like so.
 //	// resp, err := applePayClient.All(p.WithQuery("use_cursor","true"))
 //
-// // see https://paystack.com/docs/api/apple-pay/#list-domains for supported query parameters
+//	// see https://paystack.com/docs/api/apple-pay/#list-domains for supported query parameters
 //
 //	resp, err := applePayClient.All()
 //	if err != nil {

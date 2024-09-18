@@ -50,7 +50,7 @@ func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 //	// from paystack documentation see https://paystack.com/docs/api/subscription/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := subClient.CreateCreate("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx")
+//	resp, err := subClient.CreateCreate("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx")
 //
 //	if err != nil {
 //		panic(err)
@@ -98,7 +98,7 @@ func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan s
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := subClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/subscription/#list for supported query parameters
+//	// see https://paystack.com/docs/api/subscription/#list for supported query parameters
 //
 //	resp, err := subClient.All()
 //	if err != nil {

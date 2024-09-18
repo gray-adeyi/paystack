@@ -44,7 +44,7 @@ func NewDisputeClient(options ...ClientOptions) *DisputeClient {
 //	// All also accepts queries, so say you want to specify the date range, you can write it like so.
 //	// resp, err := dClient.All(p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
 //
-// // see https://paystack.com/docs/api/dispute/#list for supported query parameters
+//	// see https://paystack.com/docs/api/dispute/#list for supported query parameters
 //
 //	resp, err := dClient.All()
 //	if err != nil {
@@ -255,7 +255,7 @@ func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmai
 //	// All also accepts queries, so say you want to specify the `upload_filename`, you can write it like so.
 //	// resp, err := dClient.UploadURL("disputeId", p.WithQuery("upload_filename","filename.txt"))
 //
-// // see https://paystack.com/docs/api/dispute/#upload-url for supported query parameters
+//	// see https://paystack.com/docs/api/dispute/#upload-url for supported query parameters
 //
 //	resp, err := dClient.UploadURL()
 //	if err != nil {
@@ -349,7 +349,7 @@ func (d *DisputeClient) Resolve(ctx context.Context, id string, resolution strin
 //	// All also accepts queries, so say you want to specify the date range, you can write it like so.
 //	// resp, err := dClient.Export(p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
 //
-// // see https://paystack.com/docs/api/dispute/#export for supported query parameters
+//	// see https://paystack.com/docs/api/dispute/#export for supported query parameters
 //
 //	resp, err := dClient.Export()
 //	if err != nil {

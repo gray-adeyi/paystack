@@ -103,7 +103,7 @@ func (t *TransactionSplitClient) Create(ctx context.Context, name string, transa
 //	// and if it is active, you can write it like so.
 //	// resp, err := txnSplitClient.All(p.WithQuery("name","co-founders account"), p.WithQuery("active", true))
 //
-// // see https://paystack.com/docs/api/split/#list for supported query parameters
+//	// see https://paystack.com/docs/api/split/#list for supported query parameters
 //
 //	resp, err := txnSplitClient.All()
 //	if err != nil {

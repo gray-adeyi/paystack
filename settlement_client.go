@@ -45,7 +45,7 @@ func NewSettlementClient(options ...ClientOptions) *SettlementClient {
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := sClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/settlement/#list for supported query parameters
+//	// see https://paystack.com/docs/api/settlement/#list for supported query parameters
 //
 //	resp, err := sClient.All()
 //	if err != nil {
@@ -86,7 +86,7 @@ func (s *SettlementClient) All(ctx context.Context, queries ...Query) (*Response
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := sClient.AllTransactions("<settlementId>", p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/settlement/#transactions for supported query parameters
+//	// see https://paystack.com/docs/api/settlement/#transactions for supported query parameters
 //
 //	resp, err := sClient.AllTransactions("<settlementId>")
 //	if err != nil {

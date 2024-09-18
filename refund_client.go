@@ -48,7 +48,7 @@ func NewRefundClient(options ...ClientOptions) *RefundClient {
 //	// from paystack documentation see https://paystack.com/docs/api/refund/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := refundClient.Create("1641")
+//	resp, err := refundClient.Create("1641")
 //
 //	if err != nil {
 //		panic(err)
@@ -95,7 +95,7 @@ func (r *RefundClient) Create(ctx context.Context, transaction string,
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := refundClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/refund/#list for supported query parameters
+//	// see https://paystack.com/docs/api/refund/#list for supported query parameters
 //
 //	resp, err := refundClient.All()
 //	if err != nil {

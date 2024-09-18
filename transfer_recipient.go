@@ -48,7 +48,7 @@ func NewTransferRecipientClient(options ...ClientOptions) *TransferRecipientClie
 //	// from paystack documentation see https://paystack.com/docs/api/transfer-recipient/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := trClient.Create("nuban","Tolu Robert","01000000010", "058")
+//	resp, err := trClient.Create("nuban","Tolu Robert","01000000010", "058")
 //
 //	if err != nil {
 //		panic(err)
@@ -103,7 +103,7 @@ func (t *TransferRecipientClient) Create(ctx context.Context, recipientType stri
 //		{"type":"nuban","name" : "Soft Merry","account_number": "98765432310","bank_code": "50211","currency": "NGN"},
 //		}
 //
-// resp, err := trClient.BulkCreate(batch)
+//	resp, err := trClient.BulkCreate(batch)
 //
 //	if err != nil {
 //		panic(err)
@@ -147,7 +147,7 @@ func (t *TransferRecipientClient) BulkCreate(ctx context.Context, batch interfac
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := trClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/transfer-recipient/#list for supported query parameters
+//	// see https://paystack.com/docs/api/transfer-recipient/#list for supported query parameters
 //
 //	resp, err := trClient.All()
 //	if err != nil {

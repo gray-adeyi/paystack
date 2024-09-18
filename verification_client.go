@@ -46,7 +46,7 @@ func NewVerificationClient(options ...ClientOptions) *VerificationClient {
 //	// resp, err := paystackClient.Verification.ResolveAccount(p.WithQuery("account_number","0022728151"),
 //	//	p.WithQuery("bank_code","063"))
 //
-// // see https://paystack.com/docs/api/verification/#resolve-account for supported query parameters
+//	// see https://paystack.com/docs/api/verification/#resolve-account for supported query parameters
 //
 //	resp, err := vClient.ResolveAccount(p.WithQuery("account_number","0022728151"),
 //	p.WithQuery("bank_code","063"))

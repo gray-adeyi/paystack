@@ -129,7 +129,7 @@ func (t *TransactionClient) Verify(ctx context.Context, reference string) (*Resp
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := txnClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/transaction/#list for supported query parameters
+//	// see https://paystack.com/docs/api/transaction/#list for supported query parameters
 //
 //	resp, err := txnClient.All()
 //	if err != nil {
@@ -288,7 +288,7 @@ func (t *TransactionClient) Timeline(ctx context.Context, idOrReference string) 
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := txnClient.Total(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/transaction/#totals for supported query parameters
+//	// see https://paystack.com/docs/api/transaction/#totals for supported query parameters
 //
 //	resp, err := txnClient.Total()
 //	if err != nil {
@@ -329,7 +329,7 @@ func (t *TransactionClient) Total(ctx context.Context, queries ...Query) (*Respo
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := txnClient.Export(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/transaction/#export for supported query parameters
+//	// see https://paystack.com/docs/api/transaction/#export for supported query parameters
 //
 //	resp, err := txnClient.Export()
 //	if err != nil {

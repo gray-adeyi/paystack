@@ -89,7 +89,7 @@ func (b *BulkChargeClient) Initiate(ctx context.Context, charges interface{}) (*
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := bcClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/bulk-charge/#list for supported query parameters
+//	// see https://paystack.com/docs/api/bulk-charge/#list for supported query parameters
 //
 //	resp, err := bcClient.All()
 //	if err != nil {
@@ -165,7 +165,7 @@ func (b *BulkChargeClient) FetchOne(ctx context.Context, idOrCode string) (*Resp
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := bcClient.Charges("<idOrSlug>",p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/bulk-charge/#fetch-charge for supported query parameters
+//	// see https://paystack.com/docs/api/bulk-charge/#fetch-charge for supported query parameters
 //
 //	resp, err := bcClient.Charges("<idOrSlug>")
 //	if err != nil {

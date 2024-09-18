@@ -48,7 +48,7 @@ func NewChargeClient(options ...ClientOptions) *ChargeClient {
 //	// from paystack documentation see https://paystack.com/docs/api/charge/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := chargeClient.Create("johndoe@example.com", 100000)
+//	resp, err := chargeClient.Create("johndoe@example.com", 100000)
 //
 //	if err != nil {
 //		panic(err)
@@ -92,7 +92,7 @@ func (c *ChargeClient) Create(ctx context.Context, email string, amount string, 
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.Charges.SubmitPin("1234", "5bwib5v6anhe9xa")
 //
-// resp, err := chargeClient.SubmitPin("1234", "5bwib5v6anhe9xa")
+//	resp, err := chargeClient.SubmitPin("1234", "5bwib5v6anhe9xa")
 //
 //	if err != nil {
 //		panic(err)
@@ -132,7 +132,7 @@ func (c *ChargeClient) SubmitPin(ctx context.Context, pin string, reference stri
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.Charges.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
 //
-// resp, err := chargeClient.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
+//	resp, err := chargeClient.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
 //
 //	if err != nil {
 //		panic(err)
@@ -172,7 +172,7 @@ func (c *ChargeClient) SubmitPhone(ctx context.Context, phone string, reference 
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.Charges.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
 //
-// resp, err := chargeClient.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
+//	resp, err := chargeClient.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
 //
 //	if err != nil {
 //		panic(err)
@@ -213,7 +213,7 @@ func (c *ChargeClient) SubmitBirthday(ctx context.Context, birthday string, refe
 //	// resp, err := paystackClient.Charges.SubmitAddress("140 N 2ND ST",
 //	//	"7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
 //
-// resp, err := chargeClient.SubmitAddress("140 N 2ND ST", "7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
+//	resp, err := chargeClient.SubmitAddress("140 N 2ND ST", "7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
 //
 //	if err != nil {
 //		panic(err)
@@ -259,7 +259,7 @@ func (c *ChargeClient) SubmitAddress(ctx context.Context, address string, refere
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.Charges.PendingCharge("5bwib5v6anhe9xa")
 //
-// resp, err := chargeClient.PendingCharge("5bwib5v6anhe9xa")
+//	resp, err := chargeClient.PendingCharge("5bwib5v6anhe9xa")
 //
 //	if err != nil {
 //		panic(err)

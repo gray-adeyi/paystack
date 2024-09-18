@@ -19,8 +19,11 @@ var ErrNoSecretKey = errors.New("Paystack secret key was not provided")
 // Response is a struct containing the status code and data retrieved from paystack. Response.Data is a slice of
 // byte that is JSON serializable.
 type Response struct {
+	// StatusCode is the http status code returned from making an http request to Paystack
 	StatusCode int
-	Data       []byte
+	// Data is a json serializable slice of byte containing the response data returned from Paystack from calling
+	// any of the client associated methods
+	Data []byte
 }
 
 // ClientOptions is a type used to modify attributes of an APIClient. It can be passed into the NewAPIClient
@@ -66,7 +69,7 @@ type OptionalPayloadParameter = func(map[string]any) map[string]any
 //	resp, err := client.DedicatedVirtualAccounts.Create(context.TODO(),"481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
 //
 // WithOptionalParameter is used to pass the `preferred_bank` optional parameter in the client method call
-func WithOptionalParameter(key string, value interface{}) OptionalPayloadParameter {
+func WithOptionalParameter(key string, value any) OptionalPayloadParameter {
 	return func(m map[string]any) map[string]any {
 		m[key] = value
 		return m

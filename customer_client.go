@@ -49,7 +49,7 @@ func NewCustomerClient(options ...ClientOptions) *CustomerClient {
 //	// from paystack documentation see https://paystack.com/docs/api/customer/#create
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-// resp, err := customerClient.Create("johndoe@example.com","John","Doe")
+//	resp, err := customerClient.Create("johndoe@example.com","John","Doe")
 //
 //	if err != nil {
 //		panic(err)
@@ -98,7 +98,7 @@ func (c *CustomerClient) Create(ctx context.Context, email string, firstName str
 //	// to retrieve, you can write it like so.
 //	// resp, err := customerClient.All(p.WithQuery("page",2))
 //
-// // see https://paystack.com/docs/api/customer/#list for supported query parameters
+//	// see https://paystack.com/docs/api/customer/#list for supported query parameters
 //
 //	resp, err := customerClient.All()
 //	if err != nil {

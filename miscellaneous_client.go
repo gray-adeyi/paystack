@@ -44,7 +44,7 @@ func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
 //	// and which country the banks to retrieve are from, you can write it like so.
 //	// resp, err := miscClient.Banks(p.WithQuery("perPage","50"), p.WithQuery("country","nigeria"))
 //
-// // see https://paystack.com/docs/api/miscellaneous/#bank for supported query parameters
+//	// see https://paystack.com/docs/api/miscellaneous/#bank for supported query parameters
 //
 //	resp, err := miscClient.Banks()
 //	if err != nil {
@@ -119,7 +119,7 @@ func (p *MiscellaneousClient) Countries(ctx context.Context) (*Response, error) 
 //	// to retrieve are from, you can write it like so.
 //	// resp, err := miscClient.States(p.WithQuery("country","nigeria"))
 //
-// // see https://paystack.com/docs/api/miscellaneous/#avs-states for supported query parameters
+//	// see https://paystack.com/docs/api/miscellaneous/#avs-states for supported query parameters
 //
 //	resp, err := miscClient.States()
 //	if err != nil {

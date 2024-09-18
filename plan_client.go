@@ -50,7 +50,7 @@ func NewPlanClient(options ...ClientOptions) *PlanClient {
 //	// from paystack documentation see https://paystack.com/docs/api/plan/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := planClient.Create("Monthly retainer", 500000, "monthly")
+//	resp, err := planClient.Create("Monthly retainer", 500000, "monthly")
 //
 //	if err != nil {
 //		panic(err)
@@ -98,7 +98,7 @@ func (p *PlanClient) Create(ctx context.Context, name string, amount int, interv
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := planClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/plan/#list for supported query parameters
+//	// see https://paystack.com/docs/api/plan/#list for supported query parameters
 //
 //	resp, err := planClient.All()
 //	if err != nil {

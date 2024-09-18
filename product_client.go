@@ -49,7 +49,7 @@ func NewProductClient(options ...ClientOptions) *ProductClient {
 //	// from paystack documentation see https://paystack.com/docs/api/product/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := prodClient.Create("Puff Puff", "Crispy flour ball with fluffy interior", 5000, "NGN")
+//	resp, err := prodClient.Create("Puff Puff", "Crispy flour ball with fluffy interior", 5000, "NGN")
 //
 //	if err != nil {
 //		panic(err)
@@ -99,7 +99,7 @@ func (p *ProductClient) Create(ctx context.Context, name string, description str
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := prodClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/product/#list for supported query parameters
+//	// see https://paystack.com/docs/api/product/#list for supported query parameters
 //
 //	resp, err := saClient.All()
 //	if err != nil {

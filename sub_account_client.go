@@ -51,7 +51,7 @@ func NewSubAccountClient(options ...ClientOptions) *SubAccountClient {
 //	// from paystack documentation see https://paystack.com/docs/api/subaccount/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-// resp, err := saClient.Create("Sunshine Studios", "044", "0193274682", 18.2,"")
+//	resp, err := saClient.Create("Sunshine Studios", "044", "0193274682", 18.2,"")
 //
 //	if err != nil {
 //		panic(err)
@@ -103,7 +103,7 @@ func (s *SubAccountClient) Create(ctx context.Context, businessName string, sett
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := saClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/subaccount/#list for supported query parameters
+//	// see https://paystack.com/docs/api/subaccount/#list for supported query parameters
 //
 //	resp, err := saClient.All()
 //	if err != nil {

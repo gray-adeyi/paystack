@@ -49,7 +49,7 @@ func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtua
 //	// from paystack documentation see https://paystack.com/docs/api/dedicated-virtual-account/#create
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-// resp, err := dvaClient.Create("481193")
+//	resp, err := dvaClient.Create("481193")
 //
 //	if err != nil {
 //		panic(err)
@@ -101,7 +101,7 @@ func (d *DedicatedVirtualAccountClient) Create(ctx context.Context, customerIdOr
 //	// from paystack documentation see https://paystack.com/docs/api/dedicated-virtual-account/#create
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-// resp, err := dvaClient.Assign("janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", "NG")
+//	resp, err := dvaClient.Assign("janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", "NG")
 //
 //	if err != nil {
 //		panic(err)
@@ -154,7 +154,7 @@ func (d *DedicatedVirtualAccountClient) Assign(ctx context.Context, email string
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := dvaClient.All(p.WithQuery("active","true"), p.WithQuery("bank_id","035"))
 //
-// // see https://paystack.com/docs/api/dedicated-virtual-account/#list for supported query parameters
+//	// see https://paystack.com/docs/api/dedicated-virtual-account/#list for supported query parameters
 //
 //	resp, err := txnClient.All()
 //	if err != nil {
@@ -306,7 +306,7 @@ func (d *DedicatedVirtualAccountClient) Deactivate(ctx context.Context, id strin
 //	// from paystack documentation see https://paystack.com/docs/api/dedicated-virtual-account/#add-split
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-// resp, err := dvaClient.Split("<customerIdOrCode>")
+//	resp, err := dvaClient.Split("<customerIdOrCode>")
 //
 //	if err != nil {
 //		panic(err)

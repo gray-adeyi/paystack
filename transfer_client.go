@@ -95,7 +95,7 @@ func (t *TransferClient) Initiate(ctx context.Context, source string, amount int
 //	// Therefore, this is possible
 //	// resp, err := paystackClient.Transfers.Finalize("TRF_vsyqdmlzble3uii","928783")
 //
-// resp, err := tfClient.Finalize("TRF_vsyqdmlzble3uii","928783")
+//	resp, err := tfClient.Finalize("TRF_vsyqdmlzble3uii","928783")
 //
 //	if err != nil {
 //		panic(err)
@@ -191,7 +191,7 @@ func (t *TransferClient) BulkInitiate(ctx context.Context, source string, transf
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := tfClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/transfer/#list for supported query parameters
+//	// see https://paystack.com/docs/api/transfer/#list for supported query parameters
 //
 //	resp, err := tfClient.All()
 //	if err != nil {
