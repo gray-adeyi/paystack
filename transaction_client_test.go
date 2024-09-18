@@ -1,14 +1,30 @@
 package paystack
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"testing"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
+func getTransactionClient(t *testing.T) *TransactionClient {
+	secretKey := os.Getenv("PAYSTACK_SECRET_KEY")
+	if secretKey == "" {
+		t.Error("unable to retrieve secret key from environmental variable required to run test")
+	}
+	return NewTransactionClient(WithSecretKey(secretKey))
+}
+
 func TestCanInitialize(t *testing.T) {
-	client := NewTransactionClient(WithSecretKey("sk_test_628850d539b080a5fbf5d3bfd4b35d15ac6d071f"))
-	r, err := client.Initialize(20000, "adeyigbenga027@gmail.com")
+	secretKey := os.Getenv("PAYSTACK_SECRET_KEY")
+	if secretKey == "" {
+		t.Error("unable to retrieve secret key from environmental variable required to run test")
+	}
+	client := getTransactionClient(t)
+	r, err := client.Initialize(context.TODO(), 20000, "adeyigbenga027@gmail.com")
 	if err != nil {
 		t.Error(err)
 	}
@@ -21,8 +37,8 @@ func TestCanInitialize(t *testing.T) {
 }
 
 func TestCanInitializeWithOptionalParameters(t *testing.T) {
-	client := NewTransactionClient(WithSecretKey("<paystack-secret-key>"))
-	r, err := client.Initialize(20000, "<email>",
+	client := getTransactionClient(t)
+	r, err := client.Initialize(context.TODO(), 20000, "<email>",
 		WithOptionalParameter("metadata", "{\"ref_id\":\"pot-5085072209\"}"),
 	)
 	if err != nil {

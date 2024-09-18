@@ -3,8 +3,6 @@ package paystack
 import (
 	"context"
 	"net/http"
-
-	"golang.org/x/net/context"
 )
 
 // TransferControlClient interacts with endpoints related to paystack transfer control resource that lets

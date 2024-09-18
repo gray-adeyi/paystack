@@ -2,12 +2,14 @@ package paystack
 
 import (
 	"bytes"
-	_ "github.com/joho/godotenv/autoload"
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"reflect"
 	"testing"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func TestCanCreateNewProductClient(t *testing.T) {
@@ -40,7 +42,7 @@ func getTestServer(t *testing.T, endpointPath string) *httptest.Server {
 
 func TestCanCreate(t *testing.T) {
 	productClient := getProductClient(t)
-	resp, err := productClient.Create("test product", "test description", 1000, "NGN")
+	resp, err := productClient.Create(context.TODO(), "test product", "test description", 1000, "NGN")
 	if err != nil {
 		t.Errorf("an error occured while calling productClient.Create. err: %v", err)
 	}
@@ -54,7 +56,7 @@ func TestCanCreateMocked(t *testing.T) {
 	defer testServer.Close()
 	productClient := getProductClient(t)
 	productClient.baseUrl = testServer.URL
-	resp, err := productClient.Create("test product", "test description", 1000, "NGN")
+	resp, err := productClient.Create(context.TODO(), "test product", "test description", 1000, "NGN")
 	if err != nil {
 		t.Errorf("an error occured while calling productClient.Create. err: %v", err)
 	}
@@ -68,7 +70,7 @@ func TestCanCreateMocked(t *testing.T) {
 
 func TestCanAll(t *testing.T) {
 	productClient := getProductClient(t)
-	resp, err := productClient.All()
+	resp, err := productClient.All(context.TODO())
 	if err != nil {
 		t.Errorf("an error occured while calling productClient.All. err: %v", err)
 	}

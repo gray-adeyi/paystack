@@ -50,21 +50,24 @@ func WithBaseUrl(baseUrl string) ClientOptions {
 
 // OptionalPayloadParameter is a type for storing optional parameters used by some APIClient methods that needs
 // to accept optional parameter.
-type OptionalPayloadParameter = func(map[string]interface{}) map[string]interface{}
+type OptionalPayloadParameter = func(map[string]any) map[string]any
 
 // WithOptionalParameter lets you add optional parameters when calling some client methods and you need to add
 // optional parameters to your payload.
 //
 // Example
 //
-//	import p "github.com/gray-adeyi/paystack"
+//	import (
+//		p "github.com/gray-adeyi/paystack"
+//		"context"
+//	)
 //
 //	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
-//	resp, err := client.DedicatedVirtualAccounts.Create("481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
+//	resp, err := client.DedicatedVirtualAccounts.Create(context.TODO(),"481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
 //
 // WithOptionalParameter is used to pass the `preferred_bank` optional parameter in the client method call
 func WithOptionalParameter(key string, value interface{}) OptionalPayloadParameter {
-	return func(m map[string]interface{}) map[string]interface{} {
+	return func(m map[string]any) map[string]any {
 		m[key] = value
 		return m
 	}
@@ -89,7 +92,11 @@ func (a *baseAPIClient) APICall(ctx context.Context, method string, endPointPath
 		body = bytes.NewBuffer(payloadInBytes)
 	}
 
-	apiRequest, err = http.NewRequestWithContext(ctx, method, a.baseUrl+endPointPath, body)
+	if payload != nil {
+		apiRequest, err = http.NewRequestWithContext(ctx, method, a.baseUrl+endPointPath, body)
+	} else {
+		apiRequest, err = http.NewRequestWithContext(ctx, method, a.baseUrl+endPointPath, nil)
+	}
 
 	if err != nil {
 		return nil, err
@@ -130,10 +137,13 @@ func (a *baseAPIClient) setHeaders(request *http.Request) error {
 // via its field name.
 //
 //	Example
-//	import p "github.com/gray-adeyi/paystack"
+//	import (
+//		p "github.com/gray-adeyi/paystack"
+//		"context"
+//		)
 //
 //	client := p.NewAPIClient(p.WithSecretKey("<your-paystack-secret-key>"))
-//	resp, err := client.Transactions.Verify("<reference>")
+//	resp, err := client.Transactions.Verify(context.TODO(),"<reference>")
 type APIClient struct {
 	baseAPIClient
 
