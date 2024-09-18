@@ -32,6 +32,7 @@ func NewApplePayClient(options ...ClientOptions) *ApplePayClient {
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	applePayClient := p.ApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -39,16 +40,16 @@ func NewApplePayClient(options ...ClientOptions) *ApplePayClient {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.ApplePay field is a `ApplePayClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.ApplePay.Register("<domainName>")
+//	// resp, err := paystackClient.ApplePay.Register(context.TODO(),"<domainName>")
 //
-//	resp, err := applePayClient.Register("<domainName>")
+//	resp, err := applePayClient.Register(context.TODO(),"<domainName>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -68,6 +69,7 @@ func (a *ApplePayClient) Register(ctx context.Context, domainName string) (*Resp
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	applePayClient := p.NewApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -75,21 +77,21 @@ func (a *ApplePayClient) Register(ctx context.Context, domainName string) (*Resp
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.ApplePay field is a `ApplePayClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.ApplePay.All()
+//	// resp, err := paystackClient.ApplePay.All(context.TODO())
 //
 //	// All also accepts queries, so say you want to use cursor, you can write it like so.
-//	// resp, err := applePayClient.All(p.WithQuery("use_cursor","true"))
+//	// resp, err := applePayClient.All(context.TODO(),p.WithQuery("use_cursor","true"))
 //
 //	// see https://paystack.com/docs/api/apple-pay/#list-domains for supported query parameters
 //
-//	resp, err := applePayClient.All()
+//	resp, err := applePayClient.All(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -108,6 +110,7 @@ func (a *ApplePayClient) All(ctx context.Context, queries ...Query) (*Response, 
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	applePayClient := p.ApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -115,16 +118,16 @@ func (a *ApplePayClient) All(ctx context.Context, queries ...Query) (*Response, 
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.ApplePay field is a `ApplePayClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.ApplePay.Unregister("<domainName>")
+//	// resp, err := paystackClient.ApplePay.Unregister(context.TODO(),"<domainName>")
 //
-//	resp, err := applePayClient.Unregister("<domainName>")
+//	resp, err := applePayClient.Unregister(context.TODO(),"<domainName>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
