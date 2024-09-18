@@ -31,6 +31,7 @@ func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -38,22 +39,22 @@ func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Miscellaneous.Banks()
+//	// resp, err := paystackClient.Miscellaneous.Banks(context.TODO())
 //
 //	// Banks also accepts queries, so say you want to customize how many banks to retrieve
 //	// and which country the banks to retrieve are from, you can write it like so.
-//	// resp, err := miscClient.Banks(p.WithQuery("perPage","50"), p.WithQuery("country","nigeria"))
+//	// resp, err := miscClient.Banks(context.TODO(),p.WithQuery("perPage","50"), p.WithQuery("country","nigeria"))
 //
 //	// see https://paystack.com/docs/api/miscellaneous/#bank for supported query parameters
 //
-//	resp, err := miscClient.Banks()
+//	resp, err := miscClient.Banks(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -72,6 +73,7 @@ func (p *MiscellaneousClient) Banks(ctx context.Context, queries ...Query) (*Res
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -79,16 +81,16 @@ func (p *MiscellaneousClient) Banks(ctx context.Context, queries ...Query) (*Res
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Miscellaneous.Countries()
+//	// resp, err := paystackClient.Miscellaneous.Countries(context.TODO())
 //
-//	resp, err := miscClient.Countries()
+//	resp, err := miscClient.Countries(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -113,22 +115,22 @@ func (p *MiscellaneousClient) Countries(ctx context.Context) (*Response, error) 
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Miscellaneous.States()
+//	// resp, err := paystackClient.Miscellaneous.States(context.TODO())
 //
 //	// States also accepts queries, so say you want to specify country the states
 //	// to retrieve are from, you can write it like so.
-//	// resp, err := miscClient.States(p.WithQuery("country","nigeria"))
+//	// resp, err := miscClient.States(context.TODO(),p.WithQuery("country","nigeria"))
 //
 //	// see https://paystack.com/docs/api/miscellaneous/#avs-states for supported query parameters
 //
-//	resp, err := miscClient.States()
+//	resp, err := miscClient.States(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
