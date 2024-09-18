@@ -32,6 +32,7 @@ func NewDisputeClient(options ...ClientOptions) *DisputeClient {
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -39,21 +40,21 @@ func NewDisputeClient(options ...ClientOptions) *DisputeClient {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.All()
+//	// resp, err := paystackClient.Disputes.All(context.TODO())
 //
 //	// All also accepts queries, so say you want to specify the date range, you can write it like so.
-//	// resp, err := dClient.All(p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
+//	// resp, err := dClient.All(context.TODO(),p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
 //
 //	// see https://paystack.com/docs/api/dispute/#list for supported query parameters
 //
-//	resp, err := dClient.All()
+//	resp, err := dClient.All(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -72,6 +73,7 @@ func (d *DisputeClient) All(ctx context.Context, queries ...Query) (*Response, e
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -79,16 +81,16 @@ func (d *DisputeClient) All(ctx context.Context, queries ...Query) (*Response, e
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.FetchOne("<id>")
+//	// resp, err := paystackClient.Disputes.FetchOne(context.TODO(),"<id>")
 //
-//	resp, err := dClient.FetchOne("<id>")
+//	resp, err := dClient.FetchOne(context.TODO(),"<id>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -106,6 +108,7 @@ func (d *DisputeClient) FetchOne(ctx context.Context, id string) (*Response, err
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -113,16 +116,16 @@ func (d *DisputeClient) FetchOne(ctx context.Context, id string) (*Response, err
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.AllTransactionDisputes("transactionId")
+//	// resp, err := paystackClient.Disputes.AllTransactionDisputes(context.TODO(),"transactionId")
 //
-//	resp, err := dClient.AllTransactionDisputes("transactionId")
+//	resp, err := dClient.AllTransactionDisputes(context.TODO(),"transactionId")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -140,6 +143,7 @@ func (d *DisputeClient) AllTransactionDisputes(ctx context.Context, transactionI
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -147,24 +151,24 @@ func (d *DisputeClient) AllTransactionDisputes(ctx context.Context, transactionI
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.Update("<id>", 1002)
+//	// resp, err := paystackClient.Disputes.Update(context.TODO(),"<id>", 1002)
 //
 //	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `uploaded_filename`.
-//	// resp, err := dClient.Update("<id>", 1002, "description",
+//	// resp, err := dClient.Update(context.TODO(),"<id>", 1002, "description",
 //	//	p.WithOptionalParameter("uploaded_filename","Disputes.pdf"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
 //	// from paystack documentation see https://paystack.com/docs/api/dispute/#update
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-//	resp, err := dClient.Update("<id>", 1002)
+//	resp, err := dClient.Update(context.TODO(),"<id>", 1002)
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -189,6 +193,7 @@ func (d *DisputeClient) Update(ctx context.Context, id string, referenceAmount i
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -196,25 +201,25 @@ func (d *DisputeClient) Update(ctx context.Context, id string, referenceAmount i
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.AddEvidence("<id>", "johndoe@example.com",
+//	// resp, err := paystackClient.Disputes.AddEvidence(context.TODO(),"<id>", "johndoe@example.com",
 //	//	"John Doe", "5085072209", "claim for buying product")
 //
 //	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `delivery_address`.
-//	// resp, err := dClient.AddEvidence("<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product",
+//	// resp, err := dClient.AddEvidence(context.TODO(),"<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product",
 //	//	p.WithOptionalParameter("delivery_address", "3a ladoke street ogbomoso"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
 //	// from paystack documentation see https://paystack.com/docs/api/dispute/#evidence
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-//	resp, err := dClient.AddEvidence("<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product")
+//	resp, err := dClient.AddEvidence(context.TODO(),"<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -243,6 +248,7 @@ func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmai
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -250,10 +256,10 @@ func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmai
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.UploadURL()
+//	// resp, err := paystackClient.Disputes.UploadURL(context.TODO())
 //
 //	// All also accepts queries, so say you want to specify the `upload_filename`, you can write it like so.
-//	// resp, err := dClient.UploadURL("disputeId", p.WithQuery("upload_filename","filename.txt"))
+//	// resp, err := dClient.UploadURL(context.TODO(),"disputeId", p.WithQuery("upload_filename","filename.txt"))
 //
 //	// see https://paystack.com/docs/api/dispute/#upload-url for supported query parameters
 //
@@ -262,9 +268,9 @@ func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmai
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -283,6 +289,7 @@ func (d *DisputeClient) UploadURL(ctx context.Context, id string, queries ...Que
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -290,25 +297,25 @@ func (d *DisputeClient) UploadURL(ctx context.Context, id string, queries ...Que
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.AddEvidence("<id>", "johndoe@example.com",
+//	// resp, err := paystackClient.Disputes.AddEvidence(context.TODO(),"<id>", "johndoe@example.com",
 //	//	"John Doe", "5085072209", "claim for buying product")
 //
 //	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `evidence`.
-//	// resp, err := dClient.AddEvidence("<id>", "johndoe@example.com","John Doe", "5085072209", "claim for buying product",
+//	// resp, err := dClient.AddEvidence(context.TODO(),"<id>", "johndoe@example.com","John Doe", "5085072209", "claim for buying product",
 //	//	p.WithOptionalParameter("evidence", "evidenceId"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
 //	// from paystack documentation see https://paystack.com/docs/api/dispute/#evidence
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-//	resp, err := dClient.AddEvidence("<id>", "merchant-accepted", "Merchant accepted", 10000, "resolve.pdf")
+//	resp, err := dClient.AddEvidence(context.TODO(),"<id>", "merchant-accepted", "Merchant accepted", 10000, "resolve.pdf")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -337,6 +344,7 @@ func (d *DisputeClient) Resolve(ctx context.Context, id string, resolution strin
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -344,21 +352,21 @@ func (d *DisputeClient) Resolve(ctx context.Context, id string, resolution strin
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Disputes field is a `DisputeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.Export()
+//	// resp, err := paystackClient.Disputes.Export(context.TODO())
 //
 //	// All also accepts queries, so say you want to specify the date range, you can write it like so.
-//	// resp, err := dClient.Export(p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
+//	// resp, err := dClient.Export(context.TODO(),p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
 //
 //	// see https://paystack.com/docs/api/dispute/#export for supported query parameters
 //
-//	resp, err := dClient.Export()
+//	resp, err := dClient.Export(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
