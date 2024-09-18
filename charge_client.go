@@ -32,6 +32,7 @@ func NewChargeClient(options ...ClientOptions) *ChargeClient {
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -39,24 +40,24 @@ func NewChargeClient(options ...ClientOptions) *ChargeClient {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.Create("johndoe@example.com", 100000)
+//	// resp, err := paystackClient.Charges.Create(context.TODO(),"johndoe@example.com", 100000)
 //
 //	// you can pass in optional parameters to the `Charges.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `amount`.
-//	// resp, err := ppClient.Create("johndoe@example.com", 100000, p.WithOptionalParameter("authorization_code","AUTH_xxx"))
+//	// resp, err := ppClient.Create(context.TODO(),"johndoe@example.com", 100000, p.WithOptionalParameter("authorization_code","AUTH_xxx"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
 //	// from paystack documentation see https://paystack.com/docs/api/charge/#create
 //	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
 //
-//	resp, err := chargeClient.Create("johndoe@example.com", 100000)
+//	resp, err := chargeClient.Create(context.TODO(),"johndoe@example.com", 100000)
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -83,6 +84,7 @@ func (c *ChargeClient) Create(ctx context.Context, email string, amount string, 
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -90,17 +92,17 @@ func (c *ChargeClient) Create(ctx context.Context, email string, amount string, 
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.SubmitPin("1234", "5bwib5v6anhe9xa")
+//	// resp, err := paystackClient.Charges.SubmitPin(context.TODO(),"1234", "5bwib5v6anhe9xa")
 //
-//	resp, err := chargeClient.SubmitPin("1234", "5bwib5v6anhe9xa")
+//	resp, err := chargeClient.SubmitPin(context.TODO(),"1234", "5bwib5v6anhe9xa")
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -123,6 +125,7 @@ func (c *ChargeClient) SubmitPin(ctx context.Context, pin string, reference stri
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -130,17 +133,17 @@ func (c *ChargeClient) SubmitPin(ctx context.Context, pin string, reference stri
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
+//	// resp, err := paystackClient.Charges.SubmitPhone(context.TODO(),"08012345678", "5bwib5v6anhe9xa")
 //
-//	resp, err := chargeClient.SubmitPhone("08012345678", "5bwib5v6anhe9xa")
+//	resp, err := chargeClient.SubmitPhone(context.TODO(),"08012345678", "5bwib5v6anhe9xa")
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -163,6 +166,7 @@ func (c *ChargeClient) SubmitPhone(ctx context.Context, phone string, reference 
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -170,17 +174,17 @@ func (c *ChargeClient) SubmitPhone(ctx context.Context, phone string, reference 
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
+//	// resp, err := paystackClient.Charges.SubmitBirthday(context.TODO(),"2016-09-21", "5bwib5v6anhe9xa")
 //
-//	resp, err := chargeClient.SubmitBirthday("2016-09-21", "5bwib5v6anhe9xa")
+//	resp, err := chargeClient.SubmitBirthday(context.TODO(),"2016-09-21", "5bwib5v6anhe9xa")
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -203,6 +207,7 @@ func (c *ChargeClient) SubmitBirthday(ctx context.Context, birthday string, refe
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -210,18 +215,18 @@ func (c *ChargeClient) SubmitBirthday(ctx context.Context, birthday string, refe
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.SubmitAddress("140 N 2ND ST",
+//	// resp, err := paystackClient.Charges.SubmitAddress(context.TODO(),"140 N 2ND ST",
 //	//	"7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
 //
-//	resp, err := chargeClient.SubmitAddress("140 N 2ND ST", "7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
+//	resp, err := chargeClient.SubmitAddress(context.TODO(),"140 N 2ND ST", "7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -250,6 +255,7 @@ func (c *ChargeClient) SubmitAddress(ctx context.Context, address string, refere
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -257,17 +263,17 @@ func (c *ChargeClient) SubmitAddress(ctx context.Context, address string, refere
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.Charges field is a `ChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.PendingCharge("5bwib5v6anhe9xa")
+//	// resp, err := paystackClient.Charges.PendingCharge(context.TODO(),"5bwib5v6anhe9xa")
 //
-//	resp, err := chargeClient.PendingCharge("5bwib5v6anhe9xa")
+//	resp, err := chargeClient.PendingCharge(context.TODO(),"5bwib5v6anhe9xa")
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
