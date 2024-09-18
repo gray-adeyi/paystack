@@ -33,6 +33,7 @@ func NewBulkChargeClient(options ...ClientOptions) *BulkChargeClient {
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -40,25 +41,25 @@ func NewBulkChargeClient(options ...ClientOptions) *BulkChargeClient {
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	//	batch := []map[string]interface{}{
+//	//	batch := []map[string]any{
 //	//	{"authorization": "AUTH_ncx8hews93", "amount": 2500, "reference": "dam1266638dhhd"},
 //	//	{"authorization": "AUTH_xfuz7dy4b9", "amount": 1500, "reference": "dam1266638dhhe"},
 //	//	}
-//	//	resp, err := paystackClient.BulkCharges.Initiate(batch)
+//	//	resp, err := paystackClient.BulkCharges.Initiate(context.TODO(),batch)
 //
-//	batch := []map[string]interface{}{
+//	batch := []map[string]any{
 //	{"authorization": "AUTH_ncx8hews93", "amount": 2500, "reference": "dam1266638dhhd"},
 //	{"authorization": "AUTH_xfuz7dy4b9", "amount": 1500, "reference": "dam1266638dhhe"},
 //	}
-//	resp, err := bcClient.Initiate(batch)
+//	resp, err := bcClient.Initiate(context.TODO(),batch)
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -76,6 +77,7 @@ func (b *BulkChargeClient) Initiate(ctx context.Context, charges interface{}) (*
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -83,22 +85,22 @@ func (b *BulkChargeClient) Initiate(ctx context.Context, charges interface{}) (*
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.BulkCharges.All()
+//	// resp, err := paystackClient.BulkCharges.All(context.TODO())
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
-//	// resp, err := bcClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//	// resp, err := bcClient.All(context.TODO(),p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
 //	// see https://paystack.com/docs/api/bulk-charge/#list for supported query parameters
 //
-//	resp, err := bcClient.All()
+//	resp, err := bcClient.All(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -118,6 +120,7 @@ func (b *BulkChargeClient) All(ctx context.Context, queries ...Query) (*Response
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -125,16 +128,16 @@ func (b *BulkChargeClient) All(ctx context.Context, queries ...Query) (*Response
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.BulkCharges.FetchOne("<idOrCode>")
+//	// resp, err := paystackClient.BulkCharges.FetchOne(context.TODO(),"<idOrCode>")
 //
-//	resp, err := bcClient.FetchOne("<idOrSlug>")
+//	resp, err := bcClient.FetchOne(context.TODO(),"<idOrSlug>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -152,6 +155,7 @@ func (b *BulkChargeClient) FetchOne(ctx context.Context, idOrCode string) (*Resp
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -159,22 +163,22 @@ func (b *BulkChargeClient) FetchOne(ctx context.Context, idOrCode string) (*Resp
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.BulkCharges.Charges("<idOrCode>")
+//	// resp, err := paystackClient.BulkCharges.Charges(context.TODO(),"<idOrCode>")
 //
 //	// All also accepts queries, so say you want to customize how many payment pages to retrieve
 //	// and which page to retrieve, you can write it like so.
-//	// resp, err := bcClient.Charges("<idOrSlug>",p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//	// resp, err := bcClient.Charges(context.TODO(),"<idOrSlug>",p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
 //	// see https://paystack.com/docs/api/bulk-charge/#fetch-charge for supported query parameters
 //
-//	resp, err := bcClient.Charges("<idOrSlug>")
+//	resp, err := bcClient.Charges(context.TODO(),"<idOrSlug>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -193,6 +197,7 @@ func (b *BulkChargeClient) Charges(ctx context.Context, idOrCode string, queries
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -200,16 +205,16 @@ func (b *BulkChargeClient) Charges(ctx context.Context, idOrCode string, queries
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.BulkCharges.Pause("<idOrCode>")
+//	// resp, err := paystackClient.BulkCharges.Pause(context.TODO(),"<idOrCode>")
 //
-//	resp, err := bcClient.Pause("<idOrSlug>")
+//	resp, err := bcClient.Pause(context.TOOD(),"<idOrSlug>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -227,6 +232,7 @@ func (b *BulkChargeClient) Pause(ctx context.Context, idOrCode string) (*Respons
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	bcClient := p.NewBulkChargeClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -234,16 +240,16 @@ func (b *BulkChargeClient) Pause(ctx context.Context, idOrCode string) (*Respons
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.BulkCharges field is a `BulkChargeClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.BulkCharges.Resume("<idOrCode>")
+//	// resp, err := paystackClient.BulkCharges.Resume(context.TODO(),"<idOrCode>")
 //
-//	resp, err := bcClient.Resume("<idOrSlug>")
+//	resp, err := bcClient.Resume(context.TODO(),"<idOrSlug>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
