@@ -33,6 +33,7 @@ func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtua
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -40,24 +41,24 @@ func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtua
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.Create("481193")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Create(context.TODO(),"481193")
 //
 //	// you can pass in optional parameters to the `DedicatedVirtualAccounts.Create` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `preferred_bank`.
-//	// resp, err := dvaClient.Create("481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
+//	// resp, err := dvaClient.Create(context.TODO(),"481193", p.WithOptionalParameter("preferred_bank","wema-bank"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
 //	// from paystack documentation see https://paystack.com/docs/api/dedicated-virtual-account/#create
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-//	resp, err := dvaClient.Create("481193")
+//	resp, err := dvaClient.Create(context.TODO(),"481193")
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -83,6 +84,7 @@ func (d *DedicatedVirtualAccountClient) Create(ctx context.Context, customerIdOr
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -90,26 +92,26 @@ func (d *DedicatedVirtualAccountClient) Create(ctx context.Context, customerIdOr
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.Assign("janedoe@test.com","Jane",
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Assign(context.TODO(),"janedoe@test.com","Jane",
 //	//	"Doe","Karen", "+2348100000000", "test-bank", "NG")
 //
 //	// you can pass in optional parameters to the `DedicatedVirtualAccounts.Assign` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `account_number`.
-//	// resp, err := dvaClient.Assign("janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", "NG",
+//	// resp, err := dvaClient.Assign(context.TODO(),"janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", "NG",
 //	//	p.WithOptionalParameter("account_number","5273681014"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
 //	// from paystack documentation see https://paystack.com/docs/api/dedicated-virtual-account/#create
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-//	resp, err := dvaClient.Assign("janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", "NG")
+//	resp, err := dvaClient.Assign(context.TODO(),"janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", "NG")
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -141,6 +143,7 @@ func (d *DedicatedVirtualAccountClient) Assign(ctx context.Context, email string
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -148,22 +151,22 @@ func (d *DedicatedVirtualAccountClient) Assign(ctx context.Context, email string
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.All()
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.All(context.TODO())
 //
 //	// All also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
-//	// resp, err := dvaClient.All(p.WithQuery("active","true"), p.WithQuery("bank_id","035"))
+//	// resp, err := dvaClient.All(context.TODO(),p.WithQuery("active","true"), p.WithQuery("bank_id","035"))
 //
 //	// see https://paystack.com/docs/api/dedicated-virtual-account/#list for supported query parameters
 //
-//	resp, err := txnClient.All()
+//	resp, err := txnClient.All(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -182,6 +185,7 @@ func (d *DedicatedVirtualAccountClient) All(ctx context.Context, queries ...Quer
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -189,16 +193,16 @@ func (d *DedicatedVirtualAccountClient) All(ctx context.Context, queries ...Quer
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.FetchOne("<dedicatedAccountId>")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.FetchOne(context.TODO(),"<dedicatedAccountId>")
 //
-//	resp, err := dvaClient.FetchOne("<dedicatedAccountId>")
+//	resp, err := dvaClient.FetchOne(context.TODO(),"<dedicatedAccountId>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -216,6 +220,7 @@ func (d *DedicatedVirtualAccountClient) FetchOne(ctx context.Context, dedicatedA
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -223,22 +228,22 @@ func (d *DedicatedVirtualAccountClient) FetchOne(ctx context.Context, dedicatedA
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.Requery()
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Requery(context.TODO())
 //
 //	// All also accepts queries, so say you want to customize how many Transactions to retrieve
 //	// and which page to retrieve, you can write it like so.
-//	// resp, err := dvaClient.Requery(p.WithQuery("account_number","1234567890"), p.WithQuery("provider_slug","example-provider"))
+//	// resp, err := dvaClient.Requery(context.TODO(),p.WithQuery("account_number","1234567890"), p.WithQuery("provider_slug","example-provider"))
 //
-// // see https://paystack.com/docs/api/dedicated-virtual-account/#requery for supported query parameters
+//	// see https://paystack.com/docs/api/dedicated-virtual-account/#requery for supported query parameters
 //
 //	resp, err := txnClient.Requery()
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -256,6 +261,7 @@ func (d *DedicatedVirtualAccountClient) Requery(ctx context.Context, queries ...
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -263,16 +269,16 @@ func (d *DedicatedVirtualAccountClient) Requery(ctx context.Context, queries ...
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.Deactivate("<dedicatedAccountId>")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Deactivate(context.TODO(),"<dedicatedAccountId>")
 //
-//	resp, err := dvaClient.Deactivate("<dedicatedAccountId>")
+//	resp, err := dvaClient.Deactivate(context.TODO(),"<dedicatedAccountId>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -290,6 +296,7 @@ func (d *DedicatedVirtualAccountClient) Deactivate(ctx context.Context, id strin
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -297,24 +304,24 @@ func (d *DedicatedVirtualAccountClient) Deactivate(ctx context.Context, id strin
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.Split("<customerIdOrCode>")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.Split(context.TODO(),"<customerIdOrCode>")
 //
 //	// you can pass in optional parameters to the `DedicatedVirtualAccounts.Split` with `p.WithOptionalParameter`
 //	// for example say you want to specify the `preferred_bank`.
-//	// resp, err := dvaClient.Split("<customerIdOrCode>", p.WithOptionalParameter("preferred_bank","wema-bank"))
+//	// resp, err := dvaClient.Split(context.TODO(),"<customerIdOrCode>", p.WithOptionalParameter("preferred_bank","wema-bank"))
 //	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
 //	// from paystack documentation see https://paystack.com/docs/api/dedicated-virtual-account/#add-split
 //	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
 //
-//	resp, err := dvaClient.Split("<customerIdOrCode>")
+//	resp, err := dvaClient.Split(context.TODO(),"<customerIdOrCode>")
 //
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -341,6 +348,7 @@ func (d *DedicatedVirtualAccountClient) Split(ctx context.Context, customerIdOrC
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -348,16 +356,16 @@ func (d *DedicatedVirtualAccountClient) Split(ctx context.Context, customerIdOrC
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.RemoveSplit("<accountNumber>")
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.RemoveSplit(context.TODO(),"<accountNumber>")
 //
-//	resp, err := dvaClient.RemoveSplit("<accountNumber>")
+//	resp, err := dvaClient.RemoveSplit(context.TODO(),"<accountNumber>")
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
@@ -378,6 +386,7 @@ func (d *DedicatedVirtualAccountClient) RemoveSplit(ctx context.Context, account
 //		"fmt"
 //		p "github.com/gray-adeyi/paystack"
 //		"encoding/json"
+//		"context"
 //	)
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
@@ -385,16 +394,16 @@ func (d *DedicatedVirtualAccountClient) RemoveSplit(ctx context.Context, account
 //	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
 //	// paystackClient.DedicatedVirtualAccounts field is a `DedicatedVirtualAccountClient`
 //	// Therefore, this is possible
-//	// resp, err := paystackClient.DedicatedVirtualAccounts.BankProviders()
+//	// resp, err := paystackClient.DedicatedVirtualAccounts.BankProviders(context.TODO())
 //
-//	resp, err := dvaClient.BankProviders()
+//	resp, err := dvaClient.BankProviders(context.TODO())
 //	if err != nil {
 //		panic(err)
 //	}
 //	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
+//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
 //	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//	data := make(map[string]any)
 //
 //	err := json.Unmarshal(resp.Data, &data); if err != nil {
 //		panic(err)
