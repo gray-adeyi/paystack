@@ -96,7 +96,7 @@ func (p *PaymentRequestClient) Create(ctx context.Context, customerIdOrCode stri
 //	// and which page to retrieve, you can write it like so.
 //	// resp, err := prClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //
-// // see https://paystack.com/docs/api/payment-request/#list for supported query parameters
+//	// see https://paystack.com/docs/api/payment-request/#list for supported query parameters
 //
 //	resp, err := prClient.All()
 //	if err != nil {
