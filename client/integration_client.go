@@ -54,8 +54,8 @@ func NewIntegrationClient(options ...ClientOptions) *IntegrationClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (i *IntegrationClient) Timeout(ctx context.Context) (*Response, error) {
-	return i.APICall(ctx, http.MethodGet, "/integration/payment_session_timeout", nil)
+func (i *IntegrationClient) Timeout(ctx context.Context, response any) error {
+	return i.APICall(ctx, http.MethodGet, "/integration/payment_session_timeout", nil, response)
 }
 
 // UpdateTimeout lets you update the payment session timeout on your Integration
@@ -89,9 +89,9 @@ func (i *IntegrationClient) Timeout(ctx context.Context) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (i *IntegrationClient) UpdateTimeout(ctx context.Context, timeout int) (*Response, error) {
+func (i *IntegrationClient) UpdateTimeout(ctx context.Context, timeout int, response any) error {
 	payload := map[string]any{
 		"timeout": timeout,
 	}
-	return i.APICall(ctx, http.MethodPut, "/integration/payment_session_timeout", payload)
+	return i.APICall(ctx, http.MethodPut, "/integration/payment_session_timeout", payload, response)
 }
