@@ -63,7 +63,7 @@ func NewChargeClient(options ...ClientOptions) *ChargeClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *ChargeClient) Create(ctx context.Context, email string, amount string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (c *ChargeClient) Create(ctx context.Context, email string, amount string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"email":  email,
 		"amount": amount,
@@ -73,7 +73,7 @@ func (c *ChargeClient) Create(ctx context.Context, email string, amount string, 
 		payload = optionalPayloadParameter(payload)
 	}
 
-	return c.APICall(ctx, http.MethodPost, "/charge", payload)
+	return c.APICall(ctx, http.MethodPost, "/charge", payload, response)
 }
 
 // SubmitPin lets you submit pin to continue a charge
@@ -108,13 +108,13 @@ func (c *ChargeClient) Create(ctx context.Context, email string, amount string, 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *ChargeClient) SubmitPin(ctx context.Context, pin string, reference string) (*Response, error) {
+func (c *ChargeClient) SubmitPin(ctx context.Context, pin string, reference string, response any) error {
 	payload := map[string]any{
 		"pin":       pin,
 		"reference": reference,
 	}
 
-	return c.APICall(ctx, http.MethodPost, "/charge/submit_pin", payload)
+	return c.APICall(ctx, http.MethodPost, "/charge/submit_pin", payload, response)
 }
 
 // SubmitPhone lets you submit phone number when requested
@@ -149,13 +149,13 @@ func (c *ChargeClient) SubmitPin(ctx context.Context, pin string, reference stri
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *ChargeClient) SubmitPhone(ctx context.Context, phone string, reference string) (*Response, error) {
+func (c *ChargeClient) SubmitPhone(ctx context.Context, phone string, reference string, response any) error {
 	payload := map[string]any{
 		"phone":     phone,
 		"reference": reference,
 	}
 
-	return c.APICall(ctx, http.MethodPost, "/charge/submit_phone", payload)
+	return c.APICall(ctx, http.MethodPost, "/charge/submit_phone", payload, response)
 }
 
 // SubmitBirthday lets you submit a birthday when requested
@@ -190,13 +190,13 @@ func (c *ChargeClient) SubmitPhone(ctx context.Context, phone string, reference 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *ChargeClient) SubmitBirthday(ctx context.Context, birthday string, reference string) (*Response, error) {
+func (c *ChargeClient) SubmitBirthday(ctx context.Context, birthday string, reference string, response any) error {
 	payload := map[string]any{
 		"birthday":  birthday,
 		"reference": reference,
 	}
 
-	return c.APICall(ctx, http.MethodPost, "/charge/submit_birthday", payload)
+	return c.APICall(ctx, http.MethodPost, "/charge/submit_birthday", payload, response)
 }
 
 // SubmitAddress lets you submit address to continue a charge
@@ -233,7 +233,7 @@ func (c *ChargeClient) SubmitBirthday(ctx context.Context, birthday string, refe
 //	}
 //	fmt.Println(data)
 func (c *ChargeClient) SubmitAddress(ctx context.Context, address string, reference string, city string,
-	state string, zipCode string) (*Response, error) {
+	state string, zipCode string, response any) error {
 	payload := map[string]any{
 		"address":   address,
 		"reference": reference,
@@ -242,7 +242,7 @@ func (c *ChargeClient) SubmitAddress(ctx context.Context, address string, refere
 		"zipcode":   zipCode,
 	}
 
-	return c.APICall(ctx, http.MethodPost, "/charge/submit_address", payload)
+	return c.APICall(ctx, http.MethodPost, "/charge/submit_address", payload, response)
 }
 
 // PendingCharge lets you check the status of a charge. When you get pending as a charge status or if there
@@ -279,6 +279,6 @@ func (c *ChargeClient) SubmitAddress(ctx context.Context, address string, refere
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *ChargeClient) PendingCharge(ctx context.Context, reference string) (*Response, error) {
-	return c.APICall(ctx, http.MethodGet, fmt.Sprintf("/charge/%s", reference), nil)
+func (c *ChargeClient) PendingCharge(ctx context.Context, reference string, response any) error {
+	return c.APICall(ctx, http.MethodGet, fmt.Sprintf("/charge/%s", reference), nil, response)
 }
