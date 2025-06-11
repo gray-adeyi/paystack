@@ -66,7 +66,7 @@ func NewTransactionSplitClient(options ...ClientOptions) *TransactionSplitClient
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionSplitClient) Create(ctx context.Context, name string, transactionSplitType string, currency string, subaccounts interface{}, bearerType string, bearerSubaccount string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (t *TransactionSplitClient) Create(ctx context.Context, name string, transactionSplitType string, currency string, subaccounts interface{}, bearerType string, bearerSubaccount string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"name":              name,
 		"type":              transactionSplitType,
@@ -79,7 +79,7 @@ func (t *TransactionSplitClient) Create(ctx context.Context, name string, transa
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(ctx, http.MethodPost, "/split", payload)
+	return t.APICall(ctx, http.MethodPost, "/split", payload, response)
 }
 
 // All let you list the transaction splits available on your Integration
@@ -118,9 +118,9 @@ func (t *TransactionSplitClient) Create(ctx context.Context, name string, transa
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionSplitClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (t *TransactionSplitClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/split", queries...)
-	return t.APICall(ctx, http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you get the details of a split on your Integration
@@ -153,8 +153,8 @@ func (t *TransactionSplitClient) All(ctx context.Context, queries ...Query) (*Re
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionSplitClient) FetchOne(ctx context.Context, id string) (*Response, error) {
-	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/split/%s", id), nil)
+func (t *TransactionSplitClient) FetchOne(ctx context.Context, id string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/split/%s", id), nil, response)
 }
 
 // Update lets you update a transaction split details on your Integration
@@ -193,7 +193,7 @@ func (t *TransactionSplitClient) FetchOne(ctx context.Context, id string) (*Resp
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionSplitClient) Update(ctx context.Context, id string, name string, active bool, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (t *TransactionSplitClient) Update(ctx context.Context, id string, name string, active bool, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"name":   name,
 		"active": active,
@@ -203,7 +203,7 @@ func (t *TransactionSplitClient) Update(ctx context.Context, id string, name str
 		payload = optionalPayloadParameter(payload)
 	}
 
-	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/split/%s", id), payload)
+	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/split/%s", id), payload, response)
 }
 
 // Add lets you add a Subaccount to a Transaction Split, or update the share of an existing
@@ -237,12 +237,12 @@ func (t *TransactionSplitClient) Update(ctx context.Context, id string, name str
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionSplitClient) Add(ctx context.Context, id string, subAccount string, share int) (*Response, error) {
+func (t *TransactionSplitClient) Add(ctx context.Context, id string, subAccount string, share int, response any) error {
 	payload := map[string]interface{}{
 		"subaccount": subAccount,
 		"share":      share,
 	}
-	return t.APICall(ctx, http.MethodPost, fmt.Sprintf("/split/%s/add", id), payload)
+	return t.APICall(ctx, http.MethodPost, fmt.Sprintf("/split/%s/add", id), payload, response)
 }
 
 // Remove lets you remove a subaccount from a transaction split
@@ -275,10 +275,10 @@ func (t *TransactionSplitClient) Add(ctx context.Context, id string, subAccount 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransactionSplitClient) Remove(ctx context.Context, id string, subAccount string) (*Response, error) {
+func (t *TransactionSplitClient) Remove(ctx context.Context, id string, subAccount string, response any) error {
 	payload := map[string]any{
 		"subaccount": subAccount,
 	}
 
-	return t.APICall(ctx, http.MethodPost, fmt.Sprintf("/split/%s/remove", id), payload)
+	return t.APICall(ctx, http.MethodPost, fmt.Sprintf("/split/%s/remove", id), payload, response)
 }

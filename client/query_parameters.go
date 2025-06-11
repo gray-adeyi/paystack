@@ -1,11 +1,9 @@
 package client
 
 import (
-	"strings"
 	"fmt"
+	"strings"
 )
-
-
 
 // Query helps represent key value pairs used in url query parametes
 type Query struct {

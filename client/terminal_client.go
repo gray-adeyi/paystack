@@ -64,14 +64,14 @@ func NewTerminalClient(options ...ClientOptions) *TerminalClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) SendEvent(ctx context.Context, terminalId string, eventType TerminalEvent, action string, data interface{}) (*Response, error) {
+func (t *TerminalClient) SendEvent(ctx context.Context, terminalId string, eventType TerminalEvent, action string, data, response any) error {
 	payload := map[string]any{
 		"type":   eventType,
 		"action": action,
 		"data":   data,
 	}
 
-	return t.APICall(ctx, http.MethodPost, fmt.Sprintf("/terminal/%s/event", terminalId), payload)
+	return t.APICall(ctx, http.MethodPost, fmt.Sprintf("/terminal/%s/event", terminalId), payload, response)
 }
 
 // EventStatus lets you check the status of an event sent to the Terminal
@@ -106,8 +106,8 @@ func (t *TerminalClient) SendEvent(ctx context.Context, terminalId string, event
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) EventStatus(ctx context.Context, terminalId string, eventId string) (*Response, error) {
-	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s/event/%s", terminalId, eventId), nil)
+func (t *TerminalClient) EventStatus(ctx context.Context, terminalId string, eventId string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s/event/%s", terminalId, eventId), nil, response)
 }
 
 // TerminalStatus lets you check the availability of a Terminal before sending an event to it
@@ -140,8 +140,8 @@ func (t *TerminalClient) EventStatus(ctx context.Context, terminalId string, eve
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) TerminalStatus(ctx context.Context, terminalId string) (*Response, error) {
-	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s/presence", terminalId), nil)
+func (t *TerminalClient) TerminalStatus(ctx context.Context, terminalId string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s/presence", terminalId), nil, response)
 }
 
 // All lets you retrieve the Terminals available on your Integration
@@ -180,9 +180,9 @@ func (t *TerminalClient) TerminalStatus(ctx context.Context, terminalId string) 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (t *TerminalClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/terminal", queries...)
-	return t.APICall(ctx, http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you get the details of a Terminal
@@ -215,8 +215,8 @@ func (t *TerminalClient) All(ctx context.Context, queries ...Query) (*Response, 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) FetchOne(ctx context.Context, terminalId string) (*Response, error) {
-	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s", terminalId), nil)
+func (t *TerminalClient) FetchOne(ctx context.Context, terminalId string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s", terminalId), nil, response)
 }
 
 // Update lets you update the details of a Terminal
@@ -249,13 +249,13 @@ func (t *TerminalClient) FetchOne(ctx context.Context, terminalId string) (*Resp
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) Update(ctx context.Context, terminalId string, name string, address string) (*Response, error) {
+func (t *TerminalClient) Update(ctx context.Context, terminalId string, name string, address string, response any) error {
 	payload := map[string]any{
 		"name":    name,
 		"address": address,
 	}
 
-	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/terminal/%s", terminalId), payload)
+	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/terminal/%s", terminalId), payload, response)
 }
 
 // Commission lets you activate your debug device by linking it to your Integration
@@ -288,12 +288,12 @@ func (t *TerminalClient) Update(ctx context.Context, terminalId string, name str
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) Commission(ctx context.Context, serialNumber string) (*Response, error) {
+func (t *TerminalClient) Commission(ctx context.Context, serialNumber string, response any) error {
 	payload := map[string]any{
 		"serial_number": serialNumber,
 	}
 
-	return t.APICall(ctx, http.MethodPost, "/terminal/commission_device", payload)
+	return t.APICall(ctx, http.MethodPost, "/terminal/commission_device", payload, response)
 }
 
 // Decommission lets you unlink your debug device from your Integration
@@ -326,10 +326,10 @@ func (t *TerminalClient) Commission(ctx context.Context, serialNumber string) (*
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) Decommission(ctx context.Context, serialNumber string) (*Response, error) {
+func (t *TerminalClient) Decommission(ctx context.Context, serialNumber string, response any) error {
 	payload := map[string]string{
 		"serial_number": serialNumber,
 	}
 
-	return t.APICall(ctx, http.MethodPost, "/terminal/decommission_device", payload)
+	return t.APICall(ctx, http.MethodPost, "/terminal/decommission_device", payload, response)
 }

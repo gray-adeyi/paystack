@@ -64,8 +64,8 @@ func NewTransferClient(options ...ClientOptions) *TransferClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) Initiate(ctx context.Context, source string, amount int, recipient string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (t *TransferClient) Initiate(ctx context.Context, source string, amount int, recipient string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"source":    source,
 		"amount":    amount,
@@ -75,7 +75,7 @@ func (t *TransferClient) Initiate(ctx context.Context, source string, amount int
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(ctx, http.MethodPost, "/transfer", payload)
+	return t.APICall(ctx, http.MethodPost, "/transfer", payload, response)
 }
 
 // Finalize lets you finalize an initiated transfer
@@ -109,13 +109,13 @@ func (t *TransferClient) Initiate(ctx context.Context, source string, amount int
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) Finalize(ctx context.Context, transferCode string, otp string) (*Response, error) {
+func (t *TransferClient) Finalize(ctx context.Context, transferCode string, otp string, response any) error {
 	payload := map[string]any{
 		"transfer_code": transferCode,
 		"otp":           otp,
 	}
 
-	return t.APICall(ctx, http.MethodPost, "/transfer/finalize_transfer", payload)
+	return t.APICall(ctx, http.MethodPost, "/transfer/finalize_transfer", payload, response)
 }
 
 // BulkInitiate lets you initiate multiple Transfers in a single request.
@@ -161,13 +161,13 @@ func (t *TransferClient) Finalize(ctx context.Context, transferCode string, otp 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) BulkInitiate(ctx context.Context, source string, transfers interface{}) (*Response, error) {
+func (t *TransferClient) BulkInitiate(ctx context.Context, source string, transfers, response any) error {
 	payload := map[string]any{
 		"source":    source,
 		"Transfers": transfers,
 	}
 
-	return t.APICall(ctx, http.MethodPost, "/transfer/bulk", payload)
+	return t.APICall(ctx, http.MethodPost, "/transfer/bulk", payload, response)
 }
 
 // All lets you retrieve all the Transfers made on your Integration.
@@ -206,9 +206,9 @@ func (t *TransferClient) BulkInitiate(ctx context.Context, source string, transf
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (t *TransferClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/transfer", queries...)
-	return t.APICall(ctx, http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve the details of a transfer on your Integration.
@@ -241,8 +241,8 @@ func (t *TransferClient) All(ctx context.Context, queries ...Query) (*Response, 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
-	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transfer/%s", idOrCode), nil)
+func (t *TransferClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transfer/%s", idOrCode), nil, response)
 }
 
 // Verify lets you verify the status of a transfer on your Integration.
@@ -275,6 +275,6 @@ func (t *TransferClient) FetchOne(ctx context.Context, idOrCode string) (*Respon
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferClient) Verify(ctx context.Context, reference string) (*Response, error) {
-	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transfer/verify/%s", reference), nil)
+func (t *TransferClient) Verify(ctx context.Context, reference string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transfer/verify/%s", reference), nil, response)
 }

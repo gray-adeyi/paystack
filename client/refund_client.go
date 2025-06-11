@@ -62,8 +62,8 @@ func NewRefundClient(options ...ClientOptions) *RefundClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (r *RefundClient) Create(ctx context.Context, transaction string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (r *RefundClient) Create(ctx context.Context, transaction string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"transaction": transaction,
 	}
@@ -71,7 +71,7 @@ func (r *RefundClient) Create(ctx context.Context, transaction string,
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return r.APICall(ctx, http.MethodPost, "/refund", payload)
+	return r.APICall(ctx, http.MethodPost, "/refund", payload, response)
 }
 
 // All lets you retrieve Refunds available on your Integration
@@ -110,9 +110,9 @@ func (r *RefundClient) Create(ctx context.Context, transaction string,
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (r *RefundClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (r *RefundClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/refund", queries...)
-	return r.APICall(ctx, http.MethodGet, url, nil)
+	return r.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve the details of a refund on your Integration
@@ -145,6 +145,6 @@ func (r *RefundClient) All(ctx context.Context, queries ...Query) (*Response, er
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (r *RefundClient) FetchOne(ctx context.Context, reference string) (*Response, error) {
-	return r.APICall(ctx, http.MethodGet, fmt.Sprintf("/refund/%s", reference), nil)
+func (r *RefundClient) FetchOne(ctx context.Context, reference string, response any) error {
+	return r.APICall(ctx, http.MethodGet, fmt.Sprintf("/refund/%s", reference), nil, response)
 }

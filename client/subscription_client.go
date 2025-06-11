@@ -64,7 +64,7 @@ func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan string, authorization string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan string, authorization string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"customer":      customer,
 		"plan":          plan,
@@ -74,7 +74,7 @@ func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan s
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return s.APICall(ctx, http.MethodPost, "/subscription", payload)
+	return s.APICall(ctx, http.MethodPost, "/subscription", payload, response)
 }
 
 // All lets you retrieve Subscriptions available on your Integration
@@ -113,9 +113,9 @@ func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan s
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (s *SubscriptionClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/subscription", queries...)
-	return s.APICall(ctx, http.MethodGet, url, nil)
+	return s.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve details of a subscription on your Integration
@@ -148,8 +148,8 @@ func (s *SubscriptionClient) All(ctx context.Context, queries ...Query) (*Respon
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
-	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subscription/%s", idOrCode), nil)
+func (s *SubscriptionClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subscription/%s", idOrCode), nil, response)
 }
 
 // Enable lets you enable a subscription on your Integration
@@ -182,13 +182,13 @@ func (s *SubscriptionClient) FetchOne(ctx context.Context, idOrCode string) (*Re
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) Enable(ctx context.Context, code string, token string) (*Response, error) {
+func (s *SubscriptionClient) Enable(ctx context.Context, code string, token string, response any) error {
 	payload := map[string]any{
 		"code":  code,
 		"token": token,
 	}
 
-	return s.APICall(ctx, http.MethodPost, "/subscription/enable", payload)
+	return s.APICall(ctx, http.MethodPost, "/subscription/enable", payload, response)
 }
 
 // Disable lets you disable a subscription on your Integration
@@ -221,12 +221,12 @@ func (s *SubscriptionClient) Enable(ctx context.Context, code string, token stri
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) Disable(ctx context.Context, code string, token string) (*Response, error) {
+func (s *SubscriptionClient) Disable(ctx context.Context, code string, token string, response any) error {
 	payload := map[string]any{
 		"code":  code,
 		"token": token,
 	}
-	return s.APICall(ctx, http.MethodPost, "/subscription/disable", payload)
+	return s.APICall(ctx, http.MethodPost, "/subscription/disable", payload, response)
 }
 
 // GenerateLink lets you generate a link for updating the card on a subscription
@@ -259,8 +259,8 @@ func (s *SubscriptionClient) Disable(ctx context.Context, code string, token str
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) GenerateLink(ctx context.Context, code string) (*Response, error) {
-	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subscription/%s/manage/link/", code), nil)
+func (s *SubscriptionClient) GenerateLink(ctx context.Context, code string, response any) error {
+	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subscription/%s/manage/link/", code), nil, response)
 }
 
 // SendLink lets you email a customer a link for updating the card on their subscription
@@ -293,6 +293,6 @@ func (s *SubscriptionClient) GenerateLink(ctx context.Context, code string) (*Re
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubscriptionClient) SendLink(ctx context.Context, code string) (*Response, error) {
-	return s.APICall(ctx, http.MethodPost, fmt.Sprintf("/subscription/%s/manage/email/", code), nil)
+func (s *SubscriptionClient) SendLink(ctx context.Context, code string, response any) error {
+	return s.APICall(ctx, http.MethodPost, fmt.Sprintf("/subscription/%s/manage/email/", code), nil, response)
 }

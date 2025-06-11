@@ -64,7 +64,7 @@ func NewPlanClient(options ...ClientOptions) *PlanClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PlanClient) Create(ctx context.Context, name string, amount int, interval string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (p *PlanClient) Create(ctx context.Context, name string, amount int, interval string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"name":     name,
 		"amount":   amount,
@@ -74,7 +74,7 @@ func (p *PlanClient) Create(ctx context.Context, name string, amount int, interv
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(ctx, http.MethodPost, "/plan", payload)
+	return p.APICall(ctx, http.MethodPost, "/plan", payload, response)
 }
 
 // All lets you retrieve Plans available on your Integration
@@ -113,9 +113,9 @@ func (p *PlanClient) Create(ctx context.Context, name string, amount int, interv
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PlanClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (p *PlanClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/plan", queries...)
-	return p.APICall(ctx, http.MethodGet, url, nil)
+	return p.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve details of a plan on your Integration
@@ -148,8 +148,8 @@ func (p *PlanClient) All(ctx context.Context, queries ...Query) (*Response, erro
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PlanClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
-	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/plan/%s", idOrCode), nil)
+func (p *PlanClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/plan/%s", idOrCode), nil, response)
 }
 
 // Update lets you update a plan details on your Integration
@@ -190,7 +190,7 @@ func (p *PlanClient) FetchOne(ctx context.Context, idOrCode string) (*Response, 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PlanClient) Update(ctx context.Context, idOrCode string, name string, amount int, interval string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (p *PlanClient) Update(ctx context.Context, idOrCode string, name string, amount int, interval string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"name":     name,
 		"amount":   amount,
@@ -200,5 +200,5 @@ func (p *PlanClient) Update(ctx context.Context, idOrCode string, name string, a
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/plan/%s", idOrCode), payload)
+	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/plan/%s", idOrCode), payload, response)
 }

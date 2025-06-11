@@ -7,6 +7,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gray-adeyi/paystack/models"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -24,30 +25,20 @@ func TestCanInitialize(t *testing.T) {
 		t.Error("unable to retrieve secret key from environmental variable required to run test")
 	}
 	client := getTransactionClient(t)
-	r, err := client.Initialize(context.TODO(), 20000, "adeyigbenga027@gmail.com")
-	if err != nil {
+	var r models.Response[any]
+	if err := client.Initialize(context.TODO(), 20000, "adeyigbenga027@gmail.com", &r); err != nil {
 		t.Error(err)
 	}
-	g := make(map[string]interface{})
-	err = json.Unmarshal(r.Data, &g)
-	if err != nil {
-		t.Errorf("Error in client: %v", err)
-	}
-	fmt.Println(g)
+	fmt.Println(r)
 }
 
 func TestCanInitializeWithOptionalParameters(t *testing.T) {
 	client := getTransactionClient(t)
-	r, err := client.Initialize(context.TODO(), 20000, "<email>",
+	var r models.Response[any]
+	if err := client.Initialize(context.TODO(), 20000, "<email>", &r,
 		WithOptionalParameter("metadata", "{\"ref_id\":\"pot-5085072209\"}"),
-	)
-	if err != nil {
+	); err != nil {
 		t.Error(err)
 	}
-	g := make(map[string]interface{})
-	err = json.Unmarshal(r.Data, &g)
-	if err != nil {
-		t.Errorf("Error in client: %v", err)
-	}
-	fmt.Println(g)
+	fmt.Println(r)
 }

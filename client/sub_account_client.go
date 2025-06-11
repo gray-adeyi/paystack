@@ -66,8 +66,8 @@ func NewSubAccountClient(options ...ClientOptions) *SubAccountClient {
 //	}
 //	fmt.Println(data)
 func (s *SubAccountClient) Create(ctx context.Context, businessName string, settlementBank string,
-	accountNumber string, percentageCharge float32, description string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	accountNumber string, percentageCharge float32, description string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"business_name":     businessName,
 		"settlement_bank":   settlementBank,
@@ -79,7 +79,7 @@ func (s *SubAccountClient) Create(ctx context.Context, businessName string, sett
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return s.APICall(ctx, http.MethodPost, "/subaccount", payload)
+	return s.APICall(ctx, http.MethodPost, "/subaccount", payload, response)
 }
 
 // All lets you retrieve subaccounts available on your Integration
@@ -118,9 +118,9 @@ func (s *SubAccountClient) Create(ctx context.Context, businessName string, sett
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubAccountClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (s *SubAccountClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/subaccount", queries...)
-	return s.APICall(ctx, http.MethodGet, url, nil)
+	return s.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve details of a subaccount on your Integration
@@ -153,8 +153,8 @@ func (s *SubAccountClient) All(ctx context.Context, queries ...Query) (*Response
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubAccountClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
-	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subaccount/%s", idOrCode), nil)
+func (s *SubAccountClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subaccount/%s", idOrCode), nil, response)
 }
 
 // Update lets you update a subaccount details on your Integration
@@ -195,7 +195,7 @@ func (s *SubAccountClient) FetchOne(ctx context.Context, idOrCode string) (*Resp
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (s *SubAccountClient) Update(ctx context.Context, idOrCode string, businessName string, settlementBank string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (s *SubAccountClient) Update(ctx context.Context, idOrCode string, businessName string, settlementBank string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"business_name":   businessName,
 		"settlement_bank": settlementBank,
@@ -204,5 +204,5 @@ func (s *SubAccountClient) Update(ctx context.Context, idOrCode string, business
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return s.APICall(ctx, http.MethodPut, fmt.Sprintf("/subaccount/%s", idOrCode), payload)
+	return s.APICall(ctx, http.MethodPut, fmt.Sprintf("/subaccount/%s", idOrCode), payload, response)
 }

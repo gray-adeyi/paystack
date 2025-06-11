@@ -62,8 +62,8 @@ func NewPaymentRequestClient(options ...ClientOptions) *PaymentRequestClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentRequestClient) Create(ctx context.Context, customerIdOrCode string, amount int,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (p *PaymentRequestClient) Create(ctx context.Context, customerIdOrCode string, amount int, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"customer": customerIdOrCode,
 		"amount":   amount,
@@ -72,7 +72,7 @@ func (p *PaymentRequestClient) Create(ctx context.Context, customerIdOrCode stri
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(ctx, http.MethodPost, "/paymentrequest", payload)
+	return p.APICall(ctx, http.MethodPost, "/paymentrequest", payload, response)
 }
 
 // All lets you retrieve the payment requests available on your Integration
@@ -111,9 +111,9 @@ func (p *PaymentRequestClient) Create(ctx context.Context, customerIdOrCode stri
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentRequestClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (p *PaymentRequestClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/paymentrequest", queries...)
-	return p.APICall(ctx, http.MethodGet, url, nil)
+	return p.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve details of a payment request on your Integration
@@ -146,8 +146,8 @@ func (p *PaymentRequestClient) All(ctx context.Context, queries ...Query) (*Resp
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentRequestClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
-	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/paymentrequest/%s", idOrCode), nil)
+func (p *PaymentRequestClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/paymentrequest/%s", idOrCode), nil, response)
 }
 
 // Verify lets you verify the details of a payment request on your Integration
@@ -180,8 +180,8 @@ func (p *PaymentRequestClient) FetchOne(ctx context.Context, idOrCode string) (*
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentRequestClient) Verify(ctx context.Context, code string) (*Response, error) {
-	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/paymentrequest/verify/%s", code), nil)
+func (p *PaymentRequestClient) Verify(ctx context.Context, code string, response any) error {
+	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/paymentrequest/verify/%s", code), nil, response)
 }
 
 // SendNotification lets you send notification of a payment request to your Customers
@@ -214,8 +214,8 @@ func (p *PaymentRequestClient) Verify(ctx context.Context, code string) (*Respon
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentRequestClient) SendNotification(ctx context.Context, code string) (*Response, error) {
-	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/notify/%s", code), nil)
+func (p *PaymentRequestClient) SendNotification(ctx context.Context, code string, response any) error {
+	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/notify/%s", code), nil, response)
 }
 
 // Total lets you retrieve payment requests metric
@@ -248,8 +248,8 @@ func (p *PaymentRequestClient) SendNotification(ctx context.Context, code string
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentRequestClient) Total(ctx context.Context) (*Response, error) {
-	return p.APICall(ctx, http.MethodGet, "/paymentrequest/totals", nil)
+func (p *PaymentRequestClient) Total(ctx context.Context, response any) error {
+	return p.APICall(ctx, http.MethodGet, "/paymentrequest/totals", nil, response)
 }
 
 // Finalize lets you finalize a draft payment request
@@ -282,11 +282,11 @@ func (p *PaymentRequestClient) Total(ctx context.Context) (*Response, error) {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentRequestClient) Finalize(ctx context.Context, code string, sendNotification bool) (*Response, error) {
+func (p *PaymentRequestClient) Finalize(ctx context.Context, code string, sendNotification bool, response any) error {
 	payload := map[string]any{
 		"send_notification": sendNotification,
 	}
-	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/finalize/%s", code), payload)
+	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/finalize/%s", code), payload, response)
 }
 
 // Update lets you update a payment request details on your Integration
@@ -328,7 +328,7 @@ func (p *PaymentRequestClient) Finalize(ctx context.Context, code string, sendNo
 //	}
 //	fmt.Println(data)
 func (p *PaymentRequestClient) Update(ctx context.Context, idOrCode string, customerIdOrCode string,
-	amount int, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	amount int, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"customer": customerIdOrCode,
 		"amount":   amount,
@@ -337,7 +337,7 @@ func (p *PaymentRequestClient) Update(ctx context.Context, idOrCode string, cust
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/paymentrequest/%s", idOrCode), payload)
+	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/paymentrequest/%s", idOrCode), payload, response)
 }
 
 // Archive lets you archive a payment request. A payment request will no longer be fetched on list or returned on verify
@@ -370,6 +370,6 @@ func (p *PaymentRequestClient) Update(ctx context.Context, idOrCode string, cust
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *PaymentRequestClient) Archive(ctx context.Context, idOrCode string) (*Response, error) {
-	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/archive/%s", idOrCode), nil)
+func (p *PaymentRequestClient) Archive(ctx context.Context, idOrCode string, response any) error {
+	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/archive/%s", idOrCode), nil, response)
 }

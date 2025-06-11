@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/gray-adeyi/paystack/models"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -42,8 +43,8 @@ func getTestServer(t *testing.T, endpointPath string) *httptest.Server {
 
 func TestCanCreate(t *testing.T) {
 	productClient := getProductClient(t)
-	resp, err := productClient.Create(context.TODO(), "test product", "test description", 1000, "NGN")
-	if err != nil {
+	var resp models.Response[any]
+	if err := productClient.Create(context.TODO(), "test product", "test description", 1000, "NGN", &resp); err != nil {
 		t.Errorf("an error occured while calling productClient.Create. err: %v", err)
 	}
 	if resp.StatusCode != http.StatusCreated {
@@ -56,22 +57,22 @@ func TestCanCreateMocked(t *testing.T) {
 	defer testServer.Close()
 	productClient := getProductClient(t)
 	productClient.baseUrl = testServer.URL
-	resp, err := productClient.Create(context.TODO(), "test product", "test description", 1000, "NGN")
-	if err != nil {
+	var resp models.Response[any]
+	if err := productClient.Create(context.TODO(), "test product", "test description", 1000, "NGN"); err != nil {
 		t.Errorf("an error occured while calling productClient.Create. err: %v", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("productClient.Create returned wrong response. want status code: %d, got status code: %d", http.StatusOK, resp.StatusCode)
 	}
-	if !bytes.Equal(resp.Data, []byte("OK")) {
+	if !bytes.Equal(resp.Raw, []byte("OK")) {
 		t.Errorf("productClient.Create returned wrong Data")
 	}
 }
 
 func TestCanAll(t *testing.T) {
 	productClient := getProductClient(t)
-	resp, err := productClient.All(context.TODO())
-	if err != nil {
+	var resp models.Response[any]
+	if err := productClient.All(context.TODO(), &resp); err != nil {
 		t.Errorf("an error occured while calling productClient.All. err: %v", err)
 	}
 	if resp.StatusCode != http.StatusOK {

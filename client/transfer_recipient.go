@@ -63,7 +63,7 @@ func NewTransferRecipientClient(options ...ClientOptions) *TransferRecipientClie
 //	}
 //	fmt.Println(data)
 func (t *TransferRecipientClient) Create(ctx context.Context, recipientType string, name string, accountNumber string,
-	bankCode string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	bankCode string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"type":           recipientType,
 		"name":           name,
@@ -74,7 +74,7 @@ func (t *TransferRecipientClient) Create(ctx context.Context, recipientType stri
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(ctx, http.MethodPost, "/transferrecipient", payload)
+	return t.APICall(ctx, http.MethodPost, "/transferrecipient", payload, response)
 }
 
 // BulkCreate lets you create multiple transfer recipients in batches. A duplicate account number will lead to the retrieval of the existing record.
@@ -117,13 +117,13 @@ func (t *TransferRecipientClient) Create(ctx context.Context, recipientType stri
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferRecipientClient) BulkCreate(ctx context.Context, batch interface{}) (*Response, error) {
+func (t *TransferRecipientClient) BulkCreate(ctx context.Context, batch, response any) error {
 	payload := map[string]any{
 		"batch": batch,
 	}
 	payload["batch"] = batch
 
-	return t.APICall(ctx, http.MethodPost, "/transferrecipient/bulk", payload)
+	return t.APICall(ctx, http.MethodPost, "/transferrecipient/bulk", payload, response)
 }
 
 // All lets you retrieve transfer recipients available on your Integration
@@ -162,9 +162,9 @@ func (t *TransferRecipientClient) BulkCreate(ctx context.Context, batch interfac
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferRecipientClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (t *TransferRecipientClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/transferrecipient", queries...)
-	return t.APICall(ctx, http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve the details of a transfer recipient
@@ -197,8 +197,8 @@ func (t *TransferRecipientClient) All(ctx context.Context, queries ...Query) (*R
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferRecipientClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
-	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil)
+func (t *TransferRecipientClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil, response)
 }
 
 // Update lets you update transfer recipients available on your Integration
@@ -238,8 +238,8 @@ func (t *TransferRecipientClient) FetchOne(ctx context.Context, idOrCode string)
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferRecipientClient) Update(ctx context.Context, idOrCode string, name string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (t *TransferRecipientClient) Update(ctx context.Context, idOrCode string, name string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"name": name,
 	}
@@ -247,7 +247,7 @@ func (t *TransferRecipientClient) Update(ctx context.Context, idOrCode string, n
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/transferrecipient/%s", idOrCode), payload)
+	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/transferrecipient/%s", idOrCode), payload, response)
 }
 
 // Delete lets you delete a transfer recipient (sets the transfer recipient to inactive)
@@ -280,6 +280,6 @@ func (t *TransferRecipientClient) Update(ctx context.Context, idOrCode string, n
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TransferRecipientClient) Delete(ctx context.Context, idOrCode string) (*Response, error) {
-	return t.APICall(ctx, http.MethodDelete, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil)
+func (t *TransferRecipientClient) Delete(ctx context.Context, idOrCode string, response any) error {
+	return t.APICall(ctx, http.MethodDelete, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil, response)
 }

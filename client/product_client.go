@@ -63,8 +63,8 @@ func NewProductClient(options ...ClientOptions) *ProductClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *ProductClient) Create(ctx context.Context, name string, description string, price int, currency string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (p *ProductClient) Create(ctx context.Context, name string, description string, price int, currency string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"name":        name,
 		"description": description,
@@ -75,7 +75,7 @@ func (p *ProductClient) Create(ctx context.Context, name string, description str
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(ctx, http.MethodPost, "/product", payload)
+	return p.APICall(ctx, http.MethodPost, "/product", payload, response)
 }
 
 // All lets you retrieve Products available on your Integration
@@ -114,9 +114,9 @@ func (p *ProductClient) Create(ctx context.Context, name string, description str
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *ProductClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (p *ProductClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/product", queries...)
-	return p.APICall(ctx, http.MethodGet, url, nil)
+	return p.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you Get details of a product on your Integration
@@ -149,8 +149,8 @@ func (p *ProductClient) All(ctx context.Context, queries ...Query) (*Response, e
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *ProductClient) FetchOne(ctx context.Context, id string) (*Response, error) {
-	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/product/%s", id), nil)
+func (p *ProductClient) FetchOne(ctx context.Context, id string, response any) error {
+	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/product/%s", id), nil, response)
 }
 
 // Update lets you update a product details on your Integration
@@ -191,7 +191,7 @@ func (p *ProductClient) FetchOne(ctx context.Context, id string) (*Response, err
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *ProductClient) Update(ctx context.Context, id string, name string, description string, price int, currency string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (p *ProductClient) Update(ctx context.Context, id string, name string, description string, price int, currency string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"name":        name,
 		"description": description,
@@ -202,5 +202,5 @@ func (p *ProductClient) Update(ctx context.Context, id string, name string, desc
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/product/%s", id), payload)
+	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/product/%s", id), payload, response)
 }
