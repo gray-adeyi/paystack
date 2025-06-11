@@ -64,7 +64,7 @@ func NewCustomerClient(options ...ClientOptions) *CustomerClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *CustomerClient) Create(ctx context.Context, email string, firstName string, lastName string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (c *CustomerClient) Create(ctx context.Context, email string, firstName string, lastName string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"email":      email,
 		"first_name": firstName,
@@ -75,7 +75,7 @@ func (c *CustomerClient) Create(ctx context.Context, email string, firstName str
 		payload = optionalPayloadParameter(payload)
 	}
 
-	return c.APICall(ctx, http.MethodPost, "/customer", payload)
+	return c.APICall(ctx, http.MethodPost, "/customer", payload, response)
 }
 
 // All lets you retrieve Customers available on your Integration.
@@ -115,9 +115,9 @@ func (c *CustomerClient) Create(ctx context.Context, email string, firstName str
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *CustomerClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (c *CustomerClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/terminal", queries...)
-	return c.APICall(ctx, http.MethodGet, url, nil)
+	return c.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve the details of a customer on your Integration
@@ -151,8 +151,8 @@ func (c *CustomerClient) All(ctx context.Context, queries ...Query) (*Response, 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *CustomerClient) FetchOne(ctx context.Context, emailOrCode string) (*Response, error) {
-	return c.APICall(ctx, http.MethodGet, fmt.Sprintf("/customer/%s", emailOrCode), nil)
+func (c *CustomerClient) FetchOne(ctx context.Context, emailOrCode string, response any) error {
+	return c.APICall(ctx, http.MethodGet, fmt.Sprintf("/customer/%s", emailOrCode), nil, response)
 }
 
 // Update lets you update a customer's details on your Integration
@@ -192,14 +192,14 @@ func (c *CustomerClient) FetchOne(ctx context.Context, emailOrCode string) (*Res
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *CustomerClient) Update(ctx context.Context, code string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (c *CustomerClient) Update(ctx context.Context, code string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := make(map[string]any)
 
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
 
-	return c.APICall(ctx, http.MethodPut, fmt.Sprintf("/customer/%s", code), payload)
+	return c.APICall(ctx, http.MethodPut, fmt.Sprintf("/customer/%s", code), payload, response)
 }
 
 // Validate lets you validate a customer's identity
@@ -241,8 +241,8 @@ func (c *CustomerClient) Update(ctx context.Context, code string, optionalPayloa
 //	}
 //	fmt.Println(data)
 func (c *CustomerClient) Validate(ctx context.Context, code string, firstName string, lastName string, identificationType string,
-	value string, country string, bvn string, bankCode string, accountNumber string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	value string, country string, bvn string, bankCode string, accountNumber string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"first_name":     firstName,
 		"last_name":      lastName,
@@ -258,7 +258,7 @@ func (c *CustomerClient) Validate(ctx context.Context, code string, firstName st
 		payload = optionalPayloadParameter(payload)
 	}
 
-	return c.APICall(ctx, http.MethodPost, fmt.Sprintf("/customer/%s/identification", code), payload)
+	return c.APICall(ctx, http.MethodPost, fmt.Sprintf("/customer/%s/identification", code), payload, response)
 }
 
 // Flag lets you whitelist or blacklist a customer on your Integration
@@ -299,8 +299,8 @@ func (c *CustomerClient) Validate(ctx context.Context, code string, firstName st
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *CustomerClient) Flag(ctx context.Context, emailOrCode string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (c *CustomerClient) Flag(ctx context.Context, emailOrCode string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"cutomer": emailOrCode,
 	}
@@ -309,7 +309,7 @@ func (c *CustomerClient) Flag(ctx context.Context, emailOrCode string,
 		payload = optionalPayloadParameter(payload)
 	}
 
-	return c.APICall(ctx, http.MethodPost, "/customer/set_risk_action", payload)
+	return c.APICall(ctx, http.MethodPost, "/customer/set_risk_action", payload, response)
 }
 
 // Deactivate lets you deactivate an authorization when the card needs to be forgotten
@@ -343,10 +343,10 @@ func (c *CustomerClient) Flag(ctx context.Context, emailOrCode string,
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (c *CustomerClient) Deactivate(ctx context.Context, authorizationCode string) (*Response, error) {
+func (c *CustomerClient) Deactivate(ctx context.Context, authorizationCode string, response any) error {
 	payload := map[string]any{
 		"authorization_code": authorizationCode,
 	}
 
-	return c.APICall(ctx, http.MethodPost, "/customer/deactivate_authorization", payload)
+	return c.APICall(ctx, http.MethodPost, "/customer/deactivate_authorization", payload, response)
 }
