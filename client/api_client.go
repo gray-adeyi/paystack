@@ -2,11 +2,7 @@ package client
 
 import (
 	"net/http"
-
 )
-
-
-
 
 // PaystackClient is a struct that has other dedicated clients bound to it. This provides a convenience for interacting
 // with all of paystack's endpoints in your Go project. It should not be instantiated directly but interacting but
@@ -128,10 +124,10 @@ type PaystackClient struct {
 //	client := p.NewPaystackClient(p.WithSecretKey("<your-paystack-secret-key>"))
 func NewPaystackClient(options ...ClientOptions) *PaystackClient {
 	restClient := &restClient{
-		baseUrl: BaseUrl,
+		baseUrl:    BaseUrl,
 		httpClient: &http.Client{},
 	}
-	
+
 	for _, opts := range options {
 		opts(restClient)
 	}
