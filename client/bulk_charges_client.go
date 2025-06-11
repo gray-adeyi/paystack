@@ -65,8 +65,8 @@ func NewBulkChargeClient(options ...ClientOptions) *BulkChargeClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (b *BulkChargeClient) Initiate(ctx context.Context, charges interface{}) (*Response, error) {
-	return b.APICall(ctx, http.MethodPost, "/bulkcharge", charges)
+func (b *BulkChargeClient) Initiate(ctx context.Context, charges any, response any) error {
+	return b.APICall(ctx, http.MethodPost, "/bulkcharge", charges, response)
 }
 
 // All lets you retrieve all bulk charge batches created by the Integration.
@@ -106,9 +106,9 @@ func (b *BulkChargeClient) Initiate(ctx context.Context, charges interface{}) (*
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (b *BulkChargeClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (b *BulkChargeClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/bulkcharge", queries...)
-	return b.APICall(ctx, http.MethodGet, url, nil)
+	return b.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve a specific batch code. It also returns useful information
@@ -143,8 +143,8 @@ func (b *BulkChargeClient) All(ctx context.Context, queries ...Query) (*Response
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (b *BulkChargeClient) FetchOne(ctx context.Context, idOrCode string) (*Response, error) {
-	return b.APICall(ctx, http.MethodGet, fmt.Sprintf("/bulkcharge/%s", idOrCode), nil)
+func (b *BulkChargeClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return b.APICall(ctx, http.MethodGet, fmt.Sprintf("/bulkcharge/%s", idOrCode), nil, response)
 }
 
 // Charges lets you retrieve the Charges associated with a specified batch code.
@@ -184,9 +184,9 @@ func (b *BulkChargeClient) FetchOne(ctx context.Context, idOrCode string) (*Resp
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (b *BulkChargeClient) Charges(ctx context.Context, idOrCode string, queries ...Query) (*Response, error) {
+func (b *BulkChargeClient) Charges(ctx context.Context, idOrCode string, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl(fmt.Sprintf("/bulkcharge/%s/Charges", idOrCode), queries...)
-	return b.APICall(ctx, http.MethodGet, url, nil)
+	return b.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // Pause lets you pause a processing a batch
@@ -220,8 +220,8 @@ func (b *BulkChargeClient) Charges(ctx context.Context, idOrCode string, queries
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (b *BulkChargeClient) Pause(ctx context.Context, idOrCode string) (*Response, error) {
-	return b.APICall(ctx, http.MethodGet, fmt.Sprintf("/bulkcharge/pause/%s", idOrCode), nil)
+func (b *BulkChargeClient) Pause(ctx context.Context, idOrCode string, response any) error {
+	return b.APICall(ctx, http.MethodGet, fmt.Sprintf("/bulkcharge/pause/%s", idOrCode), nil, response)
 }
 
 // Resume lets you resume a paused batch
@@ -255,6 +255,6 @@ func (b *BulkChargeClient) Pause(ctx context.Context, idOrCode string) (*Respons
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (b *BulkChargeClient) Resume(ctx context.Context, idOrCode string) (*Response, error) {
-	return b.APICall(ctx, http.MethodGet, fmt.Sprintf("/bulkcharge/resume/%s", idOrCode), nil)
+func (b *BulkChargeClient) Resume(ctx context.Context, idOrCode string, response any) error {
+	return b.APICall(ctx, http.MethodGet, fmt.Sprintf("/bulkcharge/resume/%s", idOrCode), nil, response)
 }
