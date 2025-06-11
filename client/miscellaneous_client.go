@@ -60,9 +60,9 @@ func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *MiscellaneousClient) Banks(ctx context.Context, queries ...Query) (*Response, error) {
+func (p *MiscellaneousClient) Banks(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/bank", queries...)
-	return p.APICall(ctx, http.MethodGet, url, nil)
+	return p.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // Countries let you retrieve a list of countries that Paystack currently supports
@@ -96,8 +96,8 @@ func (p *MiscellaneousClient) Banks(ctx context.Context, queries ...Query) (*Res
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *MiscellaneousClient) Countries(ctx context.Context) (*Response, error) {
-	return p.APICall(ctx, http.MethodGet, "/country", nil)
+func (p *MiscellaneousClient) Countries(ctx context.Context, response any) error {
+	return p.APICall(ctx, http.MethodGet, "/country", nil, response)
 }
 
 // States lets you retrieve a list of states for a country for address Verification
@@ -136,7 +136,7 @@ func (p *MiscellaneousClient) Countries(ctx context.Context) (*Response, error) 
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *MiscellaneousClient) States(ctx context.Context, queries ...Query) (*Response, error) {
+func (p *MiscellaneousClient) States(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/address_verification/states", queries...)
-	return p.APICall(ctx, http.MethodGet, url, nil)
+	return p.APICall(ctx, http.MethodGet, url, nil, response)
 }
