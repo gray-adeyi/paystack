@@ -8,16 +8,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-
-	"github.com/gray-adeyi/paystack/models"
+	"reflect"
 )
 
 const Version = "0.1.0"
 const BaseUrl = "https://api.paystack.co"
 
 var ErrNoSecretKey = errors.New("Paystack secret key was not provided")
-
-
 
 // ClientOptions is a type used to modify attributes of an APIClient. It can be passed into the NewAPIClient
 // function while creating an APIClient
@@ -50,7 +47,7 @@ func WithBaseUrl(baseUrl string) ClientOptions {
 	}
 }
 
-func (a *restClient) APICall(ctx context.Context, method string, endPointPath string, payload interface{}) (*models.Response, error) {
+func (a *restClient) APICall(ctx context.Context, method string, endPointPath string, payload any, response any) error {
 	var body *bytes.Buffer
 	var apiRequest *http.Request
 	var err error
@@ -58,7 +55,7 @@ func (a *restClient) APICall(ctx context.Context, method string, endPointPath st
 	if payload != nil {
 		payloadInBytes, err := json.Marshal(payload)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		body = bytes.NewBuffer(payloadInBytes)
 	}
@@ -70,25 +67,80 @@ func (a *restClient) APICall(ctx context.Context, method string, endPointPath st
 	}
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 	err = a.setHeaders(apiRequest)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	r, err := a.httpClient.Do(apiRequest)
 	if err != nil {
-		return nil, err
+		return err
+	}
+	return a.unMarshalResponse(r, response)
+}
+
+func (a *restClient) unMarshalResponse(httpResponse *http.Response, result any) error {
+	raw, err := io.ReadAll(httpResponse.Body)
+	if err != nil {
+		return err
 	}
 
-	data, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, err
+	if err = json.Unmarshal(raw, result); err != nil {
+		return err
 	}
-	return &models.Response{
-		StatusCode: r.StatusCode,
-		Data:       data,
-	}, nil
+
+	// Get the value of the response interface
+	value := reflect.ValueOf(result)
+
+	// Check if it's a pointer and get the element it points to
+	if value.Kind() == reflect.Ptr {
+		value = value.Elem()
+	}
+
+	// Check if it's a struct
+	if value.Kind() != reflect.Struct {
+		return fmt.Errorf("expected a struct of the generic model.Response struct, got %v", value.Kind())
+	}
+
+	// Check for StatusCode field
+	statusCodeField := value.FieldByName("StatusCode")
+	if !statusCodeField.IsValid() {
+		return errors.New("response parameter has no StatusCode field, please ensure response type is of the generic model.Response struct")
+	}
+
+	// Check if StatusCode field is settable and of correct type
+	if statusCodeField.CanSet() {
+		switch statusCodeField.Kind() {
+		case reflect.Int, reflect.Int32, reflect.Int64:
+			statusCodeField.SetInt(int64(httpResponse.StatusCode))
+		default:
+			return errors.New("StatusCode field of the response parameter is not a valid integer")
+		}
+	} else {
+		return errors.New("StatusCode field of the response parameter cannot be set")
+	}
+
+	// Check for Raw field
+	rawField := value.FieldByName("Raw")
+	if !rawField.IsValid() {
+		return errors.New("response parameter has no Raw field, please ensure response type is of the generic model.Response struct")
+	}
+
+	// Check if Raw field is settable and of correct type
+	if rawField.CanSet() {
+		switch rawField.Kind() {
+		case reflect.Slice:
+			if rawField.Type().Elem().Kind() == reflect.Uint8 {
+				rawField.SetBytes(raw)
+			}
+		default:
+			return errors.New("StatusCode field of the response parameter is not a valid integer")
+		}
+	} else {
+		return errors.New("StatusCode field of the response parameter cannot be set")
+	}
+	return nil
 }
 
 func (a *restClient) setHeaders(request *http.Request) error {
