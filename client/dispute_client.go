@@ -60,9 +60,9 @@ func NewDisputeClient(options ...ClientOptions) *DisputeClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DisputeClient) All(ctx context.Context, queries ...Query) (*Response, error) {
+func (d *DisputeClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/dispute", queries...)
-	return d.APICall(ctx, http.MethodGet, url, nil)
+	return d.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve more details about a dispute.
@@ -96,8 +96,8 @@ func (d *DisputeClient) All(ctx context.Context, queries ...Query) (*Response, e
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DisputeClient) FetchOne(ctx context.Context, id string) (*Response, error) {
-	return d.APICall(ctx, http.MethodGet, fmt.Sprintf("/dispute/%s", id), nil)
+func (d *DisputeClient) FetchOne(ctx context.Context, id string, response any) error {
+	return d.APICall(ctx, http.MethodGet, fmt.Sprintf("/dispute/%s", id), nil, response)
 }
 
 // AllTransactionDisputes lets you retrieve Disputes for a particular transaction
@@ -131,8 +131,8 @@ func (d *DisputeClient) FetchOne(ctx context.Context, id string) (*Response, err
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DisputeClient) AllTransactionDisputes(ctx context.Context, transactionId string) (*Response, error) {
-	return d.APICall(ctx, http.MethodGet, fmt.Sprintf("/dispute/transaction/%s", transactionId), nil)
+func (d *DisputeClient) AllTransactionDisputes(ctx context.Context, transactionId string, response any) error {
+	return d.APICall(ctx, http.MethodGet, fmt.Sprintf("/dispute/transaction/%s", transactionId), nil, response)
 }
 
 // Update lets you update the details of a dispute on your Integration
@@ -174,15 +174,15 @@ func (d *DisputeClient) AllTransactionDisputes(ctx context.Context, transactionI
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DisputeClient) Update(ctx context.Context, id string, referenceAmount int,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+func (d *DisputeClient) Update(ctx context.Context, id string, referenceAmount int, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"reference_amount": referenceAmount,
 	}
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return d.APICall(ctx, http.MethodPut, fmt.Sprintf("/dispute/%s", id), payload)
+	return d.APICall(ctx, http.MethodPut, fmt.Sprintf("/dispute/%s", id), payload, response)
 }
 
 // AddEvidence lets you provide evidence for a dispute
@@ -226,8 +226,8 @@ func (d *DisputeClient) Update(ctx context.Context, id string, referenceAmount i
 //	}
 //	fmt.Println(data)
 func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmail string,
-	customerName string, customerPhone string, serviceDetails string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	customerName string, customerPhone string, serviceDetails string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"customer_email":  customerEmail,
 		"customer_name":   customerName,
@@ -237,7 +237,7 @@ func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmai
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return d.APICall(ctx, http.MethodPost, fmt.Sprintf("/dispute/%s/evidence", id), payload)
+	return d.APICall(ctx, http.MethodPost, fmt.Sprintf("/dispute/%s/evidence", id), payload, response)
 }
 
 // UploadURL lets you retrieve Disputes for a particular transaction
@@ -276,9 +276,9 @@ func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmai
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DisputeClient) UploadURL(ctx context.Context, id string, queries ...Query) (*Response, error) {
+func (d *DisputeClient) UploadURL(ctx context.Context, id string, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl(fmt.Sprintf("/dispute/%s/upload_url", id), queries...)
-	return d.APICall(ctx, http.MethodPost, url, nil)
+	return d.APICall(ctx, http.MethodPost, url, nil, response)
 }
 
 // Resolve lets you resolve a dispute on your Integration
@@ -322,8 +322,8 @@ func (d *DisputeClient) UploadURL(ctx context.Context, id string, queries ...Que
 //	}
 //	fmt.Println(data)
 func (d *DisputeClient) Resolve(ctx context.Context, id string, resolution string, message string,
-	refundAmount int, uploadedFilename string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
+	refundAmount int, uploadedFilename string, response any,
+	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"resolution":        resolution,
 		"message":           message,
@@ -333,7 +333,7 @@ func (d *DisputeClient) Resolve(ctx context.Context, id string, resolution strin
 	for _, optionalPayloadParameter := range optionalPayloadParameters {
 		payload = optionalPayloadParameter(payload)
 	}
-	return d.APICall(ctx, http.MethodPut, fmt.Sprintf("/dispute/%s/resolve", id), payload)
+	return d.APICall(ctx, http.MethodPut, fmt.Sprintf("/dispute/%s/resolve", id), payload, response)
 }
 
 // Export lets you export Disputes available on your Integration
@@ -372,7 +372,7 @@ func (d *DisputeClient) Resolve(ctx context.Context, id string, resolution strin
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (d *DisputeClient) Export(ctx context.Context, queries ...Query) (*Response, error) {
+func (d *DisputeClient) Export(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/dispute/export", queries...)
-	return d.APICall(ctx, http.MethodGet, url, nil)
+	return d.APICall(ctx, http.MethodGet, url, nil, response)
 }
