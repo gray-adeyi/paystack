@@ -4,13 +4,10 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"github.com/gray-adeyi/paystack/enum"
 )
 
-// TerminalEvent specifies the supported terminal event by paystack
-type TerminalEvent = string
 
-const TerminalEventInvoice TerminalEvent = "invoice"
-const TerminalEventTransaction TerminalEvent = "transaction"
 
 // TerminalClient interacts with endpoints related to paystack Terminal resource that allows you to
 // build delightful in-person payment experiences.
@@ -64,7 +61,7 @@ func NewTerminalClient(options ...ClientOptions) *TerminalClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (t *TerminalClient) SendEvent(ctx context.Context, terminalId string, eventType TerminalEvent, action string, data, response any) error {
+func (t *TerminalClient) SendEvent(ctx context.Context, terminalId string, eventType enum.TerminalEvent, action string, data, response any) error {
 	payload := map[string]any{
 		"type":   eventType,
 		"action": action,
