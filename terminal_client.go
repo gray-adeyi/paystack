@@ -3,11 +3,9 @@ package paystack
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"github.com/gray-adeyi/paystack/enum"
+	"net/http"
 )
-
-
 
 // TerminalClient interacts with endpoints related to paystack Terminal resource that allows you to
 // build delightful in-person payment experiences.
