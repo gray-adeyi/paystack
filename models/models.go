@@ -197,7 +197,7 @@ type Transaction struct {
 }
 
 type TransactionSplitSubAccount struct {
-	Subaccount Subaccount `json:"subaccount"`
+	Subaccount SubAccount `json:"subaccount"`
 	Share      int        `json:"share"`
 }
 
@@ -301,6 +301,17 @@ type PaymentPage struct {
 type PaymentRequestNotification struct {
 	SentAt  time.Time `json:"sent_at"`
 	Channel string    `json:"channel"`
+}
+
+type LineItem struct {
+	Name     string `json:"name"`
+	Amount   int    `json:"amount"`
+	Quantity int    `json:"quantity"`
+}
+
+type Tax struct {
+	Name   string `json:"name"`
+	Amount int    `json:"amount"`
 }
 
 type PaymentRequest struct {
