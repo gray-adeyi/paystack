@@ -3,6 +3,8 @@ package paystack
 import (
 	"context"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // MiscellaneousClient interacts with endpoints related to paystack Miscellaneous resource that
@@ -12,12 +14,6 @@ type MiscellaneousClient struct {
 }
 
 // NewMiscellaneousClient creates a MiscellaneousClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
 	client := NewClient(options...)
 	return client.Miscellaneous
@@ -25,117 +21,108 @@ func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
 
 // Banks lets you retrieve a list of all supported banks and their properties
 //
+// Default response: models.Response[[]models.Bank]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment pages client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Miscellaneous.Banks(context.TODO())
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// Banks also accepts queries, so say you want to customize how many banks to retrieve
-//	// and which country the banks to retrieve are from, you can write it like so.
-//	// resp, err := miscClient.Banks(context.TODO(),p.WithQuery("perPage","50"), p.WithQuery("country","nigeria"))
+//		var response models.Response[[]models.Bank]
+//		if err := client.Miscellaneous.Banks(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/miscellaneous/#bank for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := miscClient.Banks(context.TODO())
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Miscellaneous.Banks(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (p *MiscellaneousClient) Banks(ctx context.Context, response any, queries ...Query) error {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/miscellaneous/
+func (p *MiscellaneousClient) Banks(ctx context.Context, country enum.Country, response any, queries ...Query) error {
+	countryFullNames := map[enum.Country]string{
+		enum.CountryNigeria:     "nigeria",
+		enum.CountryGhana:       "ghana",
+		enum.CountrySouthAfrica: "south africa",
+		enum.CountryKenya:       "kenya",
+		enum.CountryCoteDIvoire: "côte d'ivoire",
+		enum.CountryEgypt:       "egypt",
+		enum.CountryRwanda:      "rwanda",
+	}
+	fullName := countryFullNames[country]
+	queries = append(queries, WithQuery("country", fullName))
 	url := AddQueryParamsToUrl("/bank", queries...)
 	return p.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // Countries let you retrieve a list of countries that Paystack currently supports
 //
+// Default response: models.Response[[]models.PaystackSupportedCountry]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment pages client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Miscellaneous.Countries(context.TODO())
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := miscClient.Countries(context.TODO())
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[[]models.PastackSupportedCountry]
+//		if err := client.Miscellaneous.Countries(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (p *MiscellaneousClient) Countries(ctx context.Context, response any) error {
 	return p.APICall(ctx, http.MethodGet, "/country", nil, response)
 }
 
 // States lets you retrieve a list of states for a country for address Verification
 //
+// Default response: models.Response[[]models.State]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment pages client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Miscellaneous field is a `MiscellaneousClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Miscellaneous.States(context.TODO())
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// States also accepts queries, so say you want to specify country the states
-//	// to retrieve are from, you can write it like so.
-//	// resp, err := miscClient.States(context.TODO(),p.WithQuery("country","nigeria"))
+//		var response models.Response[[]models.State]
+//		if err := client.Miscellaneous.States(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/miscellaneous/#avs-states for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := miscClient.States(context.TODO())
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Miscellaneous.States(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/miscellaneous/
 func (p *MiscellaneousClient) States(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/address_verification/states", queries...)
 	return p.APICall(ctx, http.MethodGet, url, nil, response)
