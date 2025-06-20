@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // CustomerClient interacts with endpoints related to paystack Customer resource
@@ -13,12 +15,6 @@ type CustomerClient struct {
 }
 
 // NewCustomerClient creates a CustomerClient
-//
-// Example:
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewCustomerClient(options ...ClientOptions) *CustomerClient {
 	client := NewClient(options...)
 
@@ -27,43 +23,34 @@ func NewCustomerClient(options ...ClientOptions) *CustomerClient {
 
 // Create lets you create a customer on your Integration
 //
+// Default response: models.Response[models.Customer]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a customer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Customers field is a `CustomerClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Customers.Create(context.TODO(),"johndoe@example.com","John","Doe")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `customerClient.Create` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `phone`.
-//	// resp, err := customerClient.Create("johndoe@example.com","John","Doe", p.WithOptionalParameter("phone","+2348123456789"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/customer/#create
-//	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Customer]
+//		if err := client.Customers.Create(context.TODO(),"johndoe@example.com","John","Doe", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := customerClient.Create(context.TODO(),"johndoe@example.com","John","Doe")
+//		fmt.Println(response)
 //
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.Customers.Create(context.TODO(),"johndoe@example.com","John","Doe", &response, p.WithOptionalParameter("phone","+2348123456789"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/customer/
 func (c *CustomerClient) Create(ctx context.Context, email string, firstName string, lastName string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"email":      email,
@@ -80,41 +67,34 @@ func (c *CustomerClient) Create(ctx context.Context, email string, firstName str
 
 // All lets you retrieve Customers available on your Integration.
 //
+// Default response: models.Response[[]models.Customer]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a customer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Customers field is a `CustomerClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Customers.All(context.TODO())
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to specify the page
-//	// to retrieve, you can write it like so.
-//	// resp, err := customerClient.All(context.TODO(),p.WithQuery("page",2))
+//		var response models.Response[[]models.Customer]
+//		if err := client.Customers.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/customer/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := customerClient.All(context.TODO())
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Customers.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/customer/
 func (c *CustomerClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/terminal", queries...)
 	return c.APICall(ctx, http.MethodGet, url, nil, response)
@@ -122,76 +102,62 @@ func (c *CustomerClient) All(ctx context.Context, response any, queries ...Query
 
 // FetchOne lets you retrieve the details of a customer on your Integration
 //
+// Default response: models.Response[models.Customer]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a customer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Customers field is a `CustomerClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Customers.FetchOne(context.TODO(),"<emailOrCode>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := customerClient.FetchOne(context.TODO(),"<emailOrCode>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[models.Customer]
+//		if err := client.Customers.FetchOne(context.TODO(),"<emailOrCode>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (c *CustomerClient) FetchOne(ctx context.Context, emailOrCode string, response any) error {
 	return c.APICall(ctx, http.MethodGet, fmt.Sprintf("/customer/%s", emailOrCode), nil, response)
 }
 
 // Update lets you update a customer's details on your Integration
 //
+// Default response: models.Response[models.Customer]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a customer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Customers field is a `CustomerClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Customers.Update(context.TODO(),"143", p.WithOptionalParameter("first_name","John"))
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `customerClient.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `first_name`.
-//	// resp, err := customerClient.Update(context.TODO(),"143", p.WithOptionalParameter("first_name","John"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/customer/#update
-//	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
-//	resp, err := customerClient.Update(context.TODO(),"143", p.WithOptionalParameter("first_name","John"))
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[models.Customer]
+//		if err := client.Customers.Update(context.TODO(),"<code>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Customers.Update(context.TODO(),"<code>", &response, p.WithOptionalParameter("first_name","John"))
 //	}
-//	fmt.Println(data)
+//
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/customer/
 func (c *CustomerClient) Update(ctx context.Context, code string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := make(map[string]any)
 
@@ -204,44 +170,37 @@ func (c *CustomerClient) Update(ctx context.Context, code string, response any, 
 
 // Validate lets you validate a customer's identity
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a customer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Customers field is a `CustomerClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Customers.Validate(context.TODO(),"143", "Asta","Lavista","bank_account","","NG","20012345677","007","0123456789")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `customerClient.Validate` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `middle_name`.
-//	// resp, err := customerClient.Validate(context.TODO(),"143", "Asta","Lavista","bank_account","","NG","20012345677","007",
-//	//	"0123456789", p.WithOptionalParameter("middle_name","Doe"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/customer/#validate
-//	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
-//	resp, err := customerClient.Validate(context.TODO(),"143", "Asta","Lavista","bank_account","","NG","20012345677","007","0123456789")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[struct{}]
+//		if err := client.Customers.Validate(context.TODO(),"<code>", "Asta","Lavista","bank_account","",enum.CountryNigeria,"20012345677","007","0123456789", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Customers.Validate(context.TODO(),"<code>", "Asta","Lavista","bank_account","",enum.CountryNigeria,"20012345677","007","0123456789", &response, , p.WithOptionalParameter("middle_name","Doe"))
 //	}
-//	fmt.Println(data)
+//
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/customer/
 func (c *CustomerClient) Validate(ctx context.Context, code string, firstName string, lastName string, identificationType string,
-	value string, country string, bvn string, bankCode string, accountNumber string, response any,
+	value string, country enum.Country, bvn string, bankCode string, accountNumber string, response any,
 	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"first_name":     firstName,
@@ -263,42 +222,34 @@ func (c *CustomerClient) Validate(ctx context.Context, code string, firstName st
 
 // Flag lets you whitelist or blacklist a customer on your Integration
 //
+// Default response: models.Response[models.Customer]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a customer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Customers field is a `CustomerClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Customers.Flag(context.TODO(),"CUS_xr58yrr2ujlft9k")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `customerClient.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `risk_action`.
-//	// resp, err := customerClient.Flag(context.TODO(),"CUS_xr58yrr2ujlft9k", p.WithOptionalParameter("risk_action", "allow")
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/customer/#whitelist-blacklist
-//	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Customer]
+//		if err := client.Customers.Flag(context.TODO(),"CUS_xr58yrr2ujlft9k", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := customerClient.Flag(context.TODO(),"CUS_xr58yrr2ujlft9k")
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Customers.Flag(context.TODO(),"CUS_xr58yrr2ujlft9k", &response, p.WithOptionalParameter("risk_action","allow"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/customer/
 func (c *CustomerClient) Flag(ctx context.Context, emailOrCode string, response any,
 	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
@@ -314,35 +265,28 @@ func (c *CustomerClient) Flag(ctx context.Context, emailOrCode string, response 
 
 // Deactivate lets you deactivate an authorization when the card needs to be forgotten
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a customer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Customers field is a `CustomerClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Customers.Deactivate(context.TODO(),"AUTH_72btv547")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := customerClient.Deactivate(context.TODO(),"AUTH_72btv547")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[struct{}]
+//		if err := client.Customers.Deactivate(context.TODO(),"AUTH_72btv547", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (c *CustomerClient) Deactivate(ctx context.Context, authorizationCode string, response any) error {
 	payload := map[string]any{
 		"authorization_code": authorizationCode,
