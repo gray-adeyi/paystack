@@ -13,12 +13,6 @@ type PaymentRequestClient struct {
 }
 
 // NewPaymentRequestClient creates a PaymentRequestClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	prClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewPaymentRequestClient(options ...ClientOptions) *PaymentRequestClient {
 	client := NewClient(options...)
 	return client.PaymentRequests
@@ -26,42 +20,34 @@ func NewPaymentRequestClient(options ...ClientOptions) *PaymentRequestClient {
 
 // Create lets you create a payment request for a transaction on your Integration
 //
+// Default response: models.Response[models.PaymentRequest]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.Create("CUS_xwaj0txjryg393b", 500000)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `PaymentRequests.Create` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `due_date`.
-//	// resp, err := prClient.Create("CUS_xwaj0txjryg393b", 500000, p.WithOptionalParameter("due_date","2023-12-25"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/payment-request/#create
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Customer]
+//		if err := client.PaymentRequests.Create(context.TODO(),"CUS_xwaj0txjryg393b", 500000, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := prClient.Create("CUS_xwaj0txjryg393b", 500000)
+//		fmt.Println(response)
 //
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.PaymentRequests.Create(context.TODO(),"CUS_xwaj0txjryg393b", 500000, &response, p.WithOptionalParameter("due_date","2023-12-25"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/payment-request/
 func (p *PaymentRequestClient) Create(ctx context.Context, customerIdOrCode string, amount int, response any,
 	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
@@ -77,40 +63,35 @@ func (p *PaymentRequestClient) Create(ctx context.Context, customerIdOrCode stri
 
 // All lets you retrieve the payment requests available on your Integration
 //
+
+// Default response: models.Response[[]models.PaymentRequest]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many payment pages to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := prClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.PaymentRequest]
+//		if err := client.Customers.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/payment-request/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := prClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.PaymentRequests.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/payment-request/
 func (p *PaymentRequestClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/paymentrequest", queries...)
 	return p.APICall(ctx, http.MethodGet, url, nil, response)
@@ -118,215 +99,177 @@ func (p *PaymentRequestClient) All(ctx context.Context, response any, queries ..
 
 // FetchOne lets you retrieve details of a payment request on your Integration
 //
+// Default response: models.Response[models.PaymentRequest]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.FetchOne("<idOrCode>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := prClient.FetchOne("<idOrCode>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.PaymentRequest]
+//		if err := client.PaymentRequests.FetchOne(context.TODO(),"<idOrCode>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (p *PaymentRequestClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
 	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/paymentrequest/%s", idOrCode), nil, response)
 }
 
 // Verify lets you verify the details of a payment request on your Integration
 //
+// Default response: models.Response[models.PaymentRequest]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.Verify("<code>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := prClient.Verify("<code>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.PaymentRequest]
+//		if err := client.PaymentRequests.Verify(context.TODO(),"<code>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (p *PaymentRequestClient) Verify(ctx context.Context, code string, response any) error {
 	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/paymentrequest/verify/%s", code), nil, response)
 }
 
 // SendNotification lets you send notification of a payment request to your Customers
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.SendNotification("<code>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := prClient.SendNotification("<code>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.PaymentRequests.SendNotification(context.TODO(),"<code>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (p *PaymentRequestClient) SendNotification(ctx context.Context, code string, response any) error {
-	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/notify/%s", code), nil, response)
+func (p *PaymentRequestClient) SendNotification(ctx context.Context, idOrCode string, response any) error {
+	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/notify/%s", idOrCode), nil, response)
 }
 
 // Total lets you retrieve payment requests metric
 //
+// Default response: models.Response[models.PaymentRequestStat]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.Total()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := prClient.Total()
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.PaymentRequestStat]
+//		if err := client.PaymentRequests.Total(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (p *PaymentRequestClient) Total(ctx context.Context, response any) error {
 	return p.APICall(ctx, http.MethodGet, "/paymentrequest/totals", nil, response)
 }
 
 // Finalize lets you finalize a draft payment request
 //
+// Default response: models.Response[models.PaymentRequest]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.Finalize("<code>", true)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := prClient.Finalize("<code>", true)
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.PaymentRequest]
+//		if err := client.PaymentRequests.Finalize(context.TODO(),"<idOrCode>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (p *PaymentRequestClient) Finalize(ctx context.Context, code string, sendNotification bool, response any) error {
+func (p *PaymentRequestClient) Finalize(ctx context.Context, idOrCode string, sendNotification bool, response any) error {
 	payload := map[string]any{
 		"send_notification": sendNotification,
 	}
-	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/finalize/%s", code), payload, response)
+	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/finalize/%s", idOrCode), payload, response)
 }
 
 // Update lets you update a payment request details on your Integration
 //
+// Default response: models.Response[models.PaymentRequest]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.Update("<idOrCode>", "CUS_XXX", "description")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `SubAccounts.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `amount`.
-//	// resp, err := saClient.Create("<idOrSlug>", "Buttercup Brunch", "description",
-//	//	p.WithOptionalParameter("amount",500000))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/page/#update
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.PaymentRequest]
+//		if err := client.PaymentRequests.Update(context.TODO(),"<idOrCode>", 50000, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := prClient.Update("<idOrSlug>", "Buttercup Brunch", "description")
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.PaymentRequests.Update(context.TODO(),"<idOrCode>", 50000, &response, p.WithOptionalParameter("description","update description"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/payment-request/
 func (p *PaymentRequestClient) Update(ctx context.Context, idOrCode string, customerIdOrCode string,
 	amount int, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
@@ -342,34 +285,28 @@ func (p *PaymentRequestClient) Update(ctx context.Context, idOrCode string, cust
 
 // Archive lets you archive a payment request. A payment request will no longer be fetched on list or returned on verify
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prClient := p.NewPaymentRequestClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment request client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.PaymentRequests field is a `PaymentRequestClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentRequests.Archive("<idOrCode>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := prClient.Archive("<idOrCode>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.PaymentRequests.Archive(context.TODO(),"<idOrCode>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (p *PaymentRequestClient) Archive(ctx context.Context, idOrCode string, response any) error {
 	return p.APICall(ctx, http.MethodPost, fmt.Sprintf("/paymentrequest/archive/%s", idOrCode), nil, response)
 }
