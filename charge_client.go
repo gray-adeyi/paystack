@@ -13,12 +13,6 @@ type ChargeClient struct {
 }
 
 // NewChargeClient creates a ChargeClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewChargeClient(options ...ClientOptions) *ChargeClient {
 	client := NewClient(options...)
 	return client.Charges
@@ -26,43 +20,34 @@ func NewChargeClient(options ...ClientOptions) *ChargeClient {
 
 // Create lets you initiate a payment by integrating the payment channel of your choice.
 //
+// Default response: models.Response[models.Transaction]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the charge client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Charges field is a `ChargeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.Create(context.TODO(),"johndoe@example.com", 100000)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Charges.Create` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `amount`.
-//	// resp, err := ppClient.Create(context.TODO(),"johndoe@example.com", 100000, p.WithOptionalParameter("authorization_code","AUTH_xxx"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/charge/#create
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Transaction]
+//		if err := client.Charges.Create(context.TODO(),"johndoe@example.com",100000, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := chargeClient.Create(context.TODO(),"johndoe@example.com", 100000)
+//		fmt.Println(response)
 //
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.Charges.Create(context.TODO(),"johndoe@example.com",100000, &response,p.WithOptionalParameter("authorization_code","AUTH_xxx"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/charge/
 func (c *ChargeClient) Create(ctx context.Context, email string, amount string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"email":  email,
@@ -78,36 +63,28 @@ func (c *ChargeClient) Create(ctx context.Context, email string, amount string, 
 
 // SubmitPin lets you submit pin to continue a charge
 //
+// Default response: models.Response[models.Transaction]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the charge client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Charges field is a `ChargeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.SubmitPin(context.TODO(),"1234", "5bwib5v6anhe9xa")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := chargeClient.SubmitPin(context.TODO(),"1234", "5bwib5v6anhe9xa")
+//		var response models.Response[models.Transaction]
+//		if err := client.Charges.SubmitPin(context.TODO(),"1234", "5bwib5v6anhe9xa", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
 func (c *ChargeClient) SubmitPin(ctx context.Context, pin string, reference string, response any) error {
 	payload := map[string]any{
 		"pin":       pin,
@@ -117,38 +94,63 @@ func (c *ChargeClient) SubmitPin(ctx context.Context, pin string, reference stri
 	return c.APICall(ctx, http.MethodPost, "/charge/submit_pin", payload, response)
 }
 
-// SubmitPhone lets you submit phone number when requested
+// SubmitOtp lets you submit otp to complete a charge
+//
+// Default response: models.Response[models.Transaction]
 //
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the charge client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Charges field is a `ChargeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.SubmitPhone(context.TODO(),"08012345678", "5bwib5v6anhe9xa")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := chargeClient.SubmitPhone(context.TODO(),"08012345678", "5bwib5v6anhe9xa")
+//		var response models.Response[models.Transaction]
+//		if err := client.Charges.SubmitOpt(context.TODO(),"123456", "5bwib5v6anhe9xa", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+func (c *ChargeClient) SubmitOtp(ctx context.Context, otp string, reference string, response any) error {
+	payload := map[string]any{
+		"otp":       otp,
+		"reference": reference,
+	}
+
+	return c.APICall(ctx, http.MethodPost, "/charge/submit_otp", payload, response)
+}
+
+// SubmitPhone lets you submit phone number when requested
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+// Default response: models.Response[models.Transaction]
+//
+// Example:
+//
+//	import (
+//		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
+//	)
+//
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
+//
+//		var response models.Response[models.Transaction]
+//		if err := client.Charges.SubmitPhone(context.TODO(),"08012345678", "5bwib5v6anhe9xa", &response); err != nil {
+//			panic(err)
+//		}
+//
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (c *ChargeClient) SubmitPhone(ctx context.Context, phone string, reference string, response any) error {
 	payload := map[string]any{
 		"phone":     phone,
@@ -160,36 +162,28 @@ func (c *ChargeClient) SubmitPhone(ctx context.Context, phone string, reference 
 
 // SubmitBirthday lets you submit a birthday when requested
 //
+// Default response: models.Response[models.Transaction]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the charge client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Charges field is a `ChargeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.SubmitBirthday(context.TODO(),"2016-09-21", "5bwib5v6anhe9xa")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := chargeClient.SubmitBirthday(context.TODO(),"2016-09-21", "5bwib5v6anhe9xa")
+//		var response models.Response[models.Transaction]
+//		if err := client.Charges.SubmitBirthday(context.TODO(),"2016-09-21", "5bwib5v6anhe9xa", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
 func (c *ChargeClient) SubmitBirthday(ctx context.Context, birthday string, reference string, response any) error {
 	payload := map[string]any{
 		"birthday":  birthday,
@@ -201,37 +195,28 @@ func (c *ChargeClient) SubmitBirthday(ctx context.Context, birthday string, refe
 
 // SubmitAddress lets you submit address to continue a charge
 //
+// Default response: models.Response[models.Transaction]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the charge client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Charges field is a `ChargeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.SubmitAddress(context.TODO(),"140 N 2ND ST",
-//	//	"7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := chargeClient.SubmitAddress(context.TODO(),"140 N 2ND ST", "7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360")
+//		var response models.Response[models.Transaction]
+//		if err := client.Charges.SubmitAddress(context.TODO(),"140 N 2ND ST", "7c7rpkqpc0tijs8", "Stroudsburg", "PA", "18360", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
 func (c *ChargeClient) SubmitAddress(ctx context.Context, address string, reference string, city string,
 	state string, zipCode string, response any) error {
 	payload := map[string]any{
@@ -246,39 +231,31 @@ func (c *ChargeClient) SubmitAddress(ctx context.Context, address string, refere
 }
 
 // PendingCharge lets you check the status of a charge. When you get pending as a charge status or if there
-// was an exception when calling any of the /charge endpoints, wait 10 seconds or more, then make a check
+// was an exception when calling any of the ChargeClient methods, wait 10 seconds or more, then make a check
 // to see if its status has changed. Don't call too early as you may get a lot more pending than you should.
+//
+// Default response: models.Response[models.Transaction]
 //
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the charge client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Charges field is a `ChargeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Charges.PendingCharge(context.TODO(),"5bwib5v6anhe9xa")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := chargeClient.PendingCharge(context.TODO(),"5bwib5v6anhe9xa")
+//		var response models.Response[models.Transaction]
+//		if err := client.Charges.PendingCharge(context.TODO(), "5bwib5v6anhe9xa", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
 func (c *ChargeClient) PendingCharge(ctx context.Context, reference string, response any) error {
 	return c.APICall(ctx, http.MethodGet, fmt.Sprintf("/charge/%s", reference), nil, response)
 }
