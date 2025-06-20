@@ -21,7 +21,7 @@ type SubAccountClient struct {
 //
 //	saClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewSubAccountClient(options ...ClientOptions) *SubAccountClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 
 	return client.SubAccounts
 }

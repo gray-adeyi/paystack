@@ -21,7 +21,7 @@ type TerminalClient struct {
 //
 //	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTerminalClient(options ...ClientOptions) *TerminalClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Terminals
 }
 

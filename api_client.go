@@ -116,13 +116,13 @@ type PaystackClient struct {
 	Miscellaneous *MiscellaneousClient
 }
 
-// NewPaystackClient lets you create an APIClient. it can accept zero to many client options
+// NewClient lets you create an APIClient. it can accept zero to many client options
 //
 //	Example
 //	import p "github.com/gray-adeyi/paystack"
 //
-//	client := p.NewPaystackClient(p.WithSecretKey("<your-paystack-secret-key>"))
-func NewPaystackClient(options ...ClientOptions) *PaystackClient {
+//	client := p.NewClient(p.WithSecretKey("<your-paystack-secret-key>"))
+func NewClient(options ...ClientOptions) *PaystackClient {
 	restClient := &restClient{
 		baseUrl:    BaseUrl,
 		httpClient: &http.Client{},

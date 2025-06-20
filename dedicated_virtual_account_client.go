@@ -20,7 +20,7 @@ type DedicatedVirtualAccountClient struct {
 //
 //	dvaClient := p.NewDedicatedVirtualAccountClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtualAccountClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 
 	return client.DedicatedVirtualAccounts
 }

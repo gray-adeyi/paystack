@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/gray-adeyi/paystack/enum"
 	"github.com/gray-adeyi/paystack/models"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -58,7 +59,7 @@ func TestCanCreateMocked(t *testing.T) {
 	productClient := getProductClient(t)
 	productClient.baseUrl = testServer.URL
 	var resp models.Response[any]
-	if err := productClient.Create(context.TODO(), "test product", "test description", 1000, "NGN"); err != nil {
+	if err := productClient.Create(context.TODO(), "test product", "test description", 1000, enum.CurrencyNgn,resp); err != nil {
 		t.Errorf("an error occured while calling productClient.Create. err: %v", err)
 	}
 	if resp.StatusCode != http.StatusOK {

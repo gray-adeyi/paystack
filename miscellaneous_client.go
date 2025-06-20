@@ -19,7 +19,7 @@ type MiscellaneousClient struct {
 //
 //	miscClient := p.NewMiscellaneousClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewMiscellaneousClient(options ...ClientOptions) *MiscellaneousClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Miscellaneous
 }
 

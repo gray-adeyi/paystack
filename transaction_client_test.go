@@ -2,7 +2,6 @@ package paystack
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"testing"

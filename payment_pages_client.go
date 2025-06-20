@@ -21,7 +21,7 @@ type PaymentPageClient struct {
 //
 //	ppClient := p.NewPaymentPageClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewPaymentPageClient(options ...ClientOptions) *PaymentPageClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.PaymentPages
 }
 

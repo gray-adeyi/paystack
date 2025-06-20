@@ -20,7 +20,7 @@ type DisputeClient struct {
 //
 //	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewDisputeClient(options ...ClientOptions) *DisputeClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Disputes
 }
 

@@ -20,7 +20,7 @@ type PlanClient struct {
 //
 //	planClient := p.NewPlanClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewPlanClient(options ...ClientOptions) *PlanClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 
 	return client.Plans
 }

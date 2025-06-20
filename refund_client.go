@@ -20,7 +20,7 @@ type RefundClient struct {
 //
 //	refundClient := p.NewRefundClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewRefundClient(options ...ClientOptions) *RefundClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Refunds
 }
 

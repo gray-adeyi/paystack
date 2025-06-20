@@ -20,7 +20,7 @@ type ChargeClient struct {
 //
 //	chargeClient := p.NewChargeClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewChargeClient(options ...ClientOptions) *ChargeClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Charges
 }
 

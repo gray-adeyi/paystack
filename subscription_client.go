@@ -20,7 +20,7 @@ type SubscriptionClient struct {
 //
 //	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>")
 func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 
 	return client.Subscriptions
 }

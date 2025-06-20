@@ -20,7 +20,7 @@ type SettlementClient struct {
 //
 //	sClient := p.NewSettlementClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewSettlementClient(options ...ClientOptions) *SettlementClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Settlements
 }
 

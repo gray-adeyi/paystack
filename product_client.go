@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // ProductClient interacts with endpoints related to paystack product resource that allows you to create and
@@ -20,7 +22,7 @@ type ProductClient struct {
 //
 // prodClient := p.NewProductClient(p.WithSeretKey("<paystack-secret-key>"))
 func NewProductClient(options ...ClientOptions) *ProductClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Products
 }
 
@@ -63,7 +65,7 @@ func NewProductClient(options ...ClientOptions) *ProductClient {
 //		panic(err)
 //	}
 //	fmt.Println(data)
-func (p *ProductClient) Create(ctx context.Context, name string, description string, price int, currency string, response any,
+func (p *ProductClient) Create(ctx context.Context, name string, description string, price int, currency enum.Currency, response any,
 	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"name":        name,

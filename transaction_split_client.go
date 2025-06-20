@@ -21,7 +21,7 @@ type TransactionSplitClient struct {
 //
 //	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransactionSplitClient(options ...ClientOptions) *TransactionSplitClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.TransactionSplits
 }
 

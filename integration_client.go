@@ -19,7 +19,7 @@ type IntegrationClient struct {
 //
 //	intClient := p.NewIntegrationClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewIntegrationClient(options ...ClientOptions) *IntegrationClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Integration
 }
 

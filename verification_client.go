@@ -20,7 +20,7 @@ type VerificationClient struct {
 //
 //	vClient := p.NewVerificationClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewVerificationClient(options ...ClientOptions) *VerificationClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 	return client.Verification
 }
 

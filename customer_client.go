@@ -20,7 +20,7 @@ type CustomerClient struct {
 //
 //	customerClient := p.NewCustomerClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewCustomerClient(options ...ClientOptions) *CustomerClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 
 	return client.Customers
 }

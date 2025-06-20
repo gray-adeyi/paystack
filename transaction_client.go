@@ -20,7 +20,7 @@ type TransactionClient struct {
 //
 //	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransactionClient(options ...ClientOptions) *TransactionClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 
 	return client.Transactions
 
