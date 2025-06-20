@@ -12,91 +12,73 @@ type ApplePayClient struct {
 }
 
 // NewApplePayClient creates a ApplePayClient
-//
-// Example:
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	applePayClient := p.NewApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewApplePayClient(options ...ClientOptions) *ApplePayClient {
-	client := NewPaystackClient(options...)
+	client := NewClient(options...)
 
 	return client.ApplePay
 }
 
 // Register lets you register a top-level domain or subdomain for your Apple Pay Integration.
 //
+// Default: response models.Response[struct{}]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	applePayClient := p.ApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access an Apple Pay client from APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.ApplePay field is a `ApplePayClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.ApplePay.Register(context.TODO(),"<domainName>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := applePayClient.Register(context.TODO(),"<domainName>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[struct{}]
+//		if err := client.ApplePay.Register(context.TODO(),"<domainName>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (a *ApplePayClient) Register(ctx context.Context, domainName string, response any) error {
 	payload := map[string]string{"domainName": domainName}
 	return a.APICall(ctx, http.MethodPost, "/apple-pay/domain", payload, response)
 }
 
-// All lets you retrieve all registered domains on your Integration.
-// Returns an empty array if no domains have been added.
+// All retrieves all registered Apple Pay domains on your integration.
+//
+// It returns an empty array if no domains have been added.
+//
+// Default response: models.Response[models.ApplePayDomains]
 //
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	applePayClient := p.NewApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access an Apple Pay client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.ApplePay field is a `ApplePayClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.ApplePay.All(context.TODO())
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to use cursor, you can write it like so.
-//	// resp, err := applePayClient.All(context.TODO(),p.WithQuery("use_cursor","true"))
+//		var response models.Response[models.ApplePayDomains]
+//		if err := client.ApplePay.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/apple-pay/#list-domains for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := applePayClient.All(context.TODO())
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.ApplePay.All(context.TODO(), &response, p.WithQuery("use_cursor", "true"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/apple-pay/
 func (a *ApplePayClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/apple-pay/domain", queries...)
 	return a.APICall(ctx, http.MethodGet, url, nil, response)
@@ -104,35 +86,28 @@ func (a *ApplePayClient) All(ctx context.Context, response any, queries ...Query
 
 // Unregister lets you unregister a top-level domain or subdomain previously used for your Apple Pay Integration.
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	applePayClient := p.ApplePayClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access an Apple Pay client from APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.ApplePay field is a `ApplePayClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.ApplePay.Unregister(context.TODO(),"<domainName>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := applePayClient.Unregister(context.TODO(),"<domainName>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[struct{}]
+//		if err := client.ApplePay.Unregister(context.TODO(),"<domainName>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (a *ApplePayClient) Unregister(ctx context.Context, domainName string, response any) error {
 	payload := map[string]string{"domainName": domainName}
 	return a.APICall(ctx, http.MethodDelete, "/apple-pay/domain", payload, response)
