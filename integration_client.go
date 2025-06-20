@@ -12,12 +12,6 @@ type IntegrationClient struct {
 }
 
 // NewIntegrationClient creates an IntegrationClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	intClient := p.NewIntegrationClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewIntegrationClient(options ...ClientOptions) *IntegrationClient {
 	client := NewClient(options...)
 	return client.Integration
@@ -25,70 +19,56 @@ func NewIntegrationClient(options ...ClientOptions) *IntegrationClient {
 
 // Timeout lets you retrieve the payment session timeout on your Integration
 //
+// Default response: models.Response[models.IntegrationTimeout]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	intClient := p.NewIntegrationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access an Integration client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Integration field is a `IntegrationClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Integration.Timeout(context.TODO())
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := intClient.Timeout(context.TODO())
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[models.IntegrationTimeout]
+//		if err := client.Integration.Timeout(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (i *IntegrationClient) Timeout(ctx context.Context, response any) error {
 	return i.APICall(ctx, http.MethodGet, "/integration/payment_session_timeout", nil, response)
 }
 
 // UpdateTimeout lets you update the payment session timeout on your Integration
 //
+// Default response: models.Response[models.IntegrationTimeout]
+//
 // Example:
 //
 //	import (
-//		"fmt"
-//		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
 //		"context"
+//		"fmt"
+//
+//		p "github.com/gray-adeyi/paystack"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tcClient := p.NewIntegrationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access an Integration client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Integration field is a `IntegrationClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Integration.UpdateTimeout(context.TODO(),5)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tcClient.UpdateTimeout(context.TODO(),5)
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]any` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]any)
+//		var response models.Response[models.IntegrationTimeout]
+//		if err := client.Integration.UpdateTimeout(context.TODO(),5, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (i *IntegrationClient) UpdateTimeout(ctx context.Context, timeout int, response any) error {
 	payload := map[string]any{
 		"timeout": timeout,
