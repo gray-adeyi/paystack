@@ -3,6 +3,8 @@ package paystack
 import (
 	"context"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // TransferControlClient interacts with endpoints related to paystack transfer control resource that lets
@@ -12,12 +14,6 @@ type TransferControlClient struct {
 }
 
 // NewTransferControlClient creates a TransferControlClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransferControlClient(options ...ClientOptions) *TransferControlClient {
 	client := NewClient(options...)
 	return client.TransferControl
@@ -25,103 +21,86 @@ func NewTransferControlClient(options ...ClientOptions) *TransferControlClient {
 
 // Balance lets you retrieve the available balance on your Integration
 //
+// Default response: models.Response[[]models.IntegrationBalance]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer control client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferControl field is a `TransferControlClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferControl.Balance()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tcClient.Balance()
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[[]models.IntegrationBalance]
+//		if err := client.TransferControl.Balance(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TransferControlClient) Balance(ctx context.Context, response any) error {
 	return t.APICall(ctx, http.MethodGet, "/balance", nil, response)
 }
 
 // BalanceLedger lets you retrieve all pay-ins and pay-outs that occurred on your Integration
 //
+// Default response: models.Response[[]models.BalanceLedgerItem]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer control client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferControl field is a `TransferControlClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferControl.BalanceLedger()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tcClient.BalanceLedger()
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[[]models.BalanceLedgerItem]
+//		if err := client.TransferControl.BalanceLedger(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TransferControlClient) BalanceLedger(ctx context.Context, response any) error {
 	return t.APICall(ctx, http.MethodGet, "/balance/ledger", nil, response)
 }
 
-// ResendOTP lets you generate a new OTP and sends to customer in the event they are having trouble receiving one.
+// ResendOtp lets you generate a new OTP and sends to customer in the event they are having trouble receiving one.
+//
+// Default response: models.Response[struct{}]
 //
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer control client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferControl field is a `TransferControlClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferControl.ResendOTP("TRF_vsyqdmlzble3uii","resend_otp")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tcClient.ResendOTP("TRF_vsyqdmlzble3uii","resend_otp")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.TransferControl.ResendOtp(context.TODO(),"TRF_vsyqdmlzble3uii",enum.ReasonResendOtp, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransferControlClient) ResendOTP(ctx context.Context, transferCode string, reason string, response any) error {
+func (t *TransferControlClient) ResendOtp(ctx context.Context, transferCode string, reason enum.Reason, response any) error {
 	payload := map[string]any{
 		"transfer_code": transferCode,
 		"reason":        reason,
@@ -130,106 +109,88 @@ func (t *TransferControlClient) ResendOTP(ctx context.Context, transferCode stri
 	return t.APICall(ctx, http.MethodPost, "/transfer/resend_otp", payload, response)
 }
 
-// DisableOTP lets you complete Transfers without use of OTPs.
+// DisableOtp lets you complete Transfers without use of OTPs.
 // You will get an OTP to complete the request.
+//
+// Default response: models.Response[struct{}]
 //
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer control client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferControl field is a `TransferControlClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferControl.DisableOTP()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tcClient.DisableOTP()
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.TransferControl.DisableOtp(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransferControlClient) DisableOTP(ctx context.Context, response any) error {
+func (t *TransferControlClient) DisableOtp(ctx context.Context, response any) error {
 	return t.APICall(ctx, http.MethodPost, "/transfer/disable_otp", nil, response)
 }
 
-// FinalizeDisableOTP lets you finalize the request to disable OTP on your Transfers.
+// FinalizeDisableOtp lets you finalize the request to disable OTP on your Transfers.
+//
+// Default response: models.Response[struct{}]
 //
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer control client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferControl field is a `TransferControlClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferControl.FinalizeDisableOTP("<otp>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tcClient.FinalizeDisableOTP("<otp>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.TransferControl.FinalizeDisableOtp(context.TODO(),"<otp>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransferControlClient) FinalizeDisableOTP(ctx context.Context, otp string, response any) error {
+func (t *TransferControlClient) FinalizeDisableOtp(ctx context.Context, otp string, response any) error {
 	payload := map[string]any{"otp": otp}
 	return t.APICall(ctx, http.MethodPost, "/transfer/disable_otp", payload, response)
 }
 
-// EnableOTP lets you turn OTP requirement back on.
+// EnableOtp lets you turn OTP requirement back on.
+//
+// Default response: models.Response[struct{}]
 //
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tcClient := p.NewTransferControlClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer control client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferControl field is a `TransferControlClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferControl.EnableOTP()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tcClient.EnableOTP()
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.TransferControl.EnableOtp(context.TODO(),"<otp>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransferControlClient) EnableOTP(ctx context.Context, response any) error {
+func (t *TransferControlClient) EnableOtp(ctx context.Context, response any) error {
 	return t.APICall(ctx, http.MethodPost, "/transfer/enable_otp", nil, response)
 }
