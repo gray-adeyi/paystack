@@ -13,12 +13,6 @@ type SubscriptionClient struct {
 }
 
 // NewSubscriptionClient create a SubscriptionClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>")
 func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 	client := NewClient(options...)
 
