@@ -13,12 +13,6 @@ type TransferClient struct {
 }
 
 // NewTransferClient creates a TransferClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-// tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransferClient(options ...ClientOptions) *TransferClient {
 	client := NewClient(options...)
 	return client.Transfers
@@ -28,42 +22,34 @@ func NewTransferClient(options ...ClientOptions) *TransferClient {
 // Status of a transfer object returned will be pending if OTP is disabled.
 // In the event that an OTP is required, status will read otp.
 //
+// Default response: models.Response[models.Transfer]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the transfer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transfers field is a `TransferClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transfers.Initiate("balance",500000,"RCP_gx2wn530m0i3w3m")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Transfers.Initiate` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `reason`.
-//	// resp, err := tfClient.Initiate("balance",500000,"RCP_gx2wn530m0i3w3m", p.WithOptionalParameter("reason","Discount Refund"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/transfer/#initiate
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Transfer]
+//		if err := client.Transfers.Initiate(context.TODO(),"balance",500000,"RCP_gx2wn530m0i3w3m", &response); err != nil {
+//			panic(err)
+//		}
 //
-// resp, err := tfClient.Initiate("balance",500000,"RCP_gx2wn530m0i3w3m")
+//		fmt.Println(response)
 //
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.Transfers.Initiate(context.TODO(),"balance",500000,"RCP_gx2wn530m0i3w3m", &response, p.WithOptionalParameter("reason","Discount Refund"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/transfer/
 func (t *TransferClient) Initiate(ctx context.Context, source string, amount int, recipient string, response any,
 	optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
@@ -80,35 +66,28 @@ func (t *TransferClient) Initiate(ctx context.Context, source string, amount int
 
 // Finalize lets you finalize an initiated transfer
 //
+// Default response: models.Response[models.Transfer]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the transfer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transfers field is a `TransferClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transfers.Finalize("TRF_vsyqdmlzble3uii","928783")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tfClient.Finalize("TRF_vsyqdmlzble3uii","928783")
+//		var response models.Response[models.Transfer]
+//		if err := client.Transfers.Finalize(context.TODO(),"TRF_vsyqdmlzble3uii","928783", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
 func (t *TransferClient) Finalize(ctx context.Context, transferCode string, otp string, response any) error {
 	payload := map[string]any{
 		"transfer_code": transferCode,
@@ -121,50 +100,37 @@ func (t *TransferClient) Finalize(ctx context.Context, transferCode string, otp 
 // BulkInitiate lets you initiate multiple Transfers in a single request.
 // You need to disable the Transfers OTP requirement to use this endpoint.
 //
+// Default response: models.Response[[]models.BulkTransferItem]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the transfer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transfers field is a `TransferClient`
-//	// Therefore, this is possible
-//	// Transfers := []map[string]interface{
-//	//	{"amount": 20000,"reference": "588YtfftReF355894J","reason": "Why not?","recipient":"RCP_2tn9clt23s7qr28"},
-//	//	{"amount": 30000,"reference": "YunoTReF35e0r4J","reason": "Because I can","recipient":"RCP_1a25w1h3n0xctjg"},
-//	//	{"amount": 40000,"reason": "Coming right up","recipient": "RCP_aps2aibr69caua7"},
-//	}
-//	// resp, err := paystackClient.Transfers.BulkInitiate("balance", Transfers)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	Transfers := []map[string]interface{
-//		{"amount": 20000,"reference": "588YtfftReF355894J","reason": "Why not?","recipient":"RCP_2tn9clt23s7qr28"},
-//		{"amount": 30000,"reference": "YunoTReF35e0r4J","reason": "Because I can","recipient":"RCP_1a25w1h3n0xctjg"},
-//		{"amount": 40000,"reason": "Coming right up","recipient": "RCP_aps2aibr69caua7"},
-//	}
+// 		transfers := []map[string]any{
+//			{"amount": 20000,"reference": "588YtfftReF355894J","reason": "Why not?","recipient":"RCP_2tn9clt23s7qr28"},
+//			{"amount": 30000,"reference": "YunoTReF35e0r4J","reason": "Because I can","recipient":"RCP_1a25w1h3n0xctjg"},
+//			{"amount": 40000,"reason": "Coming right up","recipient": "RCP_aps2aibr69caua7"},
+//		}
+//		var response models.Response[[]models.BulkTransferItem]
+//		if err := client.Transfers.BulkInitiate(context.TODO(),"balance",transfers, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := tfClient.BulkInitiate("balance", Transfers)
-//
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
 func (t *TransferClient) BulkInitiate(ctx context.Context, source string, transfers, response any) error {
 	payload := map[string]any{
 		"source":    source,
-		"Transfers": transfers,
+		"transfers": transfers,
 	}
 
 	return t.APICall(ctx, http.MethodPost, "/transfer/bulk", payload, response)
@@ -172,40 +138,34 @@ func (t *TransferClient) BulkInitiate(ctx context.Context, source string, transf
 
 // All lets you retrieve all the Transfers made on your Integration.
 //
+// Default response: models.Response[[]models.Transfer]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transfers field is a `TransferClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transfers.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many Transfers to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := tfClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.Transfer]
+//		if err := client.Transfers.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/transfer/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := tfClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Transfers.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/transfer/
 func (t *TransferClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/transfer", queries...)
 	return t.APICall(ctx, http.MethodGet, url, nil, response)
@@ -213,68 +173,56 @@ func (t *TransferClient) All(ctx context.Context, response any, queries ...Query
 
 // FetchOne lets you retrieve the details of a transfer on your Integration.
 //
+// Default response: models.Response[models.Transfer]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transfers field is a `TransferClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transfers.FetchOne("<idOrCode>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tfClient.FetchOne("<idOrCode>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Transfer]
+//		if err := client.Transfers.FetchOne(context.TODO(),"<idOrCode>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TransferClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
 	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transfer/%s", idOrCode), nil, response)
 }
 
 // Verify lets you verify the status of a transfer on your Integration.
 //
+// Default response: models.Response[models.Transfer]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	tfClient := p.NewTransferClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transfers field is a `TransferClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transfers.Verify("<reference>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := tfClient.Verify("<reference>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Transfer]
+//		if err := client.Transfers.Verify(context.TODO(),"<reference>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TransferClient) Verify(ctx context.Context, reference string, response any) error {
 	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transfer/verify/%s", reference), nil, response)
 }
