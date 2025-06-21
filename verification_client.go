@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // VerificationClient interacts with endpoints related to paystack Verification resource
@@ -26,42 +28,28 @@ func NewVerificationClient(options ...ClientOptions) *VerificationClient {
 
 // ResolveAccount lets you confirm an account belongs to the right customer
 //
+// Default response: models.Response[models.BankAccountInfo]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	vClient := p.NewVerificationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a Verification client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Verification field is a `VerificationClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Verification.ResolveAccount(p.WithQuery("account_number","0022728151"),
-//	//	p.WithQuery("bank_code","063"))
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, you can write it like so.
-//	// resp, err := paystackClient.Verification.ResolveAccount(p.WithQuery("account_number","0022728151"),
-//	//	p.WithQuery("bank_code","063"))
+//		var response models.Response[models.BankAccountInfo]
+//		if err := client.Verification.ResolveAccount(context.TODO(), &response,p.WithQuery("account_number","0022728151"),p.WithQuery("bank_code","063")); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/verification/#resolve-account for supported query parameters
-//
-//	resp, err := vClient.ResolveAccount(p.WithQuery("account_number","0022728151"),
-//	p.WithQuery("bank_code","063"))
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
 func (v *VerificationClient) ResolveAccount(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/bank/resolve", queries...)
 	return v.APICall(ctx, http.MethodGet, url, nil, response)
@@ -69,45 +57,35 @@ func (v *VerificationClient) ResolveAccount(ctx context.Context, response any, q
 
 // ValidateAccount lets you confirm the authenticity of a customer's account number before sending money
 //
+// Default response: models.Response[models.AccountVerificationInfo]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	vClient := p.NewVerificationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a Verification client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Verification field is a `VerificationClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Verification.ValidateAccount("Ann Bron","0123456789","personal",
-//	//	"632005","ZA","identityNumber")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Verification.ValidateAccount` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `document_number`.
-//	// resp, err := vClient.CreateValidateAccount("Ann Bron","0123456789","personal", "632005","ZA",
-//	//	"identityNumber", p.WithOptionalParameter("document_number","1234567890123"))
+//		var response models.Response[models.AccountVerificationInfo]
+//		if err := client.Verification.ValidateAccount(context.TODO(),"Ann Bron","0123456789",enum.AccountTypePersonal,"632005",enum.CountrySouthAfrica,enum.DocumentIdentityNumber, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/verification/#validate-account
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		fmt.Println(response)
 //
-//	resp, err := vClient.ValidateAccount("Ann Bron","0123456789","personal","632005","ZA","identityNumber")
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.Verification.ValidateAccount(context.TODO(),"Ann Bron","0123456789",enum.AccountTypePersonal,"632005",enum.CountrySouthAfrica,enum.DocumentIdentityNumber, &response, p.WithOptionalParameter("document_number","1234567890123"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (v *VerificationClient) ValidateAccount(ctx context.Context, accountName string, accountNumber string, accountType string, bankCode string, countryCode string, documentType string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/verification/
+func (v *VerificationClient) ValidateAccount(ctx context.Context, accountName string, accountNumber string, accountType enum.AccountType, bankCode string, countryCode enum.Country, documentType enum.Document, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"account_name":   accountName,
 		"account_number": accountNumber,
@@ -122,36 +100,30 @@ func (v *VerificationClient) ValidateAccount(ctx context.Context, accountName st
 	return v.APICall(ctx, http.MethodGet, "/bank/validate", payload, response)
 }
 
-// ResolveBIN lets you retrieve more information about a customer's card
+// ResolveBin lets you retrieve more information about a customer's card
+//
+// Default response: models.Response[models.CardBin]
 //
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	vClient := p.NewVerificationClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a Verification client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Verification field is a `VerificationClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Verification.ResolveBIN("539983")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := vClient.ResolveAccount("539983")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.CardBin]
+//		if err := client.Verification.ResolveBin(context.TODO(),"539983", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (v *VerificationClient) ResolveBIN(ctx context.Context, bin string, response any) error {
+func (v *VerificationClient) ResolveBin(ctx context.Context, bin string, response any) error {
 	return v.APICall(ctx, http.MethodGet, fmt.Sprintf("/decision/bin/%s", bin), nil, response)
 }
