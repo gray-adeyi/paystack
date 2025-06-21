@@ -1,1 +1,1 @@
-Create an issue in the project's repository with your question.
+Create an [issue](https://github.com/gray-adeyi/paystack/issues/new) with your question.

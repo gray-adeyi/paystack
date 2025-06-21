@@ -1,5 +1,5 @@
-site_name: Paystack Documentation
-site_description: paystack documentation
+site_name: Paystack Client (GO) Documentation
+site_description: Paystack Client (GO) documentation
 site_author: Gbenga Adeyi
 site_url: https://github.com/gray-adeyi/paystack
 theme:
