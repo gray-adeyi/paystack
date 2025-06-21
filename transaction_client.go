@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // TransactionClient interacts with endpoints related to paystack Transaction resource
@@ -13,12 +15,6 @@ type TransactionClient struct {
 }
 
 // NewTransactionClient creates a TransactionClient
-//
-// Example:
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransactionClient(options ...ClientOptions) *TransactionClient {
 	client := NewClient(options...)
 
@@ -28,40 +24,35 @@ func NewTransactionClient(options ...ClientOptions) *TransactionClient {
 
 // Initialize lets you initialize a transaction from your backend
 //
+// Default response: models.Response[models.InitTransaction]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.Initialize(200000, "johndoe@example.com")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `txnClient.Initialize` with `p.WithOptionalParameter`
-//	// for example say you want to specify the currency.
-//	// resp, err := txnClient.Initialize(200000, "johndoe@example.com", p.WithOptionalParameter("currency", "NGN"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/transaction/#initialize
-//	// Multiple optional parameters can be passed into `Initialize` each with it's `p.WithOptionalParameter`
-//	resp, err := txnClient.Initialize(200000, "johndoe@example.com")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.InitTransaction]
+//		if err := client.Transactions.Initialize(context.TODO(),200000, "johndoe@example.com", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Transactions.Initialize(context.TODO(),200000, "johndoe@example.com", &response, p.WithOptionalParameter("currency", string(enum.CurrencyNgn)))
 //	}
-//	fmt.Println(data)
+//
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/transaction/
 func (t *TransactionClient) Initialize(ctx context.Context, amount int, email string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"amount": amount,
@@ -76,74 +67,62 @@ func (t *TransactionClient) Initialize(ctx context.Context, amount int, email st
 
 // Verify lets you confirm the status of a transaction
 //
+// Default response: models.Response[models.Transaction]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.Verify("<reference>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := txnClient.Verify("<reference>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Transaction]
+//		if err := client.Transactions.Verify(context.TODO(),"<reference>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TransactionClient) Verify(ctx context.Context, reference string, response any) error {
 	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transaction/verify/%s", reference), nil, response)
 }
 
 // All lets you list Transactions carried out on your Integration
 //
+// Default response: models.Response[[]models.Transaction]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many Transactions to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := txnClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.Transaction]
+//		if err := client.Transactions.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/transaction/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := txnClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Transactions.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/transaction/
 func (t *TransactionClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/transaction", queries...)
 	return t.APICall(ctx, http.MethodGet, url, nil, response)
@@ -151,75 +130,62 @@ func (t *TransactionClient) All(ctx context.Context, response any, queries ...Qu
 
 // FetchOne lets you get the details of a transaction carried out on your Integration
 //
+// Default response: models.Response[models.Transaction]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.FetchOne("<id>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := txnClient.FetchOne("<id>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Transaction]
+//		if err := client.Transactions.FetchOne(context.TODO(),"<id>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TransactionClient) FetchOne(ctx context.Context, id string, response any) error {
 	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transaction/%s", id), nil, response)
 }
 
 // ChargeAuthorization lets you charge authorizations that are marked as reusable
 //
+// Default response: models.Response[models.Transaction]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.ChargeAuthorization(200000,"johndoe@example.com","AUTH_xxx")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `txnClient.ChargeAuthorization` with `p.WithOptionalParameter`
-//	// for example say you want to specify the currency and channel
-//	// resp, err := txnClient.ChargeAuthorization(200000, "johndoe@example.com",
-//	p.WithOptionalParameter("currency", "NGN"), p.WithOptionalParameter("channel","bank"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/transaction/#charge-authorization
-//	// Multiple optional parameters can be passed into `ChargeAuthorization` each with it's `p.WithOptionalParameter`
-//	resp, err := txnClient.ChargeAuthorization(200000,"johndoe@example.com","AUTH_xxx")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Transaction]
+//		if err := client.Transactions.ChargeAuthorization(context.TODO(),200000,"johndoe@example.com","AUTH_xxx", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Transactions.ChargeAuthorization(context.TODO(),200000,"johndoe@example.com","AUTH_xxx", &response, p.WithOptionalParameter("channel","bank"))
 //	}
-//	fmt.Println(data)
+//
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/transaction/
 func (t *TransactionClient) ChargeAuthorization(ctx context.Context, amount int, email string, authorizationCode string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"amount":             amount,
@@ -235,74 +201,62 @@ func (t *TransactionClient) ChargeAuthorization(ctx context.Context, amount int,
 
 // Timeline lets you view the timeline of a transaction
 //
+// Default response: models.Response[models.TransactionLog]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.Timeline("<idOrReference>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := txnClient.Timeline("<idOrReference>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.TransactionLog]
+//		if err := client.Transactions.Timeline(context.TODO(),"<idOrReference>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TransactionClient) Timeline(ctx context.Context, idOrReference string, response any) error {
 	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transaction/timeline/%s", idOrReference), nil, response)
 }
 
 // Total lets you retrieve the total amount received on your account
 //
+// Default response: models.Response[[]models.TransactionTotal]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.Total()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// Total also accepts queries, so say you want to customize how many Transactions to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := txnClient.Total(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.TransactionTotal]
+//		if err := client.Transactions.Total(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/transaction/#totals for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := txnClient.Total()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Transactions.Total(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/transaction/
 func (t *TransactionClient) Total(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/transaction/totals", queries...)
 	return t.APICall(ctx, http.MethodGet, url, nil, response)
@@ -310,40 +264,34 @@ func (t *TransactionClient) Total(ctx context.Context, response any, queries ...
 
 // Export lets you export a list of Transactions carried out on your Integration
 //
+// Default response: models.Response[[]models.TransactionExport]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.Export()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// Export also accepts queries, so say you want to customize how many Transactions to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := txnClient.Export(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.TransactionExport]
+//		if err := client.Transactions.Export(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/transaction/#export for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := txnClient.Export()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Transactions.Export(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/transaction/
 func (t *TransactionClient) Export(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/transaction/export", queries...)
 	return t.APICall(ctx, http.MethodGet, url, nil, response)
@@ -351,42 +299,36 @@ func (t *TransactionClient) Export(ctx context.Context, response any, queries ..
 
 // PartialDebit lets you retrieve part of a payment from a customer
 //
+// Default response: models.Response[[]models.Transaction]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	txnClient := p.NewTransactionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Transactions field is a `TransactionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.PartialDebit("AUTH_xxx","NGN","200000", "johndoe@example.com")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `txnClient.PartialDebit` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `at_least` optional parameter.
-//	// resp, err := txnClient.PartialDebit("AUTH_xxx","NGN","200000", "johndoe@example.com",
-//		p.WithOptionalParameter("at_least",100000))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/transaction/#partial-debit
-//	// Multiple optional parameters can be passed into `Initialize` each with it's `p.WithOptionalParameter`
-//	resp, err := txnClient.PartialDebit("AUTH_xxx","NGN","200000", "johndoe@example.com")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[[]models.Transaction]
+//		if err := client.Transactions.PartialDebit(context.TODO(),"AUTH_xxx",enum.CurrencyNgn,"200000", "johndoe@example.com", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With query parameters
+//		// err := client.Transactions.PartialDebit(context.TODO(), "AUTH_xxx",enum.CurrencyNgn,"200000", "johndoe@example.com", &response,p.WithOptionalParameter("at_least",100000))
 //	}
-//	fmt.Println(data)
-func (t *TransactionClient) PartialDebit(ctx context.Context, authorizationCode string, currency string, amount string, email string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+//
+// For supported query parameters, see:
+// https://paystack.com/docs/api/transaction/
+func (t *TransactionClient) PartialDebit(ctx context.Context, authorizationCode string, currency enum.Currency, amount string, email string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
 	payload := map[string]any{
 		"authorization_code": authorizationCode,
 		"currency":           currency,
