@@ -14,12 +14,6 @@ type TerminalClient struct {
 }
 
 // NewTerminalClient creates a TerminalClient
-//
-// Example:
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTerminalClient(options ...ClientOptions) *TerminalClient {
 	client := NewClient(options...)
 	return client.Terminals
@@ -27,39 +21,30 @@ func NewTerminalClient(options ...ClientOptions) *TerminalClient {
 
 // SendEvent lets you send an event from your application to the Paystack Terminal
 //
+// Default response: models.Response[models.TerminalEventData]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a terminal client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Terminals field is a `TerminalClient`
-//	// Therefore, this is possible
-//	// payload := map[string]interface{}{
-//	//	"id": 7895939, "reference": 4634337895939 }
-//	// resp, err := paystackClient.Terminals.SendEvent("30",p.TerminalEventInvoice,"process", payload)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	payload := map[string]interface{}{
-//	"id": 7895939, "reference": 4634337895939 }
-//	resp, err := terminalClient.SendEvent("30",p.TerminalEventInvoice,"process", payload)
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.TerminalEventData]
+// 		data := map[string]any{"id": 7895939, "reference": 4634337895939}
+//		if err := client.Terminals.SendEvent(context.TODO(),"30",event.TerminalEventInvoice,enum.TerminalEventActionProcess,data, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TerminalClient) SendEvent(ctx context.Context, terminalId string, eventType enum.TerminalEvent, action string, data, response any) error {
+func (t *TerminalClient) SendEvent(ctx context.Context, terminalId string, eventType enum.TerminalEvent, action enum.TerminalEventAction, data, response any) error {
 	payload := map[string]any{
 		"type":   eventType,
 		"action": action,
@@ -71,110 +56,90 @@ func (t *TerminalClient) SendEvent(ctx context.Context, terminalId string, event
 
 // EventStatus lets you check the status of an event sent to the Terminal
 //
+// Default response: models.Response[models.TerminalEventStatusData]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a terminal client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Terminals field is a `TerminalClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Terminals.EventStatus("30","616d721e8c5cd40a0cdd54a6")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	payload := map[string]interface{}{
-//	"id": 7895939, "reference": 4634337895939 }
-//	resp, err := terminalClient.EventStatus("30","616d721e8c5cd40a0cdd54a6")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.TerminalEventStatusData]
+//		if err := client.Terminals.EventStatus(context.TODO(),"30","616d721e8c5cd40a0cdd54a6", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TerminalClient) EventStatus(ctx context.Context, terminalId string, eventId string, response any) error {
 	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s/event/%s", terminalId, eventId), nil, response)
 }
 
 // TerminalStatus lets you check the availability of a Terminal before sending an event to it
 //
+// Default response: models.Response[models.TerminalStatusData]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Terminals field is a `TerminalClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Terminals.TerminalStatus("30")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := terminalClient.TerminalStatus("30")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.TerminalStatusData]
+//		if err := client.Terminals.EventStatus(context.TODO(),"30", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TerminalClient) TerminalStatus(ctx context.Context, terminalId string, response any) error {
 	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s/presence", terminalId), nil, response)
 }
 
 // All lets you retrieve the Terminals available on your Integration
 //
+// Default response: models.Response[[]models.Terminal]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a terminal client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Terminals field is a `TerminalClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Transactions.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many Terminals to retrieve,
-//	// you can write it like so.
-//	// resp, err := txnClient.All(p.WithQuery("perPage","50"))
+//		var response models.Response[[]models.Terminal]
+//		if err := client.Terminals.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/terminal/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := terminalClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Terminals.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/terminal/
 func (t *TerminalClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/terminal", queries...)
 	return t.APICall(ctx, http.MethodGet, url, nil, response)
@@ -182,68 +147,56 @@ func (t *TerminalClient) All(ctx context.Context, response any, queries ...Query
 
 // FetchOne lets you get the details of a Terminal
 //
+// Default response: models.Response[models.Terminal]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a terminal client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Terminals field is a `TerminalClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Terminals.FetchOne("<terminalId>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := terminalClient.FetchOne("<terminalId>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Terminal]
+//		if err := client.Terminals.FetchOne(context.TODO(),"<terminalId>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TerminalClient) FetchOne(ctx context.Context, terminalId string, response any) error {
 	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/terminal/%s", terminalId), nil, response)
 }
 
 // Update lets you update the details of a Terminal
 //
+// Default response: models.Response[struc{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a terminal client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Terminals field is a `TerminalClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Terminals.Update("<terminalId>", "New Terminal","somewhere on earth")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := terminalClient.Update("<terminalId>", "New Terminal","somewhere on earth")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.Terminals.Update(context.TODO(),"<terminalId>", "New Terminal","somewhere on earth", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TerminalClient) Update(ctx context.Context, terminalId string, name string, address string, response any) error {
 	payload := map[string]any{
 		"name":    name,
@@ -255,34 +208,28 @@ func (t *TerminalClient) Update(ctx context.Context, terminalId string, name str
 
 // Commission lets you activate your debug device by linking it to your Integration
 //
+// Default response: models.Response[struc{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a terminal client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Terminals field is a `TerminalClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Terminals.Commission("<serialNumber>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := terminalClient.Commission("<serialNumber>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.Terminals.Commission(context.TODO(),"<serialNumber>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TerminalClient) Commission(ctx context.Context, serialNumber string, response any) error {
 	payload := map[string]any{
 		"serial_number": serialNumber,
@@ -293,34 +240,28 @@ func (t *TerminalClient) Commission(ctx context.Context, serialNumber string, re
 
 // Decommission lets you unlink your debug device from your Integration
 //
+// Default response: models.Response[struc{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	terminalClient := p.NewTerminalClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a terminal client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Terminals field is a `TerminalClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Terminals.Commission("<serialNumber>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := terminalClient.Commission("<serialNumber>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.Terminals.Decommission(context.TODO(),"<serialNumber>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
 func (t *TerminalClient) Decommission(ctx context.Context, serialNumber string, response any) error {
 	payload := map[string]string{
 		"serial_number": serialNumber,
