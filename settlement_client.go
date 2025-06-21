@@ -13,12 +13,6 @@ type SettlementClient struct {
 }
 
 // NewSettlementClient creates a SettlementClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	sClient := p.NewSettlementClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewSettlementClient(options ...ClientOptions) *SettlementClient {
 	client := NewClient(options...)
 	return client.Settlements
@@ -26,40 +20,34 @@ func NewSettlementClient(options ...ClientOptions) *SettlementClient {
 
 // All lets you retrieve Settlements made to your settlement accounts
 //
+// Default response: models.Response[[]models.Settlement]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	sClient := p.NewSettlementClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a settlement client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Settlements field is a `SettlementClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Settlements.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many payment pages to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := sClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.Settlement]
+//		if err := client.Settlements.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/settlement/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := sClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Settlements.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/settlement/
 func (s *SettlementClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/settlement", queries...)
 	return s.APICall(ctx, http.MethodGet, url, nil, response)
@@ -67,40 +55,34 @@ func (s *SettlementClient) All(ctx context.Context, response any, queries ...Que
 
 // AllTransactions lets you retrieve the Transactions that make up a particular settlement
 //
+// Default response: models.Response[[]models.Transaction]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	sClient := p.NewSettlementClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a settlement client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Settlements field is a `SettlementClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Settlements.AllTransactions("<settlementId>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many payment pages to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := sClient.AllTransactions("<settlementId>", p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.Transaction]
+//		if err := client.Settlements.AllTransactions(context.TODO(), "<settlementId>",&response); err != nil {
+//			panic(err)
+//		}
 //
-//	// see https://paystack.com/docs/api/settlement/#transactions for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := sClient.AllTransactions("<settlementId>")
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Settlements.AllTransactions(context.TODO(),"<settlementId>", &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
+// For supported query parameters, see:
+// https://paystack.com/docs/api/settlement/
 func (s *SettlementClient) AllTransactions(ctx context.Context, settlementId string, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl(fmt.Sprintf("/settlement/%s", settlementId), queries...)
 	return s.APICall(ctx, http.MethodGet, url, nil, response)
