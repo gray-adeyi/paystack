@@ -22,7 +22,7 @@ type Response[T any] struct {
 type Meta struct {
 	Total     int `json:"total"`
 	Skipped   int `json:"skipped"`
-	PerPage   int `json:"perPage"`
+	PerPage  string `json:"perPage"`
 	Page      int `json:"page"`
 	PageCount int `json:"pageCount"`
 }

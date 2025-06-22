@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-$ go get -U github.com/gray-adeyi/paystack
+go get -u github.com/gray-adeyi/paystack
 ```
 
 ## Usage
@@ -32,11 +32,17 @@ func main() {
 	var response models.Response[[]models.Transaction]
 
 	// Retrieve all transactions
-	if err := client.Transactions.All(context.Background(), &response); err != nil {
+	if err := client.Transactions.All(
+		context.Background(), 
+		&response,
+		 p.WithQuery("perPage", "1"),
+	); err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(response)
+	fmt.Println(response.Status)
+	fmt.Println(response.Message)
+	fmt.Println(response.Data)
 }
 ```
 

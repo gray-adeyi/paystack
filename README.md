@@ -11,23 +11,33 @@ An open source client for [Paystack](https://paystack.com) in GO.
 package main
 
 import (
-	p "github.com/gray-adeyi/paystack"
-	"github.com/gray-adeyi/paystack/models"
+	"context"
 	"fmt"
 	"log"
-	"context"
+
+	p "github.com/gray-adeyi/paystack"
+	"github.com/gray-adeyi/paystack/models"
 )
 
-func main(){
-	// Init a client to interact with paystack
+func main() {
+	// Initialize a Paystack client with your secret key
 	client := p.NewClient(p.WithSecretKey("<your-secret-key>"))
-	
-	// Retrieving all the transactions in you integration 
+
+	// Prepare a response model to hold the returned transactions
 	var response models.Response[[]models.Transaction]
-	if err := client.Transactions.All(context.Background(), &response); err != nil {
+
+	// Retrieve all transactions
+	if err := client.Transactions.All(
+		context.Background(), 
+		&response,
+		 p.WithQuery("perPage", "1"),
+	); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(response)
+
+	fmt.Println(response.Status)
+	fmt.Println(response.Message)
+	fmt.Println(response.Data)
 }
 ```
 
