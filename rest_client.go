@@ -140,6 +140,9 @@ func (a *restClient) unMarshalResponse(httpResponse *http.Response, result any) 
 	} else {
 		return errors.New("StatusCode field of the response parameter cannot be set")
 	}
+	if httpResponse.StatusCode < http.StatusOK || httpResponse.StatusCode >= http.StatusMultipleChoices {
+		return fmt.Errorf("Request failed with status: %d", httpResponse.StatusCode)
+	}
 	return nil
 }
 
