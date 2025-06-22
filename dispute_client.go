@@ -136,17 +136,17 @@ func (d *DisputeClient) AllTransactionDisputes(ctx context.Context, transactionI
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Disputes.Update(context.TODO(),"<id>","<referenceAmount>", &response,p.WithOptionalParameter("uploaded_filename","Disputes.pdf"))
+//		// err := client.Disputes.Update(context.TODO(),"<id>","<referenceAmount>", &response,p.WithOptionalPayload("uploaded_filename","Disputes.pdf"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/dispute/
 func (d *DisputeClient) Update(ctx context.Context, id string, referenceAmount int, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"reference_amount": referenceAmount,
 	}
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return d.APICall(ctx, http.MethodPut, fmt.Sprintf("/dispute/%s", id), payload, response)
@@ -177,21 +177,21 @@ func (d *DisputeClient) Update(ctx context.Context, id string, referenceAmount i
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Disputes.AddEvidence(context.TODO(),"<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product", &response,p.WithOptionalParameter("delivery_address", "3a ladoke street ogbomoso"))
+//		// err := client.Disputes.AddEvidence(context.TODO(),"<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product", &response,p.WithOptionalPayload("delivery_address", "3a ladoke street ogbomoso"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/dispute/
 func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmail string,
 	customerName string, customerPhone string, serviceDetails string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"customer_email":  customerEmail,
 		"customer_name":   customerName,
 		"customer_phone":  customerPhone,
 		"service_details": serviceDetails,
 	}
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return d.APICall(ctx, http.MethodPost, fmt.Sprintf("/dispute/%s/evidence", id), payload, response)
@@ -257,21 +257,21 @@ func (d *DisputeClient) UploadUrl(ctx context.Context, id string, response any, 
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Disputes.Resolve(context.TODO(),enum.ResolutionMerchantAccepted,"Merchant accepted","qesp8a4df1xejihd9x5q",1002, &response,p.WithOptionalParameter("evidence", "<evidenceId>"))
+//		// err := client.Disputes.Resolve(context.TODO(),enum.ResolutionMerchantAccepted,"Merchant accepted","qesp8a4df1xejihd9x5q",1002, &response,p.WithOptionalPayload("evidence", "<evidenceId>"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/dispute/
 func (d *DisputeClient) Resolve(ctx context.Context, id string, resolution enum.Resolution, message string,
 	refundAmount int, uploadedFilename string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"resolution":        resolution,
 		"message":           message,
 		"refund_amount":     refundAmount,
 		"uploaded_filename": uploadedFilename,
 	}
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return d.APICall(ctx, http.MethodPut, fmt.Sprintf("/dispute/%s/resolve", id), payload, response)

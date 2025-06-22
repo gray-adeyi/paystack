@@ -45,14 +45,14 @@ func NewSubAccountClient(options ...ClientOptions) *SubAccountClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.SubAccounts.Create(context.TODO(), "Sunshine Studios", "044", "0193274682", 18.2,"",&response,p.WithOptionalParameter("primary_contact_email","johndoe@example.com"))
+//		// err := client.SubAccounts.Create(context.TODO(), "Sunshine Studios", "044", "0193274682", 18.2,"",&response,p.WithOptionalPayload("primary_contact_email","johndoe@example.com"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/subaccount/
 func (s *SubAccountClient) Create(ctx context.Context, businessName string, settlementBank string,
 	accountNumber string, percentageCharge float32, description string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"business_name":     businessName,
 		"settlement_bank":   settlementBank,
@@ -61,7 +61,7 @@ func (s *SubAccountClient) Create(ctx context.Context, businessName string, sett
 		"description":       description,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return s.APICall(ctx, http.MethodPost, "/subaccount", payload, response)
@@ -155,18 +155,18 @@ func (s *SubAccountClient) FetchOne(ctx context.Context, idOrCode string, respon
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.SubAccounts.Update(context.TODO(),"<idOrCode>", "Sunshine Studios", "044", &response, p.WithOptionalParameter("primary_contact_email","johndoe@example.com"))
+//		// err := client.SubAccounts.Update(context.TODO(),"<idOrCode>", "Sunshine Studios", "044", &response, p.WithOptionalPayload("primary_contact_email","johndoe@example.com"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/subaccount/
-func (s *SubAccountClient) Update(ctx context.Context, idOrCode string, businessName string, settlementBank string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (s *SubAccountClient) Update(ctx context.Context, idOrCode string, businessName string, settlementBank string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"business_name":   businessName,
 		"settlement_bank": settlementBank,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return s.APICall(ctx, http.MethodPut, fmt.Sprintf("/subaccount/%s", idOrCode), payload, response)

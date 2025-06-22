@@ -43,19 +43,19 @@ func NewPaymentRequestClient(options ...ClientOptions) *PaymentRequestClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.PaymentRequests.Create(context.TODO(),"CUS_xwaj0txjryg393b", 500000, &response, p.WithOptionalParameter("due_date","2023-12-25"))
+//		// err := client.PaymentRequests.Create(context.TODO(),"CUS_xwaj0txjryg393b", 500000, &response, p.WithOptionalPayload("due_date","2023-12-25"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/payment-request/
 func (p *PaymentRequestClient) Create(ctx context.Context, customerIdOrCode string, amount int, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"customer": customerIdOrCode,
 		"amount":   amount,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return p.APICall(ctx, http.MethodPost, "/paymentrequest", payload, response)
@@ -265,19 +265,19 @@ func (p *PaymentRequestClient) Finalize(ctx context.Context, idOrCode string, se
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.PaymentRequests.Update(context.TODO(),"<idOrCode>", 50000, &response, p.WithOptionalParameter("description","update description"))
+//		// err := client.PaymentRequests.Update(context.TODO(),"<idOrCode>", 50000, &response, p.WithOptionalPayload("description","update description"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/payment-request/
 func (p *PaymentRequestClient) Update(ctx context.Context, idOrCode string, customerIdOrCode string,
-	amount int, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+	amount int, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"customer": customerIdOrCode,
 		"amount":   amount,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/paymentrequest/%s", idOrCode), payload, response)

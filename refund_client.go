@@ -44,17 +44,17 @@ func NewRefundClient(options ...ClientOptions) *RefundClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Refunds.Create(context.TODO(),"1641", &response, p.WithOptionalParameter("amount",500000))
+//		// err := client.Refunds.Create(context.TODO(),"1641", &response, p.WithOptionalPayload("amount",500000))
 //	}
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/refund/
 func (r *RefundClient) Create(ctx context.Context, transaction string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"transaction": transaction,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return r.APICall(ctx, http.MethodPost, "/refund", payload, response)

@@ -48,18 +48,18 @@ func NewTransactionClient(options ...ClientOptions) *TransactionClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Transactions.Initialize(context.TODO(),200000, "johndoe@example.com", &response, p.WithOptionalParameter("currency", string(enum.CurrencyNgn)))
+//		// err := client.Transactions.Initialize(context.TODO(),200000, "johndoe@example.com", &response, p.WithOptionalPayload("currency", string(enum.CurrencyNgn)))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/transaction/
-func (t *TransactionClient) Initialize(ctx context.Context, amount int, email string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (t *TransactionClient) Initialize(ctx context.Context, amount int, email string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"amount": amount,
 		"email":  email,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return t.APICall(ctx, http.MethodPost, "/transaction/initialize", payload, response)
@@ -181,19 +181,19 @@ func (t *TransactionClient) FetchOne(ctx context.Context, id string, response an
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Transactions.ChargeAuthorization(context.TODO(),200000,"johndoe@example.com","AUTH_xxx", &response, p.WithOptionalParameter("channel","bank"))
+//		// err := client.Transactions.ChargeAuthorization(context.TODO(),200000,"johndoe@example.com","AUTH_xxx", &response, p.WithOptionalPayload("channel","bank"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/transaction/
-func (t *TransactionClient) ChargeAuthorization(ctx context.Context, amount int, email string, authorizationCode string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (t *TransactionClient) ChargeAuthorization(ctx context.Context, amount int, email string, authorizationCode string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"amount":             amount,
 		"email":              email,
 		"authorization_code": authorizationCode,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return t.APICall(ctx, http.MethodPost, "/transaction/charge_authorization", payload, response)
@@ -323,12 +323,12 @@ func (t *TransactionClient) Export(ctx context.Context, response any, queries ..
 //		fmt.Println(response)
 //
 //		// With query parameters
-//		// err := client.Transactions.PartialDebit(context.TODO(), "AUTH_xxx",enum.CurrencyNgn,"200000", "johndoe@example.com", &response,p.WithOptionalParameter("at_least",100000))
+//		// err := client.Transactions.PartialDebit(context.TODO(), "AUTH_xxx",enum.CurrencyNgn,"200000", "johndoe@example.com", &response,p.WithOptionalPayload("at_least",100000))
 //	}
 //
 // For supported query parameters, see:
 // https://paystack.com/docs/api/transaction/
-func (t *TransactionClient) PartialDebit(ctx context.Context, authorizationCode string, currency enum.Currency, amount string, email string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (t *TransactionClient) PartialDebit(ctx context.Context, authorizationCode string, currency enum.Currency, amount string, email string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"authorization_code": authorizationCode,
 		"currency":           currency,
@@ -336,7 +336,7 @@ func (t *TransactionClient) PartialDebit(ctx context.Context, authorizationCode 
 		"email":              email,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return t.APICall(ctx, http.MethodPost, "/transaction/partial_debit", payload, response)

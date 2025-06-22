@@ -44,17 +44,17 @@ func NewPaymentPageClient(options ...ClientOptions) *PaymentPageClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.PaymentPages.Create(context.TODO(),"Buttercup Brunch", &response, p.WithOptionalParameter("amount",500000))
+//		// err := client.PaymentPages.Create(context.TODO(),"Buttercup Brunch", &response, p.WithOptionalPayload("amount",500000))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/page/
-func (p *PaymentPageClient) Create(ctx context.Context, name string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (p *PaymentPageClient) Create(ctx context.Context, name string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name": name,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return p.APICall(ctx, http.MethodPost, "/page", payload, response)
@@ -148,19 +148,19 @@ func (p *PaymentPageClient) FetchOne(ctx context.Context, idOrSlug string, respo
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.PaymentPages.Update(context.TODO(), "Buttercup Brunch", "description", &response, p.WithOptionalParameter("amount",500000))
+//		// err := client.PaymentPages.Update(context.TODO(), "Buttercup Brunch", "description", &response, p.WithOptionalPayload("amount",500000))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/page/
 func (p *PaymentPageClient) Update(ctx context.Context, idOrSlug string, name string, description string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name":        name,
 		"description": description,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/page/%s", idOrSlug), payload, response)

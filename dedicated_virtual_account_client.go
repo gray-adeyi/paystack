@@ -46,18 +46,18 @@ func NewDedicatedVirtualAccountClient(options ...ClientOptions) *DedicatedVirtua
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.DedicatedVirtualAccounts.Create(context.TODO(),"CUS_xr58yrr2ujlft9k", &response, p.WithOptionalParameter("preferred_bank","wema-bank"))
+//		// err := client.DedicatedVirtualAccounts.Create(context.TODO(),"CUS_xr58yrr2ujlft9k", &response, p.WithOptionalPayload("preferred_bank","wema-bank"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/dedicated-virtual-account/
 func (d *DedicatedVirtualAccountClient) Create(ctx context.Context, customerIdOrCode string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"customer": customerIdOrCode,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return d.APICall(ctx, http.MethodPost, "/dedicated_account", payload, response)
@@ -88,14 +88,14 @@ func (d *DedicatedVirtualAccountClient) Create(ctx context.Context, customerIdOr
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.DedicatedVirtualAccounts.Assign(context.TODO(),"janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", enum.CountryNigeria, &response, p.WithOptionalParameter("account_number","5273681014"))
+//		// err := client.DedicatedVirtualAccounts.Assign(context.TODO(),"janedoe@test.com","Jane", "Doe","Karen", "+2348100000000", "test-bank", enum.CountryNigeria, &response, p.WithOptionalPayload("account_number","5273681014"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/dedicated-virtual-account/
 func (d *DedicatedVirtualAccountClient) Assign(ctx context.Context, email string, firstName string, lastName string,
 	phone string, preferredBank string, country enum.Country, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"email":          email,
 		"first_name":     firstName,
@@ -105,7 +105,7 @@ func (d *DedicatedVirtualAccountClient) Assign(ctx context.Context, email string
 		"country":        country,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return d.APICall(ctx, http.MethodPost, "/dedicated_account/assign", payload, response)
@@ -261,17 +261,17 @@ func (d *DedicatedVirtualAccountClient) Deactivate(ctx context.Context, id strin
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.DedicatedVirtualAccounts.Split(context.TODO(),"<customerIdOrCode>",p.WithOptionalParameter("preferred_bank","wema-bank"))
+//		// err := client.DedicatedVirtualAccounts.Split(context.TODO(),"<customerIdOrCode>",p.WithOptionalPayload("preferred_bank","wema-bank"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/dedicated-virtual-account/
-func (d *DedicatedVirtualAccountClient) Split(ctx context.Context, customerIdOrCode string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (d *DedicatedVirtualAccountClient) Split(ctx context.Context, customerIdOrCode string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"customer": customerIdOrCode,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 

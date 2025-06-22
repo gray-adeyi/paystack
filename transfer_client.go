@@ -45,20 +45,20 @@ func NewTransferClient(options ...ClientOptions) *TransferClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Transfers.Initiate(context.TODO(),"balance",500000,"RCP_gx2wn530m0i3w3m", &response, p.WithOptionalParameter("reason","Discount Refund"))
+//		// err := client.Transfers.Initiate(context.TODO(),"balance",500000,"RCP_gx2wn530m0i3w3m", &response, p.WithOptionalPayload("reason","Discount Refund"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/transfer/
 func (t *TransferClient) Initiate(ctx context.Context, source string, amount int, recipient string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"source":    source,
 		"amount":    amount,
 		"recipient": recipient,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return t.APICall(ctx, http.MethodPost, "/transfer", payload, response)

@@ -46,12 +46,12 @@ func NewProductClient(options ...ClientOptions) *ProductClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Products.Create(context.TODO(),"Puff Puff", "Crispy flour ball with fluffy interior", 5000, enum.CurrencyNgn, &response, p.WithOptionalParameter("unlimited","true"))
+//		// err := client.Products.Create(context.TODO(),"Puff Puff", "Crispy flour ball with fluffy interior", 5000, enum.CurrencyNgn, &response, p.WithOptionalPayload("unlimited","true"))
 //	}
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/product/
 func (p *ProductClient) Create(ctx context.Context, name string, description string, price int, currency enum.Currency, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name":        name,
 		"description": description,
@@ -59,7 +59,7 @@ func (p *ProductClient) Create(ctx context.Context, name string, description str
 		"currency":    currency,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return p.APICall(ctx, http.MethodPost, "/product", payload, response)
@@ -154,9 +154,9 @@ func (p *ProductClient) FetchOne(ctx context.Context, id string, response any) e
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Products.Update(context.TODO(),"<id>", "Product Six", "Product Six Description",500000, enum.CurrencyUsd, &response, p.WithOptionalParameter("unlimited","true"))
+//		// err := client.Products.Update(context.TODO(),"<id>", "Product Six", "Product Six Description",500000, enum.CurrencyUsd, &response, p.WithOptionalPayload("unlimited","true"))
 //	}
-func (p *ProductClient) Update(ctx context.Context, id string, name string, description string, price int, currency enum.Currency, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (p *ProductClient) Update(ctx context.Context, id string, name string, description string, price int, currency enum.Currency, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name":        name,
 		"description": description,
@@ -164,7 +164,7 @@ func (p *ProductClient) Update(ctx context.Context, id string, name string, desc
 		"currency":    currency,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/product/%s", id), payload, response)

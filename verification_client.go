@@ -80,12 +80,12 @@ func (v *VerificationClient) ResolveAccount(ctx context.Context, response any, q
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Verification.ValidateAccount(context.TODO(),"Ann Bron","0123456789",enum.AccountTypePersonal,"632005",enum.CountrySouthAfrica,enum.DocumentIdentityNumber, &response, p.WithOptionalParameter("document_number","1234567890123"))
+//		// err := client.Verification.ValidateAccount(context.TODO(),"Ann Bron","0123456789",enum.AccountTypePersonal,"632005",enum.CountrySouthAfrica,enum.DocumentIdentityNumber, &response, p.WithOptionalPayload("document_number","1234567890123"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/verification/
-func (v *VerificationClient) ValidateAccount(ctx context.Context, accountName string, accountNumber string, accountType enum.AccountType, bankCode string, countryCode enum.Country, documentType enum.Document, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (v *VerificationClient) ValidateAccount(ctx context.Context, accountName string, accountNumber string, accountType enum.AccountType, bankCode string, countryCode enum.Country, documentType enum.Document, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"account_name":   accountName,
 		"account_number": accountNumber,
@@ -94,7 +94,7 @@ func (v *VerificationClient) ValidateAccount(ctx context.Context, accountName st
 		"country_code":   countryCode,
 		"document_type":  documentType,
 	}
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return v.APICall(ctx, http.MethodGet, "/bank/validate", payload, response)

@@ -44,19 +44,19 @@ func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Subscriptions.Create(context.TODO(),"CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx", &response, p.WithOptionalParameter("start_date","2023-10-16T00:30:13+01:00"))
+//		// err := client.Subscriptions.Create(context.TODO(),"CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx", &response, p.WithOptionalPayload("start_date","2023-10-16T00:30:13+01:00"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/subscription/
-func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan string, authorization string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan string, authorization string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"customer":      customer,
 		"plan":          plan,
 		"authorization": authorization,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return s.APICall(ctx, http.MethodPost, "/subscription", payload, response)

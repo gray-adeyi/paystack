@@ -37,7 +37,7 @@ func TestCanInitializeWithOptionalParameters(t *testing.T) {
 	client := getTransactionClient(t)
 	var r models.Response[any]
 	if err := client.Initialize(context.TODO(), 20000, "<email>", &r,
-		p.WithOptionalParameter("metadata", "{\"ref_id\":\"pot-5085072209\"}"),
+		p.WithOptionalPayload("metadata", "{\"ref_id\":\"pot-5085072209\"}"),
 	); err != nil {
 		t.Error(err)
 	}

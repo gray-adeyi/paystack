@@ -47,18 +47,18 @@ func NewPlanClient(options ...ClientOptions) *PlanClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Plans.Create(context.TODO(),"Monthly retainer", 500000, enum.IntervalMonthly, &response, p.WithOptionalParameter("description","a test description"))
+//		// err := client.Plans.Create(context.TODO(),"Monthly retainer", 500000, enum.IntervalMonthly, &response, p.WithOptionalPayload("description","a test description"))
 //	}
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/plan/
-func (p *PlanClient) Create(ctx context.Context, name string, amount int, interval enum.Interval, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (p *PlanClient) Create(ctx context.Context, name string, amount int, interval enum.Interval, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name":     name,
 		"amount":   amount,
 		"interval": interval,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return p.APICall(ctx, http.MethodPost, "/plan", payload, response)
@@ -152,19 +152,19 @@ func (p *PlanClient) FetchOne(ctx context.Context, idOrCode string, response any
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Plans.Update(context.TODO(),"<idOrCode>","Monthly retainer", 500000, enum.IntervalMonthly, &response, p.WithOptionalParameter("description","test description"))
+//		// err := client.Plans.Update(context.TODO(),"<idOrCode>","Monthly retainer", 500000, enum.IntervalMonthly, &response, p.WithOptionalPayload("description","test description"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/plan/
-func (p *PlanClient) Update(ctx context.Context, idOrCode string, name string, amount int, interval enum.Interval, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (p *PlanClient) Update(ctx context.Context, idOrCode string, name string, amount int, interval enum.Interval, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name":     name,
 		"amount":   amount,
 		"interval": interval,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/plan/%s", idOrCode), payload, response)

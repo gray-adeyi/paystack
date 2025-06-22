@@ -50,12 +50,12 @@ func NewTransactionSplitClient(options ...ClientOptions) *TransactionSplitClient
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Customers.Create(context.TODO(),"co-founders account",enum.SplitPercentage,enum.CurrencyNgn,subaccounts, &response, p.WithOptionalParameter("bearer_type","all"))
+//		// err := client.Customers.Create(context.TODO(),"co-founders account",enum.SplitPercentage,enum.CurrencyNgn,subaccounts, &response, p.WithOptionalPayload("bearer_type","all"))
 //	}
 // 
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/split/
-func (t *TransactionSplitClient) Create(ctx context.Context, name string, transactionSplitType enum.Split, currency enum.Currency, subaccounts, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (t *TransactionSplitClient) Create(ctx context.Context, name string, transactionSplitType enum.Split, currency enum.Currency, subaccounts, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name":              name,
 		"type":              transactionSplitType,
@@ -65,7 +65,7 @@ func (t *TransactionSplitClient) Create(ctx context.Context, name string, transa
 		// "bearer_subaccount": bearerSubaccount,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return t.APICall(ctx, http.MethodPost, "/split", payload, response)
@@ -159,18 +159,18 @@ func (t *TransactionSplitClient) FetchOne(ctx context.Context, id string, respon
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.TransfersSplits.Update(context.TODO(),"143", "co-authors account", true, &response,p.WithOptionalParameter("bearer_type","all"))
+//		// err := client.TransfersSplits.Update(context.TODO(),"143", "co-authors account", true, &response,p.WithOptionalPayload("bearer_type","all"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/split/
-func (t *TransactionSplitClient) Update(ctx context.Context, id string, name string, active bool, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (t *TransactionSplitClient) Update(ctx context.Context, id string, name string, active bool, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name":   name,
 		"active": active,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 

@@ -46,13 +46,13 @@ func NewTransferRecipientClient(options ...ClientOptions) *TransferRecipientClie
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.TransferRecipients.Create(context.TODO(),enum.RecipientTypeNuban,"Tolu Robert","01000000010", "058", &response, p.WithOptionalParameter("currency","NGN"))
+//		// err := client.TransferRecipients.Create(context.TODO(),enum.RecipientTypeNuban,"Tolu Robert","01000000010", "058", &response, p.WithOptionalPayload("currency","NGN"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/transfer-recipient/
 func (t *TransferRecipientClient) Create(ctx context.Context, recipientType enum.RecipientType, name string, accountNumber string,
-	bankCode string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+	bankCode string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"type":           recipientType,
 		"name":           name,
@@ -60,7 +60,7 @@ func (t *TransferRecipientClient) Create(ctx context.Context, recipientType enum
 		"bank_code":      bankCode,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return t.APICall(ctx, http.MethodPost, "/transferrecipient", payload, response)
@@ -193,18 +193,18 @@ func (t *TransferRecipientClient) FetchOne(ctx context.Context, idOrCode string,
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.TransferRecipients.Update(context.TODO(),"<idOrCode>", "Rick Sanchez", &response, p.WithOptionalParameter("email","johndoe@example.com"))
+//		// err := client.TransferRecipients.Update(context.TODO(),"<idOrCode>", "Rick Sanchez", &response, p.WithOptionalPayload("email","johndoe@example.com"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/transfer-recipient/
 func (t *TransferRecipientClient) Update(ctx context.Context, idOrCode string, name string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"name": name,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/transferrecipient/%s", idOrCode), payload, response)

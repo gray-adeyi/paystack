@@ -43,18 +43,18 @@ func NewChargeClient(options ...ClientOptions) *ChargeClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Charges.Create(context.TODO(),"johndoe@example.com",100000, &response,p.WithOptionalParameter("authorization_code","AUTH_xxx"))
+//		// err := client.Charges.Create(context.TODO(),"johndoe@example.com",100000, &response,p.WithOptionalPayload("authorization_code","AUTH_xxx"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/charge/
-func (c *ChargeClient) Create(ctx context.Context, email string, amount string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (c *ChargeClient) Create(ctx context.Context, email string, amount string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"email":  email,
 		"amount": amount,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 

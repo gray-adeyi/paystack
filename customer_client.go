@@ -46,19 +46,19 @@ func NewCustomerClient(options ...ClientOptions) *CustomerClient {
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Customers.Create(context.TODO(),"johndoe@example.com","John","Doe", &response, p.WithOptionalParameter("phone","+2348123456789"))
+//		// err := client.Customers.Create(context.TODO(),"johndoe@example.com","John","Doe", &response, p.WithOptionalPayload("phone","+2348123456789"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/customer/
-func (c *CustomerClient) Create(ctx context.Context, email string, firstName string, lastName string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (c *CustomerClient) Create(ctx context.Context, email string, firstName string, lastName string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"email":      email,
 		"first_name": firstName,
 		"last_name":  lastName,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 
@@ -153,15 +153,15 @@ func (c *CustomerClient) FetchOne(ctx context.Context, emailOrCode string, respo
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Customers.Update(context.TODO(),"<code>", &response, p.WithOptionalParameter("first_name","John"))
+//		// err := client.Customers.Update(context.TODO(),"<code>", &response, p.WithOptionalPayload("first_name","John"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/customer/
-func (c *CustomerClient) Update(ctx context.Context, code string, response any, optionalPayloadParameters ...OptionalPayloadParameter) error {
+func (c *CustomerClient) Update(ctx context.Context, code string, response any, optionalPayloads ...OptionalPayload) error {
 	payload := make(map[string]any)
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 
@@ -194,14 +194,14 @@ func (c *CustomerClient) Update(ctx context.Context, code string, response any, 
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Customers.Validate(context.TODO(),"<code>", "Asta","Lavista","bank_account","",enum.CountryNigeria,"20012345677","007","0123456789", &response, , p.WithOptionalParameter("middle_name","Doe"))
+//		// err := client.Customers.Validate(context.TODO(),"<code>", "Asta","Lavista","bank_account","",enum.CountryNigeria,"20012345677","007","0123456789", &response, , p.WithOptionalPayload("middle_name","Doe"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/customer/
 func (c *CustomerClient) Validate(ctx context.Context, code string, firstName string, lastName string, identificationType string,
 	value string, country enum.Country, bvn string, bankCode string, accountNumber string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"first_name":     firstName,
 		"last_name":      lastName,
@@ -213,7 +213,7 @@ func (c *CustomerClient) Validate(ctx context.Context, code string, firstName st
 		"account_number": accountNumber,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 
@@ -245,18 +245,18 @@ func (c *CustomerClient) Validate(ctx context.Context, code string, firstName st
 //		fmt.Println(response)
 //
 //		// With optional parameters
-//		// err := client.Customers.Flag(context.TODO(),"CUS_xr58yrr2ujlft9k", &response, p.WithOptionalParameter("risk_action","allow"))
+//		// err := client.Customers.Flag(context.TODO(),"CUS_xr58yrr2ujlft9k", &response, p.WithOptionalPayload("risk_action","allow"))
 //	}
 //
 // For supported optional parameters, see:
 // https://paystack.com/docs/api/customer/
 func (c *CustomerClient) Flag(ctx context.Context, emailOrCode string, response any,
-	optionalPayloadParameters ...OptionalPayloadParameter) error {
+	optionalPayloads ...OptionalPayload) error {
 	payload := map[string]any{
 		"cutomer": emailOrCode,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 
