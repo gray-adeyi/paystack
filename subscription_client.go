@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -8,286 +9,239 @@ import (
 // SubscriptionClient interacts with endpoints related to paystack subscription resource that lets you
 // create and manage recurring payment on your Integration.
 type SubscriptionClient struct {
-	*baseAPIClient
+	*restClient
 }
 
 // NewSubscriptionClient create a SubscriptionClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>")
 func NewSubscriptionClient(options ...ClientOptions) *SubscriptionClient {
-	client := NewAPIClient(options...)
+	client := NewClient(options...)
 
 	return client.Subscriptions
 }
 
 // Create lets you create a subscription on your Integration
 //
+// Default response: models.Response[models.Subscription]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	subClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a subscription client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Subscriptions field is a `SubscriptionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Subscriptions.Create("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `SubAccounts.Create` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `start_date`.
-//	// resp, err := subClient.Create("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx",
-//	//	p.WithOptionalParameter("start_date","2023-10-16T00:30:13+01:00"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/subscription/#create
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Subscription]
+//		if err := client.Subscriptions.Create(context.TODO(),"CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx", &response); err != nil {
+//			panic(err)
+//		}
 //
-// resp, err := subClient.CreateCreate("CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx")
+//		fmt.Println(response)
 //
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.Subscriptions.Create(context.TODO(),"CUS_xnxdt6s1zg1f4nx", "PLN_gx2wn530m0i3w3m", "AUTH_xxx", &response, p.WithOptionalPayload("start_date","2023-10-16T00:30:13+01:00"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (s *SubscriptionClient) Create(customer string, plan string, authorization string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["customer"] = customer
-	payload["plan"] = plan
-	payload["authorization"] = authorization
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/subscription/
+func (s *SubscriptionClient) Create(ctx context.Context, customer string, plan string, authorization string, response any, optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
+		"customer":      customer,
+		"plan":          plan,
+		"authorization": authorization,
+	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return s.APICall(http.MethodPost, "/subscription", payload)
+	return s.APICall(ctx, http.MethodPost, "/subscription", payload, response)
 }
 
 // All lets you retrieve Subscriptions available on your Integration
 //
+// Default response: models.Response[[]models.Subscription]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a subscription client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Subscriptions field is a `SubscriptionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Subscriptions.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many Subscriptions to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := subClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.Subscription]
+//		if err := client.Subscriptions.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-// // see https://paystack.com/docs/api/subscription/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := subClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Subscriptions.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (s *SubscriptionClient) All(queries ...Query) (*Response, error) {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/subscription/
+func (s *SubscriptionClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/subscription", queries...)
-	return s.APICall(http.MethodGet, url, nil)
+	return s.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve details of a subscription on your Integration
 //
+// Default response: models.Response[models.Subscription]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a subscription client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Subscriptions field is a `SubscriptionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.SubAccounts.FetchOne("<idOrCode>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := subClient.FetchOne("<idOrCode>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Subscription]
+//		if err := client.Subscriptions.FetchOne(context.TODO(),"<idOrCode>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (s *SubscriptionClient) FetchOne(idOrCode string) (*Response, error) {
-	return s.APICall(http.MethodGet, fmt.Sprintf("/subscription/%s", idOrCode), nil)
+func (s *SubscriptionClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subscription/%s", idOrCode), nil, response)
 }
 
 // Enable lets you enable a subscription on your Integration
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a subscription client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Subscriptions field is a `SubscriptionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.SubAccounts.Enable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := subClient.Enable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.Subscriptions.Enable(context.TODO(),"SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (s *SubscriptionClient) Enable(code string, token string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["code"] = code
-	payload["token"] = token
-	return s.APICall(http.MethodPost, "/subscription/enable", payload)
+func (s *SubscriptionClient) Enable(ctx context.Context, code string, token string, response any) error {
+	payload := map[string]any{
+		"code":  code,
+		"token": token,
+	}
+
+	return s.APICall(ctx, http.MethodPost, "/subscription/enable", payload, response)
 }
 
 // Disable lets you disable a subscription on your Integration
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a subscription client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Subscriptions field is a `SubscriptionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.SubAccounts.Disable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := subClient.Disable("SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.Subscriptions.Disable(context.TODO(),"SUB_vsyqdmlzble3uii", "d7gofp6yppn3qz7", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (s *SubscriptionClient) Disable(code string, token string) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["code"] = code
-	payload["token"] = token
-	return s.APICall(http.MethodPost, "/subscription/disable", payload)
+func (s *SubscriptionClient) Disable(ctx context.Context, code string, token string, response any) error {
+	payload := map[string]any{
+		"code":  code,
+		"token": token,
+	}
+	return s.APICall(ctx, http.MethodPost, "/subscription/disable", payload, response)
 }
 
 // GenerateLink lets you generate a link for updating the card on a subscription
 //
+// Default response: models.Response[models.SubscriptionLink]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a subscription client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Subscriptions field is a `SubscriptionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.SubAccounts.GenerateLink("SUB_vsyqdmlzble3uii")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := subClient.GenerateLink("SUB_vsyqdmlzble3uii")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.SubscriptionLink]
+//		if err := client.Subscriptions.GenerateLink(context.TODO(),"SUB_vsyqdmlzble3uii", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (s *SubscriptionClient) GenerateLink(code string) (*Response, error) {
-	return s.APICall(http.MethodGet, fmt.Sprintf("/subscription/%s/manage/link/", code), nil)
+func (s *SubscriptionClient) GenerateLink(ctx context.Context, code string, response any) error {
+	return s.APICall(ctx, http.MethodGet, fmt.Sprintf("/subscription/%s/manage/link/", code), nil, response)
 }
 
 // SendLink lets you email a customer a link for updating the card on their subscription
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	subClient := p.NewSubscriptionClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a subscription client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Subscriptions field is a `SubscriptionClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.SubAccounts.SendLink("SUB_vsyqdmlzble3uii")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := subClient.SendLink("SUB_vsyqdmlzble3uii")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.Subscriptions.SendLink(context.TODO(),"SUB_vsyqdmlzble3uii", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (s *SubscriptionClient) SendLink(code string) (*Response, error) {
-	return s.APICall(http.MethodPost, fmt.Sprintf("/subscription/%s/manage/email/", code), nil)
+func (s *SubscriptionClient) SendLink(ctx context.Context, code string, response any) error {
+	return s.APICall(ctx, http.MethodPost, fmt.Sprintf("/subscription/%s/manage/email/", code), nil, response)
 }

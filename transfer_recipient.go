@@ -1,280 +1,239 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // TransferRecipientClient interacts with endpoints related to paystack transfer recipient resource
 // that lets you create and manage beneficiaries that you send money to.
 type TransferRecipientClient struct {
-	*baseAPIClient
+	*restClient
 }
 
 // NewTransferRecipientClient creates a TransferRecipientClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransferRecipientClient(options ...ClientOptions) *TransferRecipientClient {
-	client := NewAPIClient(options...)
+	client := NewClient(options...)
 	return client.TransferRecipients
 }
 
 // Create lets you create a new recipient. A duplicate account number will lead to the retrieval of the existing record.
 //
+// Default response: models.Response[models.TransferRecipient]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the transfer recipient client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferRecipients field is a `TransferRecipientClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferRecipients.Create("nuban","Tolu Robert","01000000010", "058")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `PaymentPages.Create` with `p.WithOptionalParameter`
-//	// for example, say you want to specify the `currency`.
-//	// resp, err := ppClient.Create("nuban","Tolu Robert","01000000010", "058", p.WithOptionalParameter("currency","NGN"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/transfer-recipient/#create
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.TransferRecipient]
+//		if err := client.TransferRecipients.Create(context.TODO(),enum.RecipientTypeNuban,"Tolu Robert","01000000010", "058", &response); err != nil {
+//			panic(err)
+//		}
 //
-// resp, err := trClient.Create("nuban","Tolu Robert","01000000010", "058")
+//		fmt.Println(response)
 //
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.TransferRecipients.Create(context.TODO(),enum.RecipientTypeNuban,"Tolu Robert","01000000010", "058", &response, p.WithOptionalPayload("currency","NGN"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (t *TransferRecipientClient) Create(recipientType string, name string, accountNumber string,
-	bankCode string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["type"] = recipientType
-	payload["name"] = name
-	payload["account_number"] = accountNumber
-	payload["bank_code"] = bankCode
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/transfer-recipient/
+func (t *TransferRecipientClient) Create(ctx context.Context, recipientType enum.RecipientType, name string, accountNumber string,
+	bankCode string, response any, optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
+		"type":           recipientType,
+		"name":           name,
+		"account_number": accountNumber,
+		"bank_code":      bankCode,
+	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(http.MethodPost, "/transferrecipient", payload)
+	return t.APICall(ctx, http.MethodPost, "/transferrecipient", payload, response)
 }
 
 // BulkCreate lets you create multiple transfer recipients in batches. A duplicate account number will lead to the retrieval of the existing record.
 //
+// Default response: models.Response[models.TransferRecipientBulkCreateData]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the transfer recipient client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferRecipients field is a `TransferRecipientClient`
-//	// Therefore, this is possible
-//	//	batch := []map[string]interface{}{
-//	//	{"type":"nuban", "name" : "Habenero Mundane", "account_number": "0123456789","bank_code":"033","currency": "NGN"},
-//	//	{"type":"nuban","name" : "Soft Merry","account_number": "98765432310","bank_code": "50211","currency": "NGN"},
-//	//	}
-//	//	resp, err := paystackClient.TransferRecipients.BulkCreate(batch)
-//
-//	batch := []map[string]interface{}{
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
+//		
+// 		batch := []map[string]any{
 //		{"type":"nuban", "name" : "Habenero Mundane", "account_number": "0123456789","bank_code":"033","currency": "NGN"},
 //		{"type":"nuban","name" : "Soft Merry","account_number": "98765432310","bank_code": "50211","currency": "NGN"},
 //		}
+// 
+//		var response models.Response[models.TransferRecipientBulkCreateData]
+//		if err := client.TransferRecipients.BulkCreate(context.TODO(),batch, &response); err != nil {
+//			panic(err)
+//		}
 //
-// resp, err := trClient.BulkCreate(batch)
-//
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (t *TransferRecipientClient) BulkCreate(batch interface{}) (*Response, error) {
-	payload := make(map[string]interface{})
+func (t *TransferRecipientClient) BulkCreate(ctx context.Context, batch, response any) error {
+	payload := map[string]any{
+		"batch": batch,
+	}
 	payload["batch"] = batch
 
-	return t.APICall(http.MethodPost, "/transferrecipient/bulk", payload)
+	return t.APICall(ctx, http.MethodPost, "/transferrecipient/bulk", payload, response)
 }
 
 // All lets you retrieve transfer recipients available on your Integration
 //
+// Default response: models.Response[[]models.TransferRecipient]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer recipient client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferRecipients field is a `TransferRecipientClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferRecipients.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many payment pages to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := trClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.TransferRecipient]
+//		if err := client.TranferRecipients.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-// // see https://paystack.com/docs/api/transfer-recipient/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := trClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.TransferRecipients.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (t *TransferRecipientClient) All(queries ...Query) (*Response, error) {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/transfer-recipient/
+func (t *TransferRecipientClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/transferrecipient", queries...)
-	return t.APICall(http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve the details of a transfer recipient
 //
+// Default response: models.Response[models.TranferRecipient]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer recipient client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferRecipients field is a `TransferRecipientClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferRecipients.FetchOne("<idOrSlug>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := trClient.FetchOne("<idOrCode>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.TransferRecipient]
+//		if err := client.TransferRecipients.FetchOne(context.TODO(),"<idOrCode>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransferRecipientClient) FetchOne(idOrCode string) (*Response, error) {
-	return t.APICall(http.MethodGet, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil)
+func (t *TransferRecipientClient) FetchOne(ctx context.Context, idOrCode string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil, response)
 }
 
 // Update lets you update transfer recipients available on your Integration
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer recipient client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferRecipients field is a `TransferClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransferRecipients.Update("<idOrCode>", "Rick Sanchez")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `TransferRecipients.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `email`.
-//	// resp, err := trClient.Create("<idOrCode>", "Rick Sanchez", p.WithOptionalParameter("email","johndoe@example.com"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/transfer-recipient/#update
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[struct{}]
+//		if err := client.TransferRecipients.Update(context.TODO(),"<idOrCode>", "Rick Sanchez", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := trClient.Update("<idOrCode>", "Rick Sanchez")
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.TransferRecipients.Update(context.TODO(),"<idOrCode>", "Rick Sanchez", &response, p.WithOptionalPayload("email","johndoe@example.com"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (t *TransferRecipientClient) Update(idOrCode string, name string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["name"] = name
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/transfer-recipient/
+func (t *TransferRecipientClient) Update(ctx context.Context, idOrCode string, name string, response any,
+	optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
+		"name": name,
+	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(http.MethodPut, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil)
+	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/transferrecipient/%s", idOrCode), payload, response)
 }
 
 // Delete lets you delete a transfer recipient (sets the transfer recipient to inactive)
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	trClient := p.NewTransferRecipientClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transfer recipient client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransferRecipients field is a `TransferClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.PaymentPages.Delete("<idOrCode>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := trClient.Delete("<idOrCode>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.TransferRecipients.Delete(context.TODO(),"<idOrCode>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransferRecipientClient) Delete(idOrCode string) (*Response, error) {
-	return t.APICall(http.MethodDelete, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil)
+func (t *TransferRecipientClient) Delete(ctx context.Context, idOrCode string, response any) error {
+	return t.APICall(ctx, http.MethodDelete, fmt.Sprintf("/transferrecipient/%s", idOrCode), nil, response)
 }

@@ -1,0 +1,80 @@
+site_name: Paystack Client (GO) Documentation
+site_description: Paystack Client (GO) documentation
+site_author: Gbenga Adeyi
+site_url: https://github.com/gray-adeyi/paystack
+theme:
+  name: "material"
+  palette:
+    - media: '(prefers-color-scheme: light)'
+      scheme: paystack-light
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: paystack-dark
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tabs
+    - navigation.top
+    - navigation.sections
+    - navigation.path
+    - navigation.indexes
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.tabs.link
+    - content.code.copy
+    - content.code.select
+  icon:
+    repo: fontawesome/brands/github-alt
+  logo: assets/paystack.svg
+  favicon: assets/paystack.svg
+  language: en
+repo_name: gray-adeyi/paystack
+repo_url: https://github.com/gray-adeyi/paystack
+
+plugins:
+  - mike:
+      alias_type: symlink
+      redirect_template: null
+      deploy_prefix: ''
+      canonical_version: latest
+      version_selector: true
+      css_dir: css
+      javascript_dir: js
+  - search
+  - glightbox
+  
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - tables
+
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/gray-adeyi/paystack
+
+extra_css:
+  - stylesheets/extra.css
+  
+nav:
+  - Home: index.md
+  - "Get Started": get-started.md
+  - Examples: examples.md
+  - "API Reference": api-reference.md
+  - FAQs: faqs.md

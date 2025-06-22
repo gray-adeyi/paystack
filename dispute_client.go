@@ -1,369 +1,313 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // DisputeClient interacts with endpoint related to paystack dispute resource that lets you
 // manage transaction Disputes on your Integration.
 type DisputeClient struct {
-	*baseAPIClient
+	*restClient
 }
 
 // NewDisputeClient creates a DisputeClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewDisputeClient(options ...ClientOptions) *DisputeClient {
-	client := NewAPIClient(options...)
+	client := NewClient(options...)
 	return client.Disputes
 }
 
 // All lets you retrieve Disputes filed against you
 //
+// Default response: models.Response[[]models.Dispute]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a dispute client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Disputes field is a `DisputeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to specify the date range, you can write it like so.
-//	// resp, err := dClient.All(p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
+//		var response models.Response[[]models.Dispute]
+//		if err := client.Disputes.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-// // see https://paystack.com/docs/api/dispute/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := dClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Disputes.All(context.TODO(), &response,p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (d *DisputeClient) All(queries ...Query) (*Response, error) {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/dispute/
+func (d *DisputeClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/dispute", queries...)
-	return d.APICall(http.MethodGet, url, nil)
+	return d.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve more details about a dispute.
 //
+// Default response: models.Response[models.Dispute]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a payment page client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Disputes field is a `DisputeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.FetchOne("<id>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := dClient.FetchOne("<id>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Dispute]
+//		if err := client.Disputes.FetchOne(context.TODO(),"<id>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (d *DisputeClient) FetchOne(id string) (*Response, error) {
-	return d.APICall(http.MethodGet, fmt.Sprintf("/dispute/%s", id), nil)
+func (d *DisputeClient) FetchOne(ctx context.Context, id string, response any) error {
+	return d.APICall(ctx, http.MethodGet, fmt.Sprintf("/dispute/%s", id), nil, response)
 }
 
 // AllTransactionDisputes lets you retrieve Disputes for a particular transaction
 //
+// Default response: models.Response[[]models.Dispute]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a dispute client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Disputes field is a `DisputeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.AllTransactionDisputes("transactionId")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := dClient.AllTransactionDisputes("transactionId")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[[]models.Dispute]
+//		if err := client.Disputes.AllTransactionDisputes(context.TODO(),<transactionId>, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (d *DisputeClient) AllTransactionDisputes(transactionId string) (*Response, error) {
-	return d.APICall(http.MethodGet, fmt.Sprintf("/dispute/transaction/%s", transactionId), nil)
+func (d *DisputeClient) AllTransactionDisputes(ctx context.Context, transactionId string, response any) error {
+	return d.APICall(ctx, http.MethodGet, fmt.Sprintf("/dispute/transaction/%s", transactionId), nil, response)
 }
 
 // Update lets you update the details of a dispute on your Integration
 //
+// Default response: models.Response[models.Dispute]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a dispute client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Disputes field is a `DisputeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.Update("<id>", 1002)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `uploaded_filename`.
-//	// resp, err := dClient.Update("<id>", 1002, "description",
-//	//	p.WithOptionalParameter("uploaded_filename","Disputes.pdf"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/dispute/#update
-//	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Dispute]
+//		if err := client.Disputes.Update(context.TODO(),"<id>","<referenceAmount>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := dClient.Update("<id>", 1002)
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Disputes.Update(context.TODO(),"<id>","<referenceAmount>", &response,p.WithOptionalPayload("uploaded_filename","Disputes.pdf"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (d *DisputeClient) Update(id string, referenceAmount int,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := map[string]interface{}{
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/dispute/
+func (d *DisputeClient) Update(ctx context.Context, id string, referenceAmount int, response any,
+	optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
 		"reference_amount": referenceAmount,
 	}
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return d.APICall(http.MethodPut, fmt.Sprintf("/dispute/%s", id), payload)
+	return d.APICall(ctx, http.MethodPut, fmt.Sprintf("/dispute/%s", id), payload, response)
 }
 
 // AddEvidence lets you provide evidence for a dispute
 //
+// Default response: models.Response[models.DisputeEvidence]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a dispute client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Disputes field is a `DisputeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.AddEvidence("<id>", "johndoe@example.com",
-//	//	"John Doe", "5085072209", "claim for buying product")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `delivery_address`.
-//	// resp, err := dClient.AddEvidence("<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product",
-//	//	p.WithOptionalParameter("delivery_address", "3a ladoke street ogbomoso"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/dispute/#evidence
-//	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.DisputeEvidence]
+//		if err := client.Disputes.AddEvidence(context.TODO(),"<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := dClient.AddEvidence("<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product")
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Disputes.AddEvidence(context.TODO(),"<id>", "johndoe@example.com", "John Doe", "5085072209", "claim for buying product", &response,p.WithOptionalPayload("delivery_address", "3a ladoke street ogbomoso"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (d *DisputeClient) AddEvidence(id string, customerEmail string,
-	customerName string, customerPhone string, serviceDetails string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := map[string]interface{}{
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/dispute/
+func (d *DisputeClient) AddEvidence(ctx context.Context, id string, customerEmail string,
+	customerName string, customerPhone string, serviceDetails string, response any,
+	optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
 		"customer_email":  customerEmail,
 		"customer_name":   customerName,
 		"customer_phone":  customerPhone,
 		"service_details": serviceDetails,
 	}
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return d.APICall(http.MethodPost, fmt.Sprintf("/dispute/%s/evidence", id), payload)
+	return d.APICall(ctx, http.MethodPost, fmt.Sprintf("/dispute/%s/evidence", id), payload, response)
 }
 
-// UploadURL lets you retrieve Disputes for a particular transaction
+// UploadUrl lets you retrieve Disputes for a particular transaction
+//
+// Default response: models.Response[models.DisputeUploadInfo]
 //
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a dispute client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Disputes field is a `DisputeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.UploadURL()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to specify the `upload_filename`, you can write it like so.
-//	// resp, err := dClient.UploadURL("disputeId", p.WithQuery("upload_filename","filename.txt"))
+//		var response models.Response[models.DisputeUploadInfo]
+//		if err := client.Disputes.UploadUrl(context.TODO(),"<disputeId>", &response); err != nil {
+//			panic(err)
+//		}
 //
-// // see https://paystack.com/docs/api/dispute/#upload-url for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := dClient.UploadURL()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Disputes.UploadUrl(context.TODO(),"<disputeId>", &response,p.WithQuery("upload_filename","filename.pdf"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (d *DisputeClient) UploadURL(id string, queries ...Query) (*Response, error) {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/dispute/
+func (d *DisputeClient) UploadUrl(ctx context.Context, id string, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl(fmt.Sprintf("/dispute/%s/upload_url", id), queries...)
-	return d.APICall(http.MethodPost, url, nil)
+	return d.APICall(ctx, http.MethodPost, url, nil, response)
 }
 
 // Resolve lets you resolve a dispute on your Integration
 //
+// Default response: models.Response[models.Dispute]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a dispute client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Disputes field is a `DisputeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.AddEvidence("<id>", "johndoe@example.com",
-//	//	"John Doe", "5085072209", "claim for buying product")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Disputes.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `evidence`.
-//	// resp, err := dClient.AddEvidence("<id>", "johndoe@example.com","John Doe", "5085072209", "claim for buying product",
-//	//	p.WithOptionalParameter("evidence", "evidenceId"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/dispute/#evidence
-//	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Dispute]
+//		if err := client.Disputes.Resolve(context.TODO(),enum.ResolutionMerchantAccepted,"Merchant accepted","qesp8a4df1xejihd9x5q",1002, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := dClient.AddEvidence("<id>", "merchant-accepted", "Merchant accepted", 10000, "resolve.pdf")
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Disputes.Resolve(context.TODO(),enum.ResolutionMerchantAccepted,"Merchant accepted","qesp8a4df1xejihd9x5q",1002, &response,p.WithOptionalPayload("evidence", "<evidenceId>"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (d *DisputeClient) Resolve(id string, resolution string, message string,
-	refundAmount int, uploadedFilename string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := map[string]interface{}{
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/dispute/
+func (d *DisputeClient) Resolve(ctx context.Context, id string, resolution enum.Resolution, message string,
+	refundAmount int, uploadedFilename string, response any,
+	optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
 		"resolution":        resolution,
 		"message":           message,
 		"refund_amount":     refundAmount,
 		"uploaded_filename": uploadedFilename,
 	}
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return d.APICall(http.MethodPut, fmt.Sprintf("/dispute/%s/resolve", id), payload)
+	return d.APICall(ctx, http.MethodPut, fmt.Sprintf("/dispute/%s/resolve", id), payload, response)
 }
 
 // Export lets you export Disputes available on your Integration
 //
+// Default response: models.Response[models.DisputeExportInfo]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	dClient := p.NewDisputeClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a dispute client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Disputes field is a `DisputeClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Disputes.Export()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to specify the date range, you can write it like so.
-//	// resp, err := dClient.Export(p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
+//		var response models.Response[models.DisputeExportInfo]
+//		if err := client.Disputes.Export(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-// // see https://paystack.com/docs/api/dispute/#export for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := dClient.Export()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Disputes.Export(context.TODO(), &response,p.WithQuery("from","2023-01-01"), p.WithQuery("to","2023-12-31"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (d *DisputeClient) Export(queries ...Query) (*Response, error) {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/dispute/
+func (d *DisputeClient) Export(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/dispute/export", queries...)
-	return d.APICall(http.MethodGet, url, nil)
+	return d.APICall(ctx, http.MethodGet, url, nil, response)
 }

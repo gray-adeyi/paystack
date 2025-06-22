@@ -1,283 +1,243 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // TransactionSplitClient interacts with endpoints related to paystack Transaction Split resource
 // that allows you to split the settlement for a transaction across a payout account, and one or
 // more subaccounts.
 type TransactionSplitClient struct {
-	*baseAPIClient
+	*restClient
 }
 
 // NewTransactionSplitClient creates a TransactionSplitClient
-//
-// Example:
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewTransactionSplitClient(options ...ClientOptions) *TransactionSplitClient {
-	client := NewAPIClient(options...)
+	client := NewClient(options...)
 	return client.TransactionSplits
 }
 
 // Create lets you create a split payment on your Integration
+// 
+// Default response: models.Response[models.TransactionSplit]
 //
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction split client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
-//	// Therefore, this is possible
-//	// subaccounts := []map[string]interface{}{
-//	// {"subaccount": "ACCT_z3x6z3nbo14xsil", "share": 20},
-//	// {"subaccount": "ACCT_pwwualwty4nhq9d", "share": 80},
-//	// }
-//	// resp, err := paystackClient.TransactionSplits.Create("co-founders account","percentage","NGN",
-//	//	subaccounts,"subaccount","ACCT_hdl8abxl8drhrl3")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-// subaccounts := []map[string]interface{}{
-// {"subaccount": "ACCT_z3x6z3nbo14xsil", "share": 20},
-// {"subaccount": "ACCT_pwwualwty4nhq9d", "share": 80},
-// }
-// resp, err := transactionSplitClient.Create("co-founders account","percentage","NGN",
+// 		subaccounts := []map[string]any{
+//			{"subaccount": "ACCT_z3x6z3nbo14xsil", "share": 20},
+// 			{"subaccount": "ACCT_pwwualwty4nhq9d", "share": 80},
+// 		}
+//		var response models.Response[models.TransactionSplit]
+//		if err := client.TransactionSplits.Create(context.TODO(),"co-founders account",enum.SplitPercentage,enum.CurrencyNgn,subaccounts, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	subaccounts,"subaccount","ACCT_hdl8abxl8drhrl3")
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Customers.Create(context.TODO(),"co-founders account",enum.SplitPercentage,enum.CurrencyNgn,subaccounts, &response, p.WithOptionalPayload("bearer_type","all"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (t *TransactionSplitClient) Create(name string, transactionSplitType string, currency string, subaccounts interface{}, bearerType string, bearerSubaccount string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := map[string]interface{}{
+// 
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/split/
+func (t *TransactionSplitClient) Create(ctx context.Context, name string, transactionSplitType enum.Split, currency enum.Currency, subaccounts, response any, optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
 		"name":              name,
 		"type":              transactionSplitType,
 		"currency":          currency,
 		"subaccounts":       subaccounts,
-		"bearer_type":       bearerType,
-		"bearer_subaccount": bearerSubaccount,
+		// "bearer_type":       bearerType, // These fields seem to be optional and should be passed as optional parameters
+		// "bearer_subaccount": bearerSubaccount,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return t.APICall(http.MethodPost, "/split", payload)
+	return t.APICall(ctx, http.MethodPost, "/split", payload, response)
 }
 
 // All let you list the transaction splits available on your Integration
 //
+// Default response: models.Response[[]models.TransactionSplit]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction split client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransactionSplits.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to filter by the name of the split
-//	// and if it is active, you can write it like so.
-//	// resp, err := txnSplitClient.All(p.WithQuery("name","co-founders account"), p.WithQuery("active", true))
+//		var response models.Response[[]models.TransactionSplit]
+//		if err := client.TransactionSplits.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-// // see https://paystack.com/docs/api/split/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := txnSplitClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.TransfersSplits.All(context.TODO(), &response,p.WithQuery("name","co-founders account"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (t *TransactionSplitClient) All(queries ...Query) (*Response, error) {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/split/
+func (t *TransactionSplitClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/split", queries...)
-	return t.APICall(http.MethodGet, url, nil)
+	return t.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you get the details of a split on your Integration
 //
+// Default response: models.Response[models.TransactionSplit]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction split client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransactionSplits.FetchOne("<id>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := txnSplitClient.FetchOne("<id>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.TransactionSplit]
+//		if err := client.TransactionSplits.FetchOne(context.TODO(),"<id>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransactionSplitClient) FetchOne(id string) (*Response, error) {
-	return t.APICall(http.MethodGet, fmt.Sprintf("/split/%s", id), nil)
+func (t *TransactionSplitClient) FetchOne(ctx context.Context, id string, response any) error {
+	return t.APICall(ctx, http.MethodGet, fmt.Sprintf("/split/%s", id), nil, response)
 }
 
 // Update lets you update a transaction split details on your Integration
 //
+// Default response: models.Response[models.TransactionSplit]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction split client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransactionSplits.Update("143", "co-authors account", true)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `txnSplitClient.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `bearer_type`.
-//	// resp, err := txnSplitClient.Update("143", "co-authors account", true, p.WithOptionalParameter("bearer_type","all"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/split/#update
-//	// Multiple optional parameters can be passed into `Update` each with it's `p.WithOptionalParameter`
-//	resp, err := txnSplitClient.Update("143", "co-authors account", true)
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.TransactionSplit]
+//		if err := client.TransactionSplits.Update(context.TODO(), "143", "co-authors account", true,&response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.TransfersSplits.Update(context.TODO(),"143", "co-authors account", true, &response,p.WithOptionalPayload("bearer_type","all"))
 //	}
-//	fmt.Println(data)
-func (t *TransactionSplitClient) Update(id string, name string, active bool, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := map[string]interface{}{
+//
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/split/
+func (t *TransactionSplitClient) Update(ctx context.Context, id string, name string, active bool, response any, optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
 		"name":   name,
 		"active": active,
 	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
 
-	return t.APICall(http.MethodPut, fmt.Sprintf("/split/%s", id), payload)
+	return t.APICall(ctx, http.MethodPut, fmt.Sprintf("/split/%s", id), payload, response)
 }
 
 // Add lets you add a Subaccount to a Transaction Split, or update the share of an existing
 // Subaccount in a Transaction Split
 //
+// Default response: models.Response[models.TransactionSplit]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction split client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransactionSplits.Add("ACCT_hdl8abxl8drhrl3", 15)
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := txnSplitClient.Add("ACCT_hdl8abxl8drhrl3", 15)
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.TransactionSplit]
+//		if err := client.TransactionSplits.Add(context.TODO(),"ACCT_hdl8abxl8drhrl3", 15, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransactionSplitClient) Add(id string, subAccount string, share int) (*Response, error) {
-	payload := map[string]interface{}{
+func (t *TransactionSplitClient) Add(ctx context.Context, id string, subAccount string, share int, response any) error {
+	payload := map[string]any{
 		"subaccount": subAccount,
 		"share":      share,
 	}
-	return t.APICall(http.MethodPost, fmt.Sprintf("/split/%s/add", id), payload)
+	return t.APICall(ctx, http.MethodPost, fmt.Sprintf("/split/%s/add", id), payload, response)
 }
 
 // Remove lets you remove a subaccount from a transaction split
 //
+// Default response: models.Response[struct{}]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	txnSplitClient := p.NewTransactionSplitClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a transaction split client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.TransactionSplits field is a `TransactionSplitClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.TransactionSplits.Remove("143","ACCT_hdl8abxl8drhrl3")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := txnSplitClient.Remove("143","ACCT_hdl8abxl8drhrl3")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[struct{}]
+//		if err := client.TransactionSplits.Remove(context.TODO(),"143","ACCT_hdl8abxl8drhrl3", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (t *TransactionSplitClient) Remove(id string, subAccount string) (*Response, error) {
-	payload := map[string]interface{}{
+func (t *TransactionSplitClient) Remove(ctx context.Context, id string, subAccount string, response any) error {
+	payload := map[string]any{
 		"subaccount": subAccount,
 	}
 
-	return t.APICall(http.MethodPost, fmt.Sprintf("/split/%s/remove", id), payload)
+	return t.APICall(ctx, http.MethodPost, fmt.Sprintf("/split/%s/remove", id), payload, response)
 }

@@ -1,203 +1,171 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/gray-adeyi/paystack/enum"
 )
 
 // ProductClient interacts with endpoints related to paystack product resource that allows you to create and
 // manage inventories on your Integration.
 type ProductClient struct {
-	*baseAPIClient
+	*restClient
 }
 
 // NewProductClient creates a ProductClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-// prodClient := p.NewProductClient(p.WithSeretKey("<paystack-secret-key>"))
 func NewProductClient(options ...ClientOptions) *ProductClient {
-	client := NewAPIClient(options...)
+	client := NewClient(options...)
 	return client.Products
 }
 
 // Create lets you create a product on your Integration
 //
+// Default response: models.Response[models.Product]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	prodClient := p.NewProductClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a product client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Products field is a `ProductClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Products.Create("Puff Puff", "Crispy flour ball with fluffy interior", 5000, "NGN")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Products.Create` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `unlimited`.
-//	// resp, err := prodClient.Create("Puff Puff", "Crispy flour ball with fluffy interior", 5000, "NGN",
-//	//	p.WithOptionalParameter("unlimited","true"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/product/#create
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Product]
+//		if err := client.Products.Create(context.TODO(),"Puff Puff", "Crispy flour ball with fluffy interior", 5000, enum.CurrencyNgn, &response); err != nil {
+//			panic(err)
+//		}
 //
-// resp, err := prodClient.Create("Puff Puff", "Crispy flour ball with fluffy interior", 5000, "NGN")
+//		fmt.Println(response)
 //
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.Products.Create(context.TODO(),"Puff Puff", "Crispy flour ball with fluffy interior", 5000, enum.CurrencyNgn, &response, p.WithOptionalPayload("unlimited","true"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (p *ProductClient) Create(name string, description string, price int, currency string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["name"] = name
-	payload["description"] = description
-	payload["price"] = price
-	payload["currency"] = currency
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/product/
+func (p *ProductClient) Create(ctx context.Context, name string, description string, price int, currency enum.Currency, response any,
+	optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
+		"name":        name,
+		"description": description,
+		"price":       price,
+		"currency":    currency,
+	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(http.MethodPost, "/product", payload)
+	return p.APICall(ctx, http.MethodPost, "/product", payload, response)
 }
 
 // All lets you retrieve Products available on your Integration
 //
+// Default response: models.Response[[]models.Product]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prodClient := p.NewProductClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a product client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Products field is a `ProductClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Products.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many Products to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := prodClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.Product]
+//		if err := client.Products.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-// // see https://paystack.com/docs/api/product/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := saClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Products.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (p *ProductClient) All(queries ...Query) (*Response, error) {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/product/
+func (p *ProductClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/product", queries...)
-	return p.APICall(http.MethodGet, url, nil)
+	return p.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you Get details of a product on your Integration
 //
+// Default response: models.Response[models.Product]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	prodClient := p.NewSubAccountClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a product client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Products field is a `ProductClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Products.FetchOne("<id>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := prodClient.FetchOne("<id>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Product]
+//		if err := client.Plans.FetchOne(context.TODO(),"<id>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (p *ProductClient) FetchOne(id string) (*Response, error) {
-	return p.APICall(http.MethodGet, fmt.Sprintf("/product/%s", id), nil)
+func (p *ProductClient) FetchOne(ctx context.Context, id string, response any) error {
+	return p.APICall(ctx, http.MethodGet, fmt.Sprintf("/product/%s", id), nil, response)
 }
 
 // Update lets you update a product details on your Integration
 //
+// Default response: models.Response[models.Product]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	prodClient := p.NewProductClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a product client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Products field is a `ProductClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Products.Update("<id>", "Product Six", "Product Six Description",500000, "USD")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Products.Update` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `unlimited`.
-//	// resp, err := prodClient.Update("<id>", "Product Six", "Product Six Description",500000, "USD",
-//	//	p.WithOptionalParameter("unlimited","true"))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/product/#update
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Plan]
+//		if err := client.Products.Update(context.TODO(),"<id>", "Product Six", "Product Six Description",500000, enum.CurrencyUsd, &response); err != nil {
+//			panic(err)
+//		}
 //
-//	resp, err := prodClient.Update("<id>", "Product Six", "Product Six Description",500000, "USD")
-//	if err != nil {
-//		panic(err)
+//		fmt.Println(response)
+//
+//		// With optional parameters
+//		// err := client.Products.Update(context.TODO(),"<id>", "Product Six", "Product Six Description",500000, enum.CurrencyUsd, &response, p.WithOptionalPayload("unlimited","true"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (p *ProductClient) Update(id string, name string, description string, price int, currency string, optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["name"] = name
-	payload["description"] = description
-	payload["price"] = price
-	payload["currency"] = currency
+func (p *ProductClient) Update(ctx context.Context, id string, name string, description string, price int, currency enum.Currency, response any, optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
+		"name":        name,
+		"description": description,
+		"price":       price,
+		"currency":    currency,
+	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return p.APICall(http.MethodPut, fmt.Sprintf("/product/%s", id), nil)
+	return p.APICall(ctx, http.MethodPut, fmt.Sprintf("/product/%s", id), payload, response)
 }

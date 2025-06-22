@@ -1,6 +1,7 @@
 package paystack
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -8,141 +9,116 @@ import (
 // RefundClient interacts with endpoints related to paystack refund resource that lets you
 // create and manage transaction Refunds.
 type RefundClient struct {
-	*baseAPIClient
+	*restClient
 }
 
 // NewRefundClient creates a RefundClient
-//
-//	Example
-//
-//	import p "github.com/gray-adeyi/paystack"
-//
-//	refundClient := p.NewRefundClient(p.WithSecretKey("<paystack-secret-key>"))
 func NewRefundClient(options ...ClientOptions) *RefundClient {
-	client := NewAPIClient(options...)
+	client := NewClient(options...)
 	return client.Refunds
 }
 
 // Create lets you create and manage transaction Refunds.
+// 
+// Default response: models.Response[models.Refund]
 //
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
+//		"github.com/gray-adeyi/paystack/enum"
 //	)
 //
-//	refundClient := p.NewRefundClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access the refund client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.refund field is a `RefundClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Refunds.Create("1641")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// you can pass in optional parameters to the `Refunds.Create` with `p.WithOptionalParameter`
-//	// for example say you want to specify the `amount`.
-//	// resp, err := refundClient.Create("1641", p.WithOptionalParameter("amount",500000))
-//	// the `p.WithOptionalParameter` takes in a key and value parameter, the key should match the optional parameter
-//	// from paystack documentation see https://paystack.com/docs/api/refund/#create
-//	// Multiple optional parameters can be passed into `Create` each with it's `p.WithOptionalParameter`
+//		var response models.Response[models.Refund]
+//		if err := client.Refunds.Create(context.TODO(),"1641", &response); err != nil {
+//			panic(err)
+//		}
 //
-// resp, err := refundClient.Create("1641")
+//		fmt.Println(response)
 //
-//	if err != nil {
-//		panic(err)
+//		// With optional parameters
+//		// err := client.Refunds.Create(context.TODO(),"1641", &response, p.WithOptionalPayload("amount",500000))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
-//
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (r *RefundClient) Create(transaction string,
-	optionalPayloadParameters ...OptionalPayloadParameter) (*Response, error) {
-	payload := make(map[string]interface{})
-	payload["transaction"] = transaction
+// For supported optional parameters, see:
+// https://paystack.com/docs/api/refund/
+func (r *RefundClient) Create(ctx context.Context, transaction string, response any,
+	optionalPayloads ...OptionalPayload) error {
+	payload := map[string]any{
+		"transaction": transaction,
+	}
 
-	for _, optionalPayloadParameter := range optionalPayloadParameters {
+	for _, optionalPayloadParameter := range optionalPayloads {
 		payload = optionalPayloadParameter(payload)
 	}
-	return r.APICall(http.MethodPost, "/refund", payload)
+	return r.APICall(ctx, http.MethodPost, "/refund", payload, response)
 }
 
 // All lets you retrieve Refunds available on your Integration
 //
+// Default response: models.Response[[]models.Refund]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	refundClient := p.NewRefundClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a refund client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Refunds field is a `RefundClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Refunds.All()
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	// All also accepts queries, so say you want to customize how many Refunds to retrieve
-//	// and which page to retrieve, you can write it like so.
-//	// resp, err := refundClient.All(p.WithQuery("perPage","50"), p.WithQuery("page","2"))
+//		var response models.Response[[]models.Refund]
+//		if err := client.Refunds.All(context.TODO(), &response); err != nil {
+//			panic(err)
+//		}
 //
-// // see https://paystack.com/docs/api/refund/#list for supported query parameters
+//		fmt.Println(response)
 //
-//	resp, err := refundClient.All()
-//	if err != nil {
-//		panic(err)
+//		// With query parameters
+//		// err := client.Refunds.All(context.TODO(), &response,p.WithQuery("perPage","50"), p.WithQuery("page","2"))
 //	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println(data)
-func (r *RefundClient) All(queries ...Query) (*Response, error) {
+// For supported query parameters, see:
+// https://paystack.com/docs/api/refund/
+func (r *RefundClient) All(ctx context.Context, response any, queries ...Query) error {
 	url := AddQueryParamsToUrl("/refund", queries...)
-	return r.APICall(http.MethodGet, url, nil)
+	return r.APICall(ctx, http.MethodGet, url, nil, response)
 }
 
 // FetchOne lets you retrieve the details of a refund on your Integration
 //
+// Default response: models.Response[models.Refund]
+//
 // Example:
 //
 //	import (
+//		"context"
 //		"fmt"
+//
 //		p "github.com/gray-adeyi/paystack"
-//		"encoding/json"
+//		"github.com/gray-adeyi/paystack/models"
 //	)
 //
-//	refundClient := p.NewRefundClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// Alternatively, you can access a refund client from an APIClient
-//	// paystackClient := p.NewAPIClient(p.WithSecretKey("<paystack-secret-key>"))
-//	// paystackClient.Refunds field is a `RefundClient`
-//	// Therefore, this is possible
-//	// resp, err := paystackClient.Refunds.FetchOne("<reference>")
+//	func main() {
+//		client := p.NewClient(p.WithSecretKey("<paystack-secret-key>"))
 //
-//	resp, err := ppClient.FetchOne("<reference>")
-//	if err != nil {
-//		panic(err)
-//	}
-//	// you can have data be a custom structure based on the data your interested in retrieving from
-//	// from paystack for simplicity, we're using `map[string]interface{}` which is sufficient to
-//	// to serialize the json data returned by paystack
-//	data := make(map[string]interface{})
+//		var response models.Response[models.Refund]
+//		if err := client.Plans.FetchOne(context.TODO(),"<reference>", &response); err != nil {
+//			panic(err)
+//		}
 //
-//	err := json.Unmarshal(resp.Data, &data); if err != nil {
-//		panic(err)
+//		fmt.Println(response)
 //	}
-//	fmt.Println(data)
-func (r *RefundClient) FetchOne(reference string) (*Response, error) {
-	return r.APICall(http.MethodGet, fmt.Sprintf("/refund/%s", reference), nil)
+func (r *RefundClient) FetchOne(ctx context.Context, reference string, response any) error {
+	return r.APICall(ctx, http.MethodGet, fmt.Sprintf("/refund/%s", reference), nil, response)
 }
